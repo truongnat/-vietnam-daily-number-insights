@@ -13,13 +13,15 @@ export interface EventSource {
 export interface LuckyNumber {
     number: string;
     reasoning: string;
+    strategy: string; // ví dụ: "Cân Bằng", "Tin Tức Nóng", "Bất Ngờ"
+    strategyDescription: string;
 }
 
 export interface AnalysisResult {
   summary: string;
   topNumbers: TopNumber[];
   events: EventSource[];
-  luckyNumber: LuckyNumber;
+  luckyNumbers: LuckyNumber[];
 }
 
 export interface GroundingChunk {
@@ -29,9 +31,15 @@ export interface GroundingChunk {
   };
 }
 
+export interface LotteryResult {
+    specialPrize: string;
+    allPrizes: string[];
+}
+
 export interface StoredAnalysis {
   analysis: AnalysisResult;
   groundingChunks: GroundingChunk[];
+  lotteryResult?: LotteryResult;
 }
 
 export interface HistoricalData {

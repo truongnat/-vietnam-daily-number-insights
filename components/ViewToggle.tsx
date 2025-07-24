@@ -2,12 +2,12 @@
 import React from 'react';
 
 interface ViewToggleProps {
-  view: 'daily' | 'frequency';
-  setView: (view: 'daily' | 'frequency') => void;
+  view: 'daily' | 'frequency' | 'history';
+  setView: (view: 'daily' | 'frequency' | 'history') => void;
 }
 
 export const ViewToggle: React.FC<ViewToggleProps> = ({ view, setView }) => {
-  const baseClasses = "px-6 py-2 text-sm font-semibold rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900";
+  const baseClasses = "px-4 md:px-6 py-2 text-sm font-semibold rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 whitespace-nowrap";
   const activeClasses = "bg-blue-600 text-white shadow-md";
   const inactiveClasses = "bg-gray-700 text-gray-300 hover:bg-gray-600";
 
@@ -18,14 +18,21 @@ export const ViewToggle: React.FC<ViewToggleProps> = ({ view, setView }) => {
         className={`${baseClasses} ${view === 'daily' ? activeClasses : inactiveClasses}`}
         aria-pressed={view === 'daily'}
       >
-        Dữ liệu hôm nay
+        Hôm nay
       </button>
       <button
         onClick={() => setView('frequency')}
         className={`${baseClasses} ${view === 'frequency' ? activeClasses : inactiveClasses}`}
         aria-pressed={view === 'frequency'}
       >
-        Thống kê tần suất
+        Tần suất
+      </button>
+       <button
+        onClick={() => setView('history')}
+        className={`${baseClasses} ${view === 'history' ? activeClasses : inactiveClasses}`}
+        aria-pressed={view === 'history'}
+      >
+        Nhật ký
       </button>
     </div>
   );

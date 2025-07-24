@@ -1,5 +1,5 @@
 
-import type { StoredAnalysis, HistoricalData } from '../types';
+import type { StoredAnalysis, HistoricalData, LotteryResult } from '../types';
 
 const STORAGE_KEY = 'vietnamNumberInsightsHistory';
 
@@ -45,13 +45,36 @@ export const getTodaysAnalysis = (): StoredAnalysis | null => {
  * Saves today's analysis to local storage.
  * @param data The StoredAnalysis object for today.
  */
-export const saveTodaysAnalysis = (data: StoredAnalysis) => {
+export const saveTodaysAnalysis = (data: Omit<StoredAnalysis, 'lotteryResult'>) => {
   try {
     const todayKey = getVietnamDateKey(new Date());
     const allData = getAllHistoricalData();
-    allData[todayKey] = data;
+    // Preserve existing lottery result if any
+    const existingEntry = allData[todayKey];
+    allData[todayKey] = { ...existingEntry, ...data };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(allData));
   } catch (error) {
     console.error("Failed to save data to localStorage:", error);
+  }
+};
+
+/**
+ * Saves today's lottery result to local storage, merging it with existing data.
+ * @param result The LotteryResult object for today.
+ */
+export const saveTodaysLotteryResult = (result: LotteryResult) => {
+  try {
+    const todayKey = getVietnamDateKey(new Date());
+    const allData = getAllHistoricalData();
+    const todaysData = allData[todayKey];
+    if (todaysData) {
+      todaysData.lotteryResult = result;
+      allData[todayKey] = todaysData;
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(allData));
+    } else {
+      console.warn("Attempted to save lottery result, but no analysis data found for today.");
+    }
+  } catch (error) {
+    console.error("Failed to save lottery result to localStorage:", error);
   }
 };
