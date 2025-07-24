@@ -10,10 +10,16 @@ export interface EventSource {
   description: string;
 }
 
+export interface LuckyNumber {
+    number: string;
+    reasoning: string;
+}
+
 export interface AnalysisResult {
   summary: string;
   topNumbers: TopNumber[];
   events: EventSource[];
+  luckyNumber: LuckyNumber;
 }
 
 export interface GroundingChunk {
