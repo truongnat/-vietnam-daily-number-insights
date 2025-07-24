@@ -1,0 +1,5 @@
+{
+  "name": "Vietnam Daily Number Insights",
+  "description": "An application that analyzes daily news in Vietnam to find the most frequent numbers in major events.",
+  "requestFramePermissions": []
+}
