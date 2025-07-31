@@ -2,69 +2,85 @@
   "analyses": {
     "2025-07-31": {
       "analysis": {
-        "summary": "Hôm nay, Việt Nam ghi nhận nhiều sự kiện nổi bật như chuyến công tác thành công tốt đẹp của Chủ tịch Quốc hội Trần Thanh Mẫn tại Senegal, Morocco và Thụy Sĩ, mở ra nhiều cơ hội hợp tác mới. Ngành ngân hàng chứng kiến sự điều chỉnh lãi suất huy động bất ngờ tăng mạnh sau một năm ổn định. Trong lĩnh vực du lịch, núi Bà Đen tại Tây Ninh đã cán mốc 4 triệu lượt khách trong 7 tháng đầu năm 2025, khẳng định vị thế điểm đến văn hóa tâm linh hàng đầu. Bên cạnh đó, Hà Nội đang đẩy mạnh siết chặt kỷ cương tại bộ phận Một cửa và vận hành trơn tru mô hình chính quyền địa phương 2 cấp, đồng thời các doanh nghiệp cũng đang đối mặt với vấn nạn hàng giả, hàng nhái tràn lan trên môi trường mạng.",
+        "summary": "Các tin tức nổi bật trong ngày 31/7/2025 tại Việt Nam tập trung vào các sự kiện kỷ niệm lớn như 80 năm Cách mạng Tháng Tám và Ngày truyền thống Công an nhân dân. Bên cạnh đó, các thông tin kinh tế đáng chú ý bao gồm việc giá xăng dầu đồng loạt tăng, lợi nhuận của các ngân hàng và doanh nghiệp, cùng với các hoạt động triển lãm quốc tế và đại hội Đảng bộ cấp tỉnh.",
+        "bestNumber": {
+          "number": "80",
+          "type": "Số Đề May Mắn Nhất",
+          "probability": "Cao",
+          "reasoning": "Số 80 xuất hiện nhiều lần trong các tin tức quan trọng hôm nay, gắn liền với kỷ niệm 80 năm Cách mạng Tháng Tám thành công và 80 năm Ngày truyền thống Công an nhân dân Việt Nam. Đây là những sự kiện mang ý nghĩa lịch sử và quốc gia sâu sắc, tạo nên một trường năng lượng tích cực và nổi bật cho con số này. Đặc biệt, số 80 không trùng với hai chữ số cuối của giải đặc biệt ngày hôm qua (19), đáp ứng yêu cầu đề ra."
+        },
         "luckyNumbers": [
           {
-            "number": "07",
-            "strategy": "Cân Bằng",
-            "strategyDescription": "Kết hợp tin tức và lịch sử",
-            "reasoning": "Con số 07 xuất hiện với tần suất cao nhất trong các tin tức hôm nay (11 lần), chủ yếu liên quan đến các mốc thời gian trong tháng 7 và các sự kiện quan trọng. Đây là một lựa chọn cân bằng vì nó nổi bật trong dòng thời sự nhưng không trùng với hai chữ số cuối giải đặc biệt ngày hôm qua (19)."
+            "number": "20",
+            "type": "Số Lô Tiềm Năng",
+            "probability": "Cao",
+            "reasoning": "Số 20 xuất hiện trong tin tức liên quan đến kỷ niệm 20 năm Ngày hội toàn dân bảo vệ an ninh Tổ quốc và Hướng dẫn số 20-HD của Ban Tuyên giáo. Sự xuất hiện trong các sự kiện quan trọng cho thấy tiềm năng của số này."
           },
           {
-            "number": "04",
-            "strategy": "Tin Tức Nóng",
-            "strategyDescription": "Dựa hoàn toàn vào sự kiện",
-            "reasoning": "Con số 04 là 'nóng' nhất trong ngày khi gắn liền với sự kiện nổi bật về du lịch: núi Bà Đen đã cán mốc 4 triệu lượt khách trong 7 tháng đầu năm 2025, một thành tựu đáng chú ý trong ngành du lịch Việt Nam."
+            "number": "99",
+            "type": "Số Lô Tiềm Năng",
+            "probability": "Cao",
+            "reasoning": "Số 99 được nhắc đến trong sự kiện tôn vinh 99 tập thể, cá nhân điển hình dân vận khéo trong lực lượng Công an nhân dân. Đây là một con số cụ thể và mang ý nghĩa tích cực về sự ghi nhận và thành tựu."
           },
           {
-            "number": "88",
-            "strategy": "Bất Ngờ",
-            "strategyDescription": "Số 'lạnh' có tiềm năng",
-            "reasoning": "Con số 88 là một lựa chọn bất ngờ, xuất hiện trong tin tức về 'động đất 8,8 độ khiến Nga rung chuyển'. Mặc dù không phải là con số phổ biến, sự kiện địa chấn này mang lại một dấu hiệu tiềm năng cho một con số ít xuất hiện."
+            "number": "17",
+            "type": "Số Lô Tiềm Năng",
+            "probability": "Cao",
+            "reasoning": "Số 17 liên quan đến Triển lãm quốc tế về phòng cháy chữa cháy và cứu hộ cứu nạn 2025 với sự tham gia của 17 quốc gia và vùng lãnh thổ. Đây là một con số cụ thể, thể hiện sự hợp tác và quy mô quốc tế."
+          },
+          {
+            "number": "32",
+            "type": "Số Lô Tiềm Năng",
+            "probability": "Cao",
+            "reasoning": "Số 32 là một trong những số 'lô gan' (lô chưa về) lâu nhất theo thống kê xổ số miền Bắc ngày 30/07/2025, với 13 lần chưa về. Theo kinh nghiệm dân gian, các số lô gan có thể có khả năng về lại sau một thời gian dài không xuất hiện."
           }
         ],
         "topNumbers": [
           {
-            "number": "07",
-            "count": 11,
-            "reason": "Xuất hiện nhiều trong các mốc thời gian (ngày 30-7, 29-7, 7 tháng đầu năm) và sự kiện du lịch núi Bà Đen."
+            "number": "80",
+            "count": 3,
+            "reason": "Kỷ niệm 80 năm Cách mạng Tháng Tám và 80 năm Ngày truyền thống Công an nhân dân Việt Nam."
           },
           {
-            "number": "24",
-            "count": 9,
-            "reason": "Liên quan đến các ngày trong tháng 7 (24/07/2025) và đặc biệt là thông tin về cổ tức năm 2024 của nhiều doanh nghiệp."
+            "number": "20",
+            "count": 2,
+            "reason": "20 năm Ngày hội toàn dân bảo vệ an ninh Tổ quốc và Hướng dẫn số 20-HD của Ban Tuyên giáo."
           },
           {
-            "number": "01",
-            "count": 7,
-            "reason": "Gắn liền với các mốc thời gian (1 năm, 1 tháng, 1/8/2024, 1-7-2025) và các tỷ lệ phần trăm trong tin tức tài chính."
+            "number": "99",
+            "count": 1,
+            "reason": "Tôn vinh 99 tập thể, cá nhân điển hình dân vận khéo."
           },
           {
-            "number": "00",
-            "count": 6,
-            "reason": "Xuất hiện trong các giá trị tiền tệ (500 đồng, 700 đồng, 1.000 đồng, 2.500 đồng, 2.000 đồng) và khoảng cách (3.000km)."
+            "number": "17",
+            "count": 1,
+            "reason": "17 quốc gia tham gia Triển lãm quốc tế về phòng cháy chữa cháy."
           }
         ],
         "events": [
           {
-            "title": "Chủ tịch Quốc hội Trần Thanh Mẫn kết thúc tốt đẹp chuyến công tác",
-            "description": "Chủ tịch Quốc hội Trần Thanh Mẫn và Đoàn đại biểu cấp cao Việt Nam đã hoàn thành chuyến công tác tại Thụy Sĩ, Senegal và Morocco, mở ra nhiều cơ hội hợp tác mới trên các lĩnh vực."
+            "title": "Kỷ niệm 80 năm Ngày truyền thống Công an nhân dân Việt Nam và 20 năm Ngày hội toàn dân bảo vệ an ninh Tổ quốc",
+            "description": "Thành phố Hà Nội tổ chức trọng thể Lễ kỷ niệm 80 năm Ngày truyền thống Công an nhân dân Việt Nam (19/8/1945 - 19/8/2025) và 20 năm Ngày hội toàn dân bảo vệ an ninh Tổ quốc (19/8/2005 - 19/8/2025)."
           },
           {
-            "title": "Lãi suất ngân hàng bất ngờ tăng mạnh",
-            "description": "Sau một năm ổn định, một số ngân hàng, điển hình là Sacombank, đã bất ngờ công bố điều chỉnh tăng lãi suất huy động trực tuyến, gây chú ý trên thị trường tài chính."
+            "title": "Tuyên truyền kỷ niệm 80 năm Cách mạng Tháng Tám và Quốc khánh 2/9",
+            "description": "Ban Tuyên giáo và Dân vận Trung ương ban hành Hướng dẫn số 20-HD/BTGDVTW về việc hướng dẫn tuyên truyền kỷ niệm 80 năm Cách mạng Tháng Tám thành công (19/8/1945 - 19/8/2025) và Quốc khánh nước Cộng hoà xã hội chủ nghĩa Việt Nam (2/9/1945 - 2/9/2025)."
           },
           {
-            "title": "Núi Bà Đen đón 4 triệu lượt khách",
-            "description": "Khu du lịch núi Bà Đen tại Tây Ninh đã cán mốc 4 triệu lượt khách đi cáp treo trong 7 tháng đầu năm 2025, khẳng định sức hút và vị thế là điểm đến du lịch văn hóa tâm linh hàng đầu."
+            "title": "Giá xăng dầu đồng loạt tăng",
+            "description": "Từ chiều ngày 31/7, giá xăng dầu trên toàn quốc đồng loạt tăng theo kỳ điều hành của liên Bộ Công Thương - Tài chính."
           },
           {
-            "title": "Hà Nội siết chặt kỷ cương hành chính",
-            "description": "Thành phố Hà Nội đang nỗ lực siết chặt kỷ cương tại bộ phận Một cửa và vận hành trơn tru mô hình chính quyền địa phương 2 cấp, nhằm nâng cao chất lượng phục vụ người dân và doanh nghiệp."
+            "title": "Triển lãm quốc tế về kỹ thuật và phương tiện phòng cháy chữa cháy và cứu hộ cứu nạn 2025",
+            "description": "Triển lãm có sự tham gia của hơn 480 thương hiệu đến từ 17 quốc gia và vùng lãnh thổ, trưng bày các công nghệ, phương tiện, thiết bị mới trong công tác phòng cháy, chữa cháy và cứu nạn, cứu hộ."
           },
           {
-            "title": "Vấn nạn hàng giả, hàng nhái trên môi trường mạng",
-            "description": "Nhiều doanh nghiệp đang chịu thiệt hại nặng nề về uy tín và doanh thu do tình trạng hàng giả, hàng nhái tràn lan trên môi trường mạng, với các chiêu thức vi phạm ngày càng tinh vi."
+            "title": "SHB ghi nhận lợi nhuận tăng trưởng",
+            "description": "SHB đạt lợi nhuận trước thuế 6 tháng đầu năm 2025 hơn 8.900 tỷ đồng, tăng 30% so với cùng kỳ, thuộc nhóm đầu ngành."
+          },
+          {
+            "title": "Đại hội đại biểu Đảng bộ Công an tỉnh Tuyên Quang lần thứ XIII",
+            "description": "Đảng bộ Công an tỉnh Tuyên Quang tổ chức Đại hội đại biểu lần thứ XIII, nhiệm kỳ 2025 - 2030, nhằm tổng kết công tác nhiệm kỳ cũ và đề ra phương hướng cho nhiệm kỳ mới."
           }
         ]
       },

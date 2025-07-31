@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { fetchDailyAnalysis } from '@/services/geminiService';
-import { saveTodaysAnalysis, getVietnamDateKey } from '@/utils/storage';
+import { saveTodaysAnalysis, getVietnamDateKey } from '@/utils/server-storage';
 
 export async function GET() {
   try {

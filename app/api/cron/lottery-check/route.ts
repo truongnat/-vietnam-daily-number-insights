@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { fetchCurrentDayLotteryResult } from '@/services/geminiService';
-import { saveTodaysLotteryResult, getVietnamDateKey } from '@/utils/storage';
+import { saveTodaysLotteryResult, getVietnamDateKey } from '@/utils/server-storage';
 
 export async function GET() {
   try {
