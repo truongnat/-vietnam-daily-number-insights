@@ -23,19 +23,20 @@ export async function POST(request: NextRequest) {
     // Fetch daily analysis
     const result = await fetchDailyAnalysis();
     
-    if (result.analysis && result.analysis.luckyNumbers && result.analysis.luckyNumbers.length > 0) {
+    if (result.analysis && result.analysis.bestNumber && result.analysis.luckyNumbers && result.analysis.luckyNumbers.length > 0) {
       // Save the analysis
-      await saveTodaysAnalysis({ 
-        analysis: result.analysis, 
-        groundingChunks: result.groundingChunks 
+      await saveTodaysAnalysis({
+        analysis: result.analysis,
+        groundingChunks: result.groundingChunks
       });
-      
+
       console.log(`Daily analysis completed and saved for ${dateKey}`);
-      
+
       return NextResponse.json({
         success: true,
         message: `Daily analysis completed at ${currentHour}:00`,
         dateKey,
+        bestNumber: result.analysis.bestNumber.number,
         luckyNumbers: result.analysis.luckyNumbers.map(ln => ln.number)
       });
     } else {

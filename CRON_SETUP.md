@@ -1,157 +1,257 @@
-# Cron Jobs Setup for Vietnam Daily Number Insights
+# 🕐 Cron-job.org Setup Guide
 
-This document explains how to set up automated cron jobs for the Vietnam Daily Number Insights application.
+Hướng dẫn thiết lập cron jobs cho **Vietnam Daily Number Insights** sử dụng [cron-job.org](https://cron-job.org).
 
-## Overview
+## 📋 Tổng quan
 
-The application has two main cron jobs:
+Thay thế Vercel cron jobs bằng cron-job.org để có:
+- ✅ **Miễn phí** hoàn toàn
+- ✅ **Giao diện web** dễ quản lý
+- ✅ **Monitoring** chi tiết
+- ✅ **Email notifications** khi có lỗi
+- ✅ **Logs** đầy đủ
 
-1. **Daily Analysis** - Runs at 12:00 PM, 4:00 PM, and 5:00 PM Vietnam time
-2. **Lottery Results Check** - Runs at 7:00 PM Vietnam time (after lottery results are published)
+Ứng dụng có 2 cron jobs chính:
+1. **Daily Analysis** - Chạy 3 lần/ngày: 12:00, 16:00, 17:00 (Vietnam time)
+2. **Lottery Check** - Chạy lúc 19:00 (Vietnam time)
 
-## Cron Job Endpoints
+## 🔧 Cấu hình cần thiết
 
-### 1. Daily Analysis (`/api/cron/daily-analysis`)
-- **Purpose**: Fetches and analyzes Vietnamese news to generate lucky number predictions
-- **Schedule**: 12:00, 16:00, 17:00 Vietnam time (GMT+7)
-- **Method**: POST
-- **Authentication**: Requires `Authorization: Bearer ${CRON_SECRET}` header
+### 1. Environment Variables
 
-### 2. Lottery Check (`/api/cron/lottery-check`)
-- **Purpose**: Fetches daily lottery results and saves them to the database
-- **Schedule**: 19:00 Vietnam time (GMT+7) - after lottery results are published
-- **Method**: POST
-- **Authentication**: Requires `Authorization: Bearer ${CRON_SECRET}` header
+Đảm bảo có các biến môi trường sau trong Vercel:
 
-## Environment Variables
-
-Add the following environment variable to your deployment:
-
-```env
-CRON_SECRET=your-secure-random-string-here
+```bash
+CRON_SECRET=your-super-secret-token-here
+GEMINI_API_KEY=your-gemini-api-key
 ```
 
-Generate a secure random string for the CRON_SECRET. This prevents unauthorized access to your cron endpoints.
+### 2. API Endpoints
 
-## Deployment Platform Setup
+#### Daily Analysis (`/api/cron/daily-analysis`)
+- **Mục đích**: Phân tích tin tức và tạo số may mắn
+- **Lịch trình**: 12:00, 16:00, 17:00 Vietnam time (GMT+7)
+- **Method**: POST
+- **Authentication**: `Authorization: Bearer ${CRON_SECRET}`
 
-### Vercel (Recommended)
+#### Lottery Check (`/api/cron/lottery-check`)
+- **Mục đích**: Lấy kết quả xổ số và lưu vào database
+- **Lịch trình**: 19:00 Vietnam time (GMT+7) - sau khi có kết quả
+- **Method**: POST
+- **Authentication**: `Authorization: Bearer ${CRON_SECRET}`
 
-The `vercel.json` file is already configured with the cron schedules:
+## 📅 Lịch trình cron jobs
 
+### Job 1: Daily Analysis (3 lần/ngày)
+
+**Thời gian Vietnam:** 12:00, 16:00, 17:00
+**Thời gian UTC:** 05:00, 09:00, 10:00
+
+**Cấu hình cron-job.org:**
+```
+Title: Vietnam Daily Analysis - 12:00
+URL: https://your-domain.vercel.app/api/cron/daily-analysis
+Method: POST
+Schedule: 0 5 * * *
+Headers:
+  Authorization: Bearer your-super-secret-token-here
+  Content-Type: application/json
+```
+
+```
+Title: Vietnam Daily Analysis - 16:00
+URL: https://your-domain.vercel.app/api/cron/daily-analysis
+Method: POST
+Schedule: 0 9 * * *
+Headers:
+  Authorization: Bearer your-super-secret-token-here
+  Content-Type: application/json
+```
+
+```
+Title: Vietnam Daily Analysis - 17:00
+URL: https://your-domain.vercel.app/api/cron/daily-analysis
+Method: POST
+Schedule: 0 10 * * *
+Headers:
+  Authorization: Bearer your-super-secret-token-here
+  Content-Type: application/json
+```
+
+### Job 2: Lottery Check
+
+**Thời gian Vietnam:** 19:00
+**Thời gian UTC:** 12:00
+
+**Cấu hình cron-job.org:**
+```
+Title: Vietnam Lottery Check
+URL: https://your-domain.vercel.app/api/cron/lottery-check
+Method: POST
+Schedule: 0 12 * * *
+Headers:
+  Authorization: Bearer your-super-secret-token-here
+  Content-Type: application/json
+```
+
+## 🚀 Hướng dẫn setup từng bước
+
+### Bước 1: Đăng ký tài khoản
+
+1. Truy cập [cron-job.org](https://cron-job.org)
+2. Đăng ký tài khoản miễn phí
+3. Xác nhận email
+
+### Bước 2: Tạo cron jobs
+
+1. **Đăng nhập** vào cron-job.org
+2. Click **"Create cronjob"**
+3. Điền thông tin cho từng job:
+
+#### Job 1: Daily Analysis 12:00
+- **Title:** `Vietnam Daily Analysis - 12:00`
+- **URL:** `https://your-domain.vercel.app/api/cron/daily-analysis`
+- **Schedule:** `0 5 * * *` (UTC)
+- **Request method:** `POST`
+- **Request headers:**
+  ```
+  Authorization: Bearer your-super-secret-token-here
+  Content-Type: application/json
+  ```
+- **Enable:** ✅
+
+#### Job 2: Daily Analysis 16:00
+- **Title:** `Vietnam Daily Analysis - 16:00`
+- **URL:** `https://your-domain.vercel.app/api/cron/daily-analysis`
+- **Schedule:** `0 9 * * *` (UTC)
+- **Request method:** `POST`
+- **Request headers:**
+  ```
+  Authorization: Bearer your-super-secret-token-here
+  Content-Type: application/json
+  ```
+- **Enable:** ✅
+
+#### Job 3: Daily Analysis 17:00
+- **Title:** `Vietnam Daily Analysis - 17:00`
+- **URL:** `https://your-domain.vercel.app/api/cron/daily-analysis`
+- **Schedule:** `0 10 * * *` (UTC)
+- **Request method:** `POST`
+- **Request headers:**
+  ```
+  Authorization: Bearer your-super-secret-token-here
+  Content-Type: application/json
+  ```
+- **Enable:** ✅
+
+#### Job 4: Lottery Check 19:00
+- **Title:** `Vietnam Lottery Check`
+- **URL:** `https://your-domain.vercel.app/api/cron/lottery-check`
+- **Schedule:** `0 12 * * *` (UTC)
+- **Request method:** `POST`
+- **Request headers:**
+  ```
+  Authorization: Bearer your-super-secret-token-here
+  Content-Type: application/json
+  ```
+- **Enable:** ✅
+
+### Bước 3: Cấu hình notifications
+
+1. Vào **Settings** → **Notifications**
+2. Bật **Email notifications** cho:
+   - ✅ Failed executions
+   - ✅ Disabled cronjobs
+3. Nhập email để nhận thông báo
+
+### Bước 4: Test thử
+
+1. Click **"Execute now"** cho từng job
+2. Kiểm tra **Execution history**
+3. Xem response để đảm bảo hoạt động đúng
+
+## 📊 Monitoring & Logs
+
+### Kiểm tra execution history:
+- Vào dashboard cron-job.org
+- Click vào từng job để xem chi tiết
+- Kiểm tra response codes và messages
+
+### Response thành công:
 ```json
 {
-  "crons": [
-    {
-      "path": "/api/cron/daily-analysis",
-      "schedule": "0 12 * * *"
-    },
-    {
-      "path": "/api/cron/daily-analysis", 
-      "schedule": "0 16 * * *"
-    },
-    {
-      "path": "/api/cron/daily-analysis",
-      "schedule": "0 17 * * *"
-    },
-    {
-      "path": "/api/cron/lottery-check",
-      "schedule": "0 19 * * *"
-    }
-  ]
+  "success": true,
+  "message": "Daily analysis completed at 12:00",
+  "dateKey": "2025-07-31",
+  "bestNumber": "25",
+  "luckyNumbers": ["12", "34", "56", "78"]
 }
 ```
 
-**Note**: Vercel cron jobs run in UTC time. The schedules above are adjusted for Vietnam time (GMT+7):
-- 12:00 Vietnam time = 05:00 UTC
-- 16:00 Vietnam time = 09:00 UTC  
-- 17:00 Vietnam time = 10:00 UTC
-- 19:00 Vietnam time = 12:00 UTC
-
-### Other Platforms
-
-For other deployment platforms, you can use external cron services like:
-
-#### 1. GitHub Actions (Free)
-
-Create `.github/workflows/cron.yml`:
-
-```yaml
-name: Scheduled Tasks
-on:
-  schedule:
-    # Daily analysis at 12:00 PM Vietnam time (5:00 AM UTC)
-    - cron: '0 5 * * *'
-    # Daily analysis at 4:00 PM Vietnam time (9:00 AM UTC)
-    - cron: '0 9 * * *'
-    # Daily analysis at 5:00 PM Vietnam time (10:00 AM UTC)
-    - cron: '0 10 * * *'
-    # Lottery check at 7:00 PM Vietnam time (12:00 PM UTC)
-    - cron: '0 12 * * *'
-
-jobs:
-  cron:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Call Daily Analysis
-        if: github.event.schedule == '0 5 * * *' || github.event.schedule == '0 9 * * *' || github.event.schedule == '0 10 * * *'
-        run: |
-          curl -X POST https://your-domain.com/api/cron/daily-analysis \
-            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}"
-      
-      - name: Call Lottery Check
-        if: github.event.schedule == '0 12 * * *'
-        run: |
-          curl -X POST https://your-domain.com/api/cron/lottery-check \
-            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}"
+### Response lỗi:
+```json
+{
+  "success": false,
+  "error": "Error message here"
+}
 ```
 
-#### 2. External Cron Services
+## 🔒 Bảo mật
 
-Use services like:
-- **cron-job.org** (Free)
-- **EasyCron** (Free tier available)
-- **Cronhub** (Free tier available)
+- ✅ **CRON_SECRET** phải được giữ bí mật
+- ✅ Chỉ cron-job.org biết token này
+- ✅ API sẽ từ chối requests không có token đúng
+- ✅ Logs không hiển thị sensitive data
 
-Configure them to make POST requests to:
-- `https://your-domain.com/api/cron/daily-analysis` at 05:00, 09:00, 10:00 UTC
-- `https://your-domain.com/api/cron/lottery-check` at 12:00 UTC
-
-Include the authorization header: `Authorization: Bearer YOUR_CRON_SECRET`
-
-## Manual Testing
-
-You can test the cron jobs manually:
+## 🧪 Test thử manual
 
 ```bash
 # Test daily analysis
-curl -X POST http://localhost:3000/api/cron/daily-analysis \
+curl -X POST https://your-domain.vercel.app/api/cron/daily-analysis \
   -H "Authorization: Bearer your-cron-secret"
 
 # Test lottery check
-curl -X POST http://localhost:3000/api/cron/lottery-check \
+curl -X POST https://your-domain.vercel.app/api/cron/lottery-check \
   -H "Authorization: Bearer your-cron-secret"
 
 # Check endpoint status
-curl http://localhost:3000/api/cron/daily-analysis
-curl http://localhost:3000/api/cron/lottery-check
+curl https://your-domain.vercel.app/api/cron/daily-analysis
+curl https://your-domain.vercel.app/api/cron/lottery-check
 ```
 
-## Monitoring
+## 🆘 Troubleshooting
 
-The cron jobs return JSON responses with success/error information. You can monitor them by:
+### Lỗi 401 Unauthorized:
+- Kiểm tra `CRON_SECRET` trong Vercel
+- Đảm bảo header `Authorization` đúng format
 
-1. Checking the deployment logs
-2. Setting up monitoring services to track the endpoint responses
-3. Adding database logging for cron job execution history
+### Lỗi 500 Internal Server Error:
+- Kiểm tra logs trong Vercel
+- Có thể do API key Gemini hết quota
 
-## Troubleshooting
+### Job không chạy:
+- Kiểm tra timezone (UTC vs Vietnam)
+- Đảm bảo job được enable
+- Kiểm tra URL endpoint
 
-### Common Issues
+## 📞 Hỗ trợ
 
-1. **401 Unauthorized**: Check that CRON_SECRET environment variable is set correctly
-2. **500 Internal Server Error**: Check the application logs for specific error details
-3. **Timeout**: The Gemini API calls may take time; ensure your platform allows sufficient timeout
+Nếu gặp vấn đề:
+1. Kiểm tra execution history trong cron-job.org
+2. Xem logs trong Vercel dashboard
+3. Test manual bằng cách gọi API trực tiếp
+
+## ✅ Checklist hoàn thành
+
+- [ ] Đăng ký tài khoản cron-job.org
+- [ ] Tạo 4 cron jobs (3 daily analysis + 1 lottery check)
+- [ ] Cấu hình headers với CRON_SECRET
+- [ ] Bật email notifications
+- [ ] Test thử từng job
+- [ ] Kiểm tra execution history
+- [ ] Xóa cấu hình Vercel cron (đã hoàn thành)
+
+**🎉 Sau khi hoàn thành, bạn sẽ có hệ thống cron jobs miễn phí và đáng tin cậy!**
 4. **Rate Limiting**: Be aware of Gemini API rate limits if running multiple instances
 
 ### Logs
