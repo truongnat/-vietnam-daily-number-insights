@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { saveLotteryResultForDate } from '../../../../../utils/database';
-import type { LotteryResult } from '../../../../../types';
+import { saveLotteryResultForDate } from '@/utils/database';
+import type { LotteryResult } from '@/types';
 
 export async function POST(
   request: NextRequest,

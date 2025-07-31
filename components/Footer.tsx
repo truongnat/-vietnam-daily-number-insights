@@ -1,6 +1,6 @@
 
 import React from 'react';
-import type { GroundingChunk } from '../types';
+import type { GroundingChunk } from '@/types';
 
 interface FooterProps {
   groundingChunks: GroundingChunk[];

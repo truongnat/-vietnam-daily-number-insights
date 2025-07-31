@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getAllHistoricalData } from '../../../../utils/database';
+import { getAllHistoricalData } from '@/utils/database';
 
 export async function GET() {
   try {

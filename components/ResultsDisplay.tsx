@@ -1,10 +1,10 @@
 
 import React from 'react';
-import type { AnalysisResult, LotteryResult } from '../types';
-import { NumberCard } from './NumberCard';
-import { EventSnippet } from './EventSnippet';
-import { LuckyNumberCard } from './LuckyNumberCard';
-import { LotteryResultDisplay } from './LotteryResultDisplay';
+import type { AnalysisResult, LotteryResult } from '@/types';
+import { NumberCard } from '@/components/NumberCard';
+import { EventSnippet } from '@/components/EventSnippet';
+import { LuckyNumberCard } from '@/components/LuckyNumberCard';
+import { LotteryResultDisplay } from '@/components/LotteryResultDisplay';
 
 interface ResultsDisplayProps {
   analysis: AnalysisResult;
@@ -18,7 +18,9 @@ export const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ analysis, lotter
     <div className="w-full max-w-6xl animate-fade-in">
       <p className="text-center text-gray-400 mb-8 max-w-3xl mx-auto">{analysis.summary}</p>
       
-      {analysis.luckyNumbers && analysis.luckyNumbers.length > 0 && <LuckyNumberCard luckyNumbers={analysis.luckyNumbers} />}
+      {analysis.bestNumber && analysis.luckyNumbers && analysis.luckyNumbers.length > 0 && (
+        <LuckyNumberCard bestNumber={analysis.bestNumber} luckyNumbers={analysis.luckyNumbers} />
+      )}
 
       {isVerifying && (
         <div className="flex flex-col items-center justify-center space-y-3 my-12">
@@ -32,8 +34,8 @@ export const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ analysis, lotter
             <p className="text-sm mt-1">{verificationError}</p>
          </div>
       )}
-      {lotteryResult && analysis.luckyNumbers && analysis.luckyNumbers.length > 0 && (
-        <LotteryResultDisplay luckyNumbers={analysis.luckyNumbers} lotteryResult={lotteryResult} />
+      {lotteryResult && analysis.bestNumber && analysis.luckyNumbers && analysis.luckyNumbers.length > 0 && (
+        <LotteryResultDisplay bestNumber={analysis.bestNumber} luckyNumbers={analysis.luckyNumbers} lotteryResult={lotteryResult} />
       )}
 
 

@@ -10,18 +10,26 @@ export interface EventSource {
   description: string;
 }
 
+export interface BestNumber {
+    number: string;
+    type: string; // "Số Đề May Mắn Nhất"
+    probability: string; // "Cao"
+    reasoning: string;
+}
+
 export interface LuckyNumber {
     number: string;
+    type: string; // "Số Lô Tiềm Năng"
+    probability: string; // "Cao"
     reasoning: string;
-    strategy: string; // ví dụ: "Cân Bằng", "Tin Tức Nóng", "Bất Ngờ"
-    strategyDescription: string;
 }
 
 export interface AnalysisResult {
   summary: string;
+  bestNumber: BestNumber;
+  luckyNumbers: LuckyNumber[];
   topNumbers: TopNumber[];
   events: EventSource[];
-  luckyNumbers: LuckyNumber[];
 }
 
 export interface GroundingChunk {

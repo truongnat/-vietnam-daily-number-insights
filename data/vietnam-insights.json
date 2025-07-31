@@ -1,0 +1,75 @@
+{
+  "analyses": {
+    "2025-07-31": {
+      "analysis": {
+        "summary": "Hôm nay, Việt Nam ghi nhận nhiều sự kiện nổi bật như chuyến công tác thành công tốt đẹp của Chủ tịch Quốc hội Trần Thanh Mẫn tại Senegal, Morocco và Thụy Sĩ, mở ra nhiều cơ hội hợp tác mới. Ngành ngân hàng chứng kiến sự điều chỉnh lãi suất huy động bất ngờ tăng mạnh sau một năm ổn định. Trong lĩnh vực du lịch, núi Bà Đen tại Tây Ninh đã cán mốc 4 triệu lượt khách trong 7 tháng đầu năm 2025, khẳng định vị thế điểm đến văn hóa tâm linh hàng đầu. Bên cạnh đó, Hà Nội đang đẩy mạnh siết chặt kỷ cương tại bộ phận Một cửa và vận hành trơn tru mô hình chính quyền địa phương 2 cấp, đồng thời các doanh nghiệp cũng đang đối mặt với vấn nạn hàng giả, hàng nhái tràn lan trên môi trường mạng.",
+        "luckyNumbers": [
+          {
+            "number": "07",
+            "strategy": "Cân Bằng",
+            "strategyDescription": "Kết hợp tin tức và lịch sử",
+            "reasoning": "Con số 07 xuất hiện với tần suất cao nhất trong các tin tức hôm nay (11 lần), chủ yếu liên quan đến các mốc thời gian trong tháng 7 và các sự kiện quan trọng. Đây là một lựa chọn cân bằng vì nó nổi bật trong dòng thời sự nhưng không trùng với hai chữ số cuối giải đặc biệt ngày hôm qua (19)."
+          },
+          {
+            "number": "04",
+            "strategy": "Tin Tức Nóng",
+            "strategyDescription": "Dựa hoàn toàn vào sự kiện",
+            "reasoning": "Con số 04 là 'nóng' nhất trong ngày khi gắn liền với sự kiện nổi bật về du lịch: núi Bà Đen đã cán mốc 4 triệu lượt khách trong 7 tháng đầu năm 2025, một thành tựu đáng chú ý trong ngành du lịch Việt Nam."
+          },
+          {
+            "number": "88",
+            "strategy": "Bất Ngờ",
+            "strategyDescription": "Số 'lạnh' có tiềm năng",
+            "reasoning": "Con số 88 là một lựa chọn bất ngờ, xuất hiện trong tin tức về 'động đất 8,8 độ khiến Nga rung chuyển'. Mặc dù không phải là con số phổ biến, sự kiện địa chấn này mang lại một dấu hiệu tiềm năng cho một con số ít xuất hiện."
+          }
+        ],
+        "topNumbers": [
+          {
+            "number": "07",
+            "count": 11,
+            "reason": "Xuất hiện nhiều trong các mốc thời gian (ngày 30-7, 29-7, 7 tháng đầu năm) và sự kiện du lịch núi Bà Đen."
+          },
+          {
+            "number": "24",
+            "count": 9,
+            "reason": "Liên quan đến các ngày trong tháng 7 (24/07/2025) và đặc biệt là thông tin về cổ tức năm 2024 của nhiều doanh nghiệp."
+          },
+          {
+            "number": "01",
+            "count": 7,
+            "reason": "Gắn liền với các mốc thời gian (1 năm, 1 tháng, 1/8/2024, 1-7-2025) và các tỷ lệ phần trăm trong tin tức tài chính."
+          },
+          {
+            "number": "00",
+            "count": 6,
+            "reason": "Xuất hiện trong các giá trị tiền tệ (500 đồng, 700 đồng, 1.000 đồng, 2.500 đồng, 2.000 đồng) và khoảng cách (3.000km)."
+          }
+        ],
+        "events": [
+          {
+            "title": "Chủ tịch Quốc hội Trần Thanh Mẫn kết thúc tốt đẹp chuyến công tác",
+            "description": "Chủ tịch Quốc hội Trần Thanh Mẫn và Đoàn đại biểu cấp cao Việt Nam đã hoàn thành chuyến công tác tại Thụy Sĩ, Senegal và Morocco, mở ra nhiều cơ hội hợp tác mới trên các lĩnh vực."
+          },
+          {
+            "title": "Lãi suất ngân hàng bất ngờ tăng mạnh",
+            "description": "Sau một năm ổn định, một số ngân hàng, điển hình là Sacombank, đã bất ngờ công bố điều chỉnh tăng lãi suất huy động trực tuyến, gây chú ý trên thị trường tài chính."
+          },
+          {
+            "title": "Núi Bà Đen đón 4 triệu lượt khách",
+            "description": "Khu du lịch núi Bà Đen tại Tây Ninh đã cán mốc 4 triệu lượt khách đi cáp treo trong 7 tháng đầu năm 2025, khẳng định sức hút và vị thế là điểm đến du lịch văn hóa tâm linh hàng đầu."
+          },
+          {
+            "title": "Hà Nội siết chặt kỷ cương hành chính",
+            "description": "Thành phố Hà Nội đang nỗ lực siết chặt kỷ cương tại bộ phận Một cửa và vận hành trơn tru mô hình chính quyền địa phương 2 cấp, nhằm nâng cao chất lượng phục vụ người dân và doanh nghiệp."
+          },
+          {
+            "title": "Vấn nạn hàng giả, hàng nhái trên môi trường mạng",
+            "description": "Nhiều doanh nghiệp đang chịu thiệt hại nặng nề về uy tín và doanh thu do tình trạng hàng giả, hàng nhái tràn lan trên môi trường mạng, với các chiêu thức vi phạm ngày càng tinh vi."
+          }
+        ]
+      },
+      "groundingChunks": []
+    }
+  },
+  "lotteryResults": {}
+}

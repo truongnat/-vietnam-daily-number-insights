@@ -1,0 +1,20 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/daily-analysis",
+      "schedule": "0 5 * * *"
+    },
+    {
+      "path": "/api/cron/daily-analysis",
+      "schedule": "0 9 * * *"
+    },
+    {
+      "path": "/api/cron/daily-analysis",
+      "schedule": "0 10 * * *"
+    },
+    {
+      "path": "/api/cron/lottery-check",
+      "schedule": "0 12 * * *"
+    }
+  ]
+}

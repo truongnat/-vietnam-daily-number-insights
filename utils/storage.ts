@@ -1,5 +1,5 @@
 
-import type { StoredAnalysis, HistoricalData, LotteryResult } from '../types';
+import type { StoredAnalysis, HistoricalData, LotteryResult } from '@/types';
 
 /**
  * Gets a date key in YYYY-MM-DD format for consistency.

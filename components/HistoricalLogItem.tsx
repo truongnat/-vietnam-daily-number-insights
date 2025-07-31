@@ -1,8 +1,8 @@
 
 import React, { useState, useMemo } from 'react';
-import type { StoredAnalysis } from '../types';
-import { EventSnippet } from './EventSnippet';
-import { NumberCard } from './NumberCard';
+import type { StoredAnalysis } from '@/types';
+import { EventSnippet } from '@/components/EventSnippet';
+import { NumberCard } from '@/components/NumberCard';
 
 interface HistoricalLogItemProps {
   dateKey: string;
@@ -38,20 +38,34 @@ export const HistoricalLogItem: React.FC<HistoricalLogItemProps> = ({ dateKey, s
     }, [dateKey]);
 
     const winStats = useMemo(() => {
-        if (!lotteryResult || !analysis.luckyNumbers) {
+        if (!lotteryResult || (!analysis.bestNumber && !analysis.luckyNumbers)) {
             return { de: 0, lo: 0, total: 0 };
         }
         let de = 0;
         let lo = 0;
-        analysis.luckyNumbers.forEach(ln => {
-            if (lotteryResult.specialPrize === ln.number) {
+
+        // Check best number
+        if (analysis.bestNumber) {
+            if (lotteryResult.specialPrize === analysis.bestNumber.number) {
                 de++;
-            } else if (lotteryResult.allPrizes.includes(ln.number)) {
+            } else if (lotteryResult.allPrizes.includes(analysis.bestNumber.number)) {
                 lo++;
             }
-        });
+        }
+
+        // Check lucky numbers
+        if (analysis.luckyNumbers) {
+            analysis.luckyNumbers.forEach(ln => {
+                if (lotteryResult.specialPrize === ln.number) {
+                    de++;
+                } else if (lotteryResult.allPrizes.includes(ln.number)) {
+                    lo++;
+                }
+            });
+        }
+
         return { de, lo, total: de + lo };
-    }, [lotteryResult, analysis.luckyNumbers]);
+    }, [lotteryResult, analysis.bestNumber, analysis.luckyNumbers]);
 
     return (
         <div className="bg-gray-800/70 border border-gray-700 rounded-lg text-left overflow-hidden">
@@ -64,7 +78,12 @@ export const HistoricalLogItem: React.FC<HistoricalLogItemProps> = ({ dateKey, s
                     <p className="font-semibold text-lg text-white">{formattedDate}</p>
                     <div className="flex items-center gap-3 mt-1">
                         <p className="text-sm text-gray-400">Gợi ý:</p>
-                        {analysis.luckyNumbers.map(ln => (
+                        {analysis.bestNumber && (
+                            <span className="text-lg font-bold text-yellow-300 border border-yellow-600 px-2 py-1 rounded">
+                                {analysis.bestNumber.number}
+                            </span>
+                        )}
+                        {analysis.luckyNumbers && analysis.luckyNumbers.map(ln => (
                              <span key={ln.number} className="text-lg font-bold text-gray-200">{ln.number}</span>
                         ))}
                     </div>
@@ -98,12 +117,20 @@ export const HistoricalLogItem: React.FC<HistoricalLogItemProps> = ({ dateKey, s
                     <div className="mb-6">
                         <h5 className="font-semibold text-gray-300 mb-3">Các Gợi Ý:</h5>
                         <div className="space-y-4">
-                        {analysis.luckyNumbers.map((ln, index) => (
-                            <div key={index} className="bg-gray-800 p-3 rounded-md border-l-4 border-gray-600">
-                                <p className="font-bold text-white">{ln.strategy}: <span className="text-xl">{ln.number}</span></p>
-                                <p className="text-xs text-gray-400 mt-1 italic">"{ln.reasoning}"</p>
-                            </div>
-                        ))}
+                            {analysis.bestNumber && (
+                                <div className="bg-yellow-900/30 p-4 rounded-md border-l-4 border-yellow-600">
+                                    <p className="font-bold text-white">{analysis.bestNumber.type}: <span className="text-2xl text-yellow-300">{analysis.bestNumber.number}</span></p>
+                                    <p className="text-xs text-yellow-200 mt-1">Tỷ lệ: {analysis.bestNumber.probability}</p>
+                                    <p className="text-xs text-gray-400 mt-1 italic">"{analysis.bestNumber.reasoning}"</p>
+                                </div>
+                            )}
+                            {analysis.luckyNumbers && analysis.luckyNumbers.map((ln, index) => (
+                                <div key={index} className="bg-gray-800 p-3 rounded-md border-l-4 border-gray-600">
+                                    <p className="font-bold text-white">{ln.type}: <span className="text-xl">{ln.number}</span></p>
+                                    <p className="text-xs text-gray-400 mt-1">Tỷ lệ: {ln.probability}</p>
+                                    <p className="text-xs text-gray-400 mt-1 italic">"{ln.reasoning}"</p>
+                                </div>
+                            ))}
                         </div>
                     </div>
                     

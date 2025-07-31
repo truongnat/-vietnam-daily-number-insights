@@ -1,8 +1,9 @@
 
 import React from 'react';
-import type { LotteryResult, LuckyNumber } from '../types';
+import type { LotteryResult, LuckyNumber, BestNumber } from '@/types';
 
 interface LotteryResultDisplayProps {
+  bestNumber: BestNumber;
   luckyNumbers: LuckyNumber[];
   lotteryResult: LotteryResult;
 }
@@ -33,8 +34,16 @@ const ResultIcon: React.FC<{ status: 'de' | 'lo' | 'miss' }> = ({ status }) => {
 };
 
 
-export const LotteryResultDisplay: React.FC<LotteryResultDisplayProps> = ({ luckyNumbers, lotteryResult }) => {
-    const results = luckyNumbers.map(ln => {
+export const LotteryResultDisplay: React.FC<LotteryResultDisplayProps> = ({ bestNumber, luckyNumbers, lotteryResult }) => {
+    // Check best number result
+    const bestNumberResult = {
+        ...bestNumber,
+        status: lotteryResult.specialPrize === bestNumber.number ? 'de' as const :
+                lotteryResult.allPrizes.includes(bestNumber.number) ? 'lo' as const : 'miss' as const
+    };
+
+    // Check lucky numbers results
+    const luckyNumberResults = luckyNumbers.map(ln => {
         const isSpecialPrizeWin = lotteryResult.specialPrize === ln.number;
         const isLotoWin = lotteryResult.allPrizes.includes(ln.number);
         let status: 'de' | 'lo' | 'miss' = 'miss';
@@ -43,7 +52,7 @@ export const LotteryResultDisplay: React.FC<LotteryResultDisplayProps> = ({ luck
         return { ...ln, status };
     });
 
-    const hasWin = results.some(r => r.status !== 'miss');
+    const hasWin = bestNumberResult.status !== 'miss' || luckyNumberResults.some(r => r.status !== 'miss');
 
     return (
         <div className={`w-full max-w-2xl mx-auto my-12 p-6 relative rounded-2xl border ${hasWin ? 'border-green-400/50' : 'border-gray-700'} bg-gray-800/50 shadow-xl animate-fade-in`}>
@@ -59,13 +68,26 @@ export const LotteryResultDisplay: React.FC<LotteryResultDisplayProps> = ({ luck
                 <div className="w-full my-4 border-t border-gray-700/50"></div>
 
                 <div className="w-full space-y-3">
-                    {results.map((res, index) => (
+                    {/* Best Number Result */}
+                    <div className="flex justify-between items-center bg-yellow-900/30 p-4 rounded-lg border border-yellow-600/30">
+                        <div className="flex items-center gap-4">
+                           <p className="text-5xl font-bold text-yellow-300">{bestNumberResult.number}</p>
+                           <div>
+                               <p className="text-sm font-semibold text-white">{bestNumberResult.type}</p>
+                               <p className="text-xs text-yellow-200">Tỷ lệ: {bestNumberResult.probability}</p>
+                           </div>
+                        </div>
+                        <ResultIcon status={bestNumberResult.status} />
+                    </div>
+
+                    {/* Lucky Numbers Results */}
+                    {luckyNumberResults.map((res, index) => (
                         <div key={index} className="flex justify-between items-center bg-gray-900/50 p-3 rounded-lg">
                             <div className="flex items-center gap-4">
-                               <p className="text-4xl font-bold text-gray-300">{res.number}</p>
+                               <p className="text-3xl font-bold text-gray-300">{res.number}</p>
                                <div>
-                                   <p className="text-sm font-semibold text-white">{res.strategy}</p>
-                                   <p className="text-xs text-gray-500">{res.strategyDescription}</p>
+                                   <p className="text-sm font-semibold text-white">{res.type}</p>
+                                   <p className="text-xs text-gray-500">Tỷ lệ: {res.probability}</p>
                                </div>
                             </div>
                             <ResultIcon status={res.status} />

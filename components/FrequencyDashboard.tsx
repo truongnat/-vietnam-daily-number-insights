@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { getAllHistoricalData, getVietnamDateKey } from '../utils/storage';
-import { FrequencyChart } from './FrequencyChart';
-import { StatCard } from './StatCard';
+import { getAllHistoricalData, getVietnamDateKey } from '@/utils/storage';
+import { FrequencyChart } from '@/components/FrequencyChart';
+import { StatCard } from '@/components/StatCard';
 
 const FireIcon = (props: React.SVGProps<SVGSVGElement>) => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" {...props}>

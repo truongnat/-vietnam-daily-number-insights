@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getAnalysisForDate, saveAnalysisForDate } from '../../../../../utils/database';
-import type { StoredAnalysis } from '../../../../../types';
+import { getAnalysisForDate, saveAnalysisForDate } from '@/utils/database';
+import type { StoredAnalysis } from '@/types';
 
 export async function GET(
   request: NextRequest,

@@ -1,8 +1,8 @@
 
 import React, { useState, useEffect } from 'react';
-import { getAllHistoricalData } from '../utils/storage';
-import type { HistoricalData } from '../types';
-import { HistoricalLogItem } from './HistoricalLogItem';
+import { getAllHistoricalData } from '@/utils/storage';
+import type { HistoricalData } from '@/types';
+import { HistoricalLogItem } from '@/components/HistoricalLogItem';
 
 export const HistoricalLog: React.FC = () => {
     const [historicalData, setHistoricalData] = useState<HistoricalData>({});
