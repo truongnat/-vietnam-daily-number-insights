@@ -9,11 +9,21 @@ export const HistoricalLog: React.FC = () => {
     const [sortedKeys, setSortedKeys] = useState<string[]>([]);
 
     useEffect(() => {
-        const data = getAllHistoricalData();
-        setHistoricalData(data);
-        // Sort keys in descending order (most recent first)
-        const keys = Object.keys(data).sort((a, b) => new Date(b).getTime() - new Date(a).getTime());
-        setSortedKeys(keys);
+        const fetchData = async () => {
+            try {
+                const data = await getAllHistoricalData();
+                setHistoricalData(data);
+                // Sort keys in descending order (most recent first)
+                const keys = Object.keys(data).sort((a, b) => new Date(b).getTime() - new Date(a).getTime());
+                setSortedKeys(keys);
+            } catch (error) {
+                console.error("Error fetching historical data:", error);
+                setHistoricalData({});
+                setSortedKeys([]);
+            }
+        };
+
+        fetchData();
     }, []);
 
     if (sortedKeys.length === 0) {

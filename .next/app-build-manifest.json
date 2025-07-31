@@ -1,3 +1,48 @@
 {
-  "pages": {}
+  "pages": {
+    "/_not-found/page": [
+      "static/chunks/webpack-9231b7e78a19210b.js",
+      "static/chunks/93805c03-4f76366c4b2dea2c.js",
+      "static/chunks/772-f5c24b80e54ef4a0.js",
+      "static/chunks/main-app-63eaa70a219dee6d.js",
+      "static/chunks/app/_not-found/page-9c5cf06393578c67.js"
+    ],
+    "/layout": [
+      "static/chunks/webpack-9231b7e78a19210b.js",
+      "static/chunks/93805c03-4f76366c4b2dea2c.js",
+      "static/chunks/772-f5c24b80e54ef4a0.js",
+      "static/chunks/main-app-63eaa70a219dee6d.js",
+      "static/css/86a78f7dfdff004b.css",
+      "static/chunks/app/layout-da65c563d1033705.js"
+    ],
+    "/api/storage/analysis/[date]/route": [
+      "static/chunks/webpack-9231b7e78a19210b.js",
+      "static/chunks/93805c03-4f76366c4b2dea2c.js",
+      "static/chunks/772-f5c24b80e54ef4a0.js",
+      "static/chunks/main-app-63eaa70a219dee6d.js",
+      "static/chunks/app/api/storage/analysis/[date]/route-8425fc3710221300.js"
+    ],
+    "/api/storage/lottery/[date]/route": [
+      "static/chunks/webpack-9231b7e78a19210b.js",
+      "static/chunks/93805c03-4f76366c4b2dea2c.js",
+      "static/chunks/772-f5c24b80e54ef4a0.js",
+      "static/chunks/main-app-63eaa70a219dee6d.js",
+      "static/chunks/app/api/storage/lottery/[date]/route-8425fc3710221300.js"
+    ],
+    "/api/storage/historical/route": [
+      "static/chunks/webpack-9231b7e78a19210b.js",
+      "static/chunks/93805c03-4f76366c4b2dea2c.js",
+      "static/chunks/772-f5c24b80e54ef4a0.js",
+      "static/chunks/main-app-63eaa70a219dee6d.js",
+      "static/chunks/app/api/storage/historical/route-8425fc3710221300.js"
+    ],
+    "/page": [
+      "static/chunks/webpack-9231b7e78a19210b.js",
+      "static/chunks/93805c03-4f76366c4b2dea2c.js",
+      "static/chunks/772-f5c24b80e54ef4a0.js",
+      "static/chunks/main-app-63eaa70a219dee6d.js",
+      "static/chunks/25612085-e779f4157b6e9d6b.js",
+      "static/chunks/app/page-6ee5c78df80b5380.js"
+    ]
+  }
 }

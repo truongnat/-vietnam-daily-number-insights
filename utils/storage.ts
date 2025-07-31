@@ -1,8 +1,6 @@
 
 import type { StoredAnalysis, HistoricalData, LotteryResult } from '../types';
 
-const STORAGE_KEY = 'vietnamNumberInsightsHistory';
-
 /**
  * Gets a date key in YYYY-MM-DD format for consistency.
  * @param date The date object to format.
@@ -17,64 +15,85 @@ export const getVietnamDateKey = (date: Date): string => {
 };
 
 /**
- * Retrieves all historical data from local storage.
+ * Retrieves all historical data from the API.
  * @returns A HistoricalData object, or an empty object if none exists or an error occurs.
  */
-export const getAllHistoricalData = (): HistoricalData => {
+export const getAllHistoricalData = async (): Promise<HistoricalData> => {
   try {
-    const storedData = localStorage.getItem(STORAGE_KEY);
-    return storedData ? (JSON.parse(storedData) as HistoricalData) : {};
+    const response = await fetch('/api/storage/historical');
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return await response.json();
   } catch (error) {
-    console.error("Failed to parse historical data from localStorage:", error);
+    console.error("Failed to fetch historical data:", error);
     return {};
   }
 };
 
 /**
- * Retrieves today's analysis from local storage.
+ * Retrieves today's analysis from the API.
  * @returns The StoredAnalysis object for today, or null if it doesn't exist.
  */
-export const getTodaysAnalysis = (): StoredAnalysis | null => {
-  const todayKey = getVietnamDateKey(new Date());
-  const allData = getAllHistoricalData();
-  return allData[todayKey] || null;
-};
-
-
-/**
- * Saves today's analysis to local storage.
- * @param data The StoredAnalysis object for today.
- */
-export const saveTodaysAnalysis = (data: Omit<StoredAnalysis, 'lotteryResult'>) => {
+export const getTodaysAnalysis = async (): Promise<StoredAnalysis | null> => {
   try {
     const todayKey = getVietnamDateKey(new Date());
-    const allData = getAllHistoricalData();
-    // Preserve existing lottery result if any
-    const existingEntry = allData[todayKey];
-    allData[todayKey] = { ...existingEntry, ...data };
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(allData));
+    const response = await fetch(`/api/storage/analysis/${todayKey}`);
+    if (!response.ok) {
+      if (response.status === 404) {
+        return null;
+      }
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return await response.json();
   } catch (error) {
-    console.error("Failed to save data to localStorage:", error);
+    console.error("Failed to fetch today's analysis:", error);
+    return null;
   }
 };
 
 /**
- * Saves today's lottery result to local storage, merging it with existing data.
- * @param result The LotteryResult object for today.
+ * Saves today's analysis via the API.
+ * @param data The StoredAnalysis object for today.
  */
-export const saveTodaysLotteryResult = (result: LotteryResult) => {
+export const saveTodaysAnalysis = async (data: Omit<StoredAnalysis, 'lotteryResult'>) => {
   try {
     const todayKey = getVietnamDateKey(new Date());
-    const allData = getAllHistoricalData();
-    const todaysData = allData[todayKey];
-    if (todaysData) {
-      todaysData.lotteryResult = result;
-      allData[todayKey] = todaysData;
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(allData));
-    } else {
-      console.warn("Attempted to save lottery result, but no analysis data found for today.");
+    const response = await fetch(`/api/storage/analysis/${todayKey}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
   } catch (error) {
-    console.error("Failed to save lottery result to localStorage:", error);
+    console.error("Failed to save analysis:", error);
+    throw error;
+  }
+};
+
+/**
+ * Saves today's lottery result via the API, merging it with existing data.
+ * @param result The LotteryResult object for today.
+ */
+export const saveTodaysLotteryResult = async (result: LotteryResult) => {
+  try {
+    const todayKey = getVietnamDateKey(new Date());
+    const response = await fetch(`/api/storage/lottery/${todayKey}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(result),
+    });
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+  } catch (error) {
+    console.error("Failed to save lottery result:", error);
+    throw error;
   }
 };

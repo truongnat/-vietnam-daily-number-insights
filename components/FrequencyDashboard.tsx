@@ -27,50 +27,60 @@ export const FrequencyDashboard: React.FC = () => {
     const [frequencyData, setFrequencyData] = useState<Map<string, number>>(new Map());
 
     useEffect(() => {
-        const historicalData = getAllHistoricalData();
-        const rangeCutoff = new Date();
-        rangeCutoff.setDate(rangeCutoff.getDate() - dateRange);
+        const fetchAndAnalyzeData = async () => {
+            try {
+                const historicalData = await getAllHistoricalData();
+                const rangeCutoff = new Date();
+                rangeCutoff.setDate(rangeCutoff.getDate() - dateRange);
 
-        const freqMap = new Map<string, number>();
+                const freqMap = new Map<string, number>();
 
-        Object.entries(historicalData).forEach(([dateStr, data]) => {
-            const entryDate = new Date(dateStr);
-            if (entryDate >= rangeCutoff) {
-                data.analysis.topNumbers.forEach(num => {
-                    const currentCount = freqMap.get(num.number) || 0;
-                    freqMap.set(num.number, currentCount + 1);
+                Object.entries(historicalData).forEach(([dateStr, data]) => {
+                    const entryDate = new Date(dateStr);
+                    if (entryDate >= rangeCutoff) {
+                        data.analysis.topNumbers.forEach(num => {
+                            const currentCount = freqMap.get(num.number) || 0;
+                            freqMap.set(num.number, currentCount + 1);
+                        });
+                    }
                 });
-            }
-        });
 
-        if (freqMap.size > 0) {
-            const hotNumber = [...freqMap.entries()].reduce((a, b) => a[1] > b[1] ? a : b)[0];
+                if (freqMap.size > 0) {
+                    const hotNumber = [...freqMap.entries()].reduce((a, b) => a[1] > b[1] ? a : b)[0];
 
-            let coldNumber: string | undefined = undefined;
-            const allNumbers = Array.from({ length: 100 }, (_, i) => String(i).padStart(2, '0'));
-            const appearedNumbers = new Set(freqMap.keys());
-            const coldNumbers = allNumbers.filter(n => !appearedNumbers.has(n));
-            if (coldNumbers.length > 0) {
-                coldNumber = coldNumbers[Math.floor(Math.random() * coldNumbers.length)];
-            }
+                    let coldNumber: string | undefined = undefined;
+                    const allNumbers = Array.from({ length: 100 }, (_, i) => String(i).padStart(2, '0'));
+                    const appearedNumbers = new Set(freqMap.keys());
+                    const coldNumbers = allNumbers.filter(n => !appearedNumbers.has(n));
+                    if (coldNumbers.length > 0) {
+                        coldNumber = coldNumbers[Math.floor(Math.random() * coldNumbers.length)];
+                    }
 
-            let potentialNumber: string | undefined = undefined;
-            const yesterdayKey = getVietnamDateKey(new Date(Date.now() - 864e5));
-            const yesterdayData = historicalData[yesterdayKey];
-            if (yesterdayData) {
-                const yesterdayNumbers = yesterdayData.analysis.topNumbers.map(n => n.number);
-                const candidates = yesterdayNumbers.filter(n => (freqMap.get(n) || 0) <= 2);
-                if (candidates.length > 0) {
-                    potentialNumber = candidates[0];
+                    let potentialNumber: string | undefined = undefined;
+                    const yesterdayKey = getVietnamDateKey(new Date(Date.now() - 864e5));
+                    const yesterdayData = historicalData[yesterdayKey];
+                    if (yesterdayData) {
+                        const yesterdayNumbers = yesterdayData.analysis.topNumbers.map(n => n.number);
+                        const candidates = yesterdayNumbers.filter(n => (freqMap.get(n) || 0) <= 2);
+                        if (candidates.length > 0) {
+                            potentialNumber = candidates[0];
+                        }
+                    }
+
+                    setStats({ hot: hotNumber, cold: coldNumber, potential: potentialNumber });
+                } else {
+                    setStats({});
                 }
+
+                setFrequencyData(freqMap);
+            } catch (error) {
+                console.error("Error fetching and analyzing historical data:", error);
+                setStats({});
+                setFrequencyData(new Map());
             }
+        };
 
-            setStats({ hot: hotNumber, cold: coldNumber, potential: potentialNumber });
-        } else {
-            setStats({});
-        }
-
-        setFrequencyData(freqMap);
+        fetchAndAnalyzeData();
     }, [dateRange]);
 
     const hasData = useMemo(() => frequencyData.size > 0, [frequencyData]);

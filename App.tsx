@@ -42,15 +42,20 @@ const App: React.FC = () => {
     setError(null);
     setLotteryResult(null);
 
-    const storedData = getTodaysAnalysis();
-    if (storedData) {
-      setAnalysis(storedData.analysis);
-      setGroundingChunks(storedData.groundingChunks);
-      if (storedData.lotteryResult) {
-        setLotteryResult(storedData.lotteryResult);
+    try {
+      const storedData = await getTodaysAnalysis();
+      if (storedData) {
+        setAnalysis(storedData.analysis);
+        setGroundingChunks(storedData.groundingChunks);
+        if (storedData.lotteryResult) {
+          setLotteryResult(storedData.lotteryResult);
+        }
+        setIsLoading(false);
+        return;
       }
-      setIsLoading(false);
-      return;
+    } catch (error) {
+      console.error("Error fetching stored data:", error);
+      // Continue to fetch fresh data if stored data fails
     }
 
     try {
@@ -58,7 +63,12 @@ const App: React.FC = () => {
       if (result.analysis && result.analysis.luckyNumbers && result.analysis.luckyNumbers.length > 0) {
         setAnalysis(result.analysis);
         setGroundingChunks(result.groundingChunks);
-        saveTodaysAnalysis({ analysis: result.analysis, groundingChunks: result.groundingChunks });
+        try {
+          await saveTodaysAnalysis({ analysis: result.analysis, groundingChunks: result.groundingChunks });
+        } catch (saveError) {
+          console.error("Error saving analysis:", saveError);
+          // Don't fail the whole operation if saving fails
+        }
       } else {
         setError("Không thể truy xuất phân tích hợp lệ. Mô hình có thể đã trả về phản hồi trống hoặc không hợp lệ.");
       }
@@ -86,7 +96,12 @@ const App: React.FC = () => {
                 const result = await fetchCurrentDayLotteryResult();
                 if (result) {
                     setLotteryResult(result);
-                    saveTodaysLotteryResult(result);
+                    try {
+                        await saveTodaysLotteryResult(result);
+                    } catch (saveError) {
+                        console.error("Error saving lottery result:", saveError);
+                        // Don't fail the whole operation if saving fails
+                    }
                 } else {
                     setVerificationError("Không thể lấy kết quả xổ số. Phản hồi không hợp lệ.");
                 }
