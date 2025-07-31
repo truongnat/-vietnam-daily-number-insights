@@ -2,11 +2,12 @@
 import { GoogleGenAI } from "@google/genai";
 import type { AnalysisResult, GroundingChunk, LotteryResult } from '../types';
 
-if (!process.env.API_KEY) {
-  throw new Error("API_KEY environment variable not set");
+function getGeminiAI() {
+  if (!process.env.GEMINI_API_KEY) {
+    throw new Error("GEMINI_API_KEY environment variable not set");
+  }
+  return new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 }
-
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
 /**
  * Wraps a promise with a timeout.
@@ -118,6 +119,7 @@ export const fetchDailyAnalysis = async (): Promise<{ analysis: AnalysisResult |
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
       console.log(`Attempt ${attempt} to fetch daily analysis...`);
+      const ai = getGeminiAI();
       const generateContentPromise = ai.models.generateContent({
         model: model,
         contents: prompt,
@@ -131,7 +133,11 @@ export const fetchDailyAnalysis = async (): Promise<{ analysis: AnalysisResult |
         generateContentPromise,
         90000, // 90-second timeout
         new Error(`Yêu cầu tới Gemini đã hết thời gian chờ (Thử lần ${attempt}).`)
-      );
+      ) as any;
+
+      if (!response.text) {
+        throw new Error("Không nhận được phản hồi từ Gemini.");
+      }
 
       const analysis = parseJsonResponse<AnalysisResult>(response.text);
 
@@ -201,6 +207,7 @@ export const fetchCurrentDayLotteryResult = async (): Promise<LotteryResult | nu
 
   try {
     console.log(`Fetching current day's lottery results for ${todayString}...`);
+    const ai = getGeminiAI();
     const generateContentPromise = ai.models.generateContent({
       model: model,
       contents: prompt,
@@ -214,7 +221,11 @@ export const fetchCurrentDayLotteryResult = async (): Promise<LotteryResult | nu
       generateContentPromise,
       60000, // 60-second timeout
       new Error(`Yêu cầu lấy kết quả xổ số đã hết thời gian chờ.`)
-    );
+    ) as any;
+
+    if (!response.text) {
+      throw new Error("Không nhận được phản hồi từ Gemini khi lấy kết quả xổ số.");
+    }
 
     const result = parseJsonResponse<{ specialPrize: string | null, allPrizes: string[] }>(response.text);
     
