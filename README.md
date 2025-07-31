@@ -129,7 +129,6 @@ vietnam-daily-number-insights/
 3. **Set Environment Variables**:
    ```
    GEMINI_API_KEY=your-gemini-api-key
-   CRON_SECRET=your-secure-random-string
    ```
 4. **Deploy** - Vercel sẽ tự động build và deploy
 
@@ -139,10 +138,10 @@ Sau khi deploy, setup cron jobs với cron-job.org:
 
 1. **Đọc hướng dẫn**: [`CRON_QUICK_SETUP.md`](CRON_QUICK_SETUP.md)
 2. **Đăng ký miễn phí** tại [cron-job.org](https://cron-job.org) (không cần API key)
-3. **Tạo 4 cron jobs** qua giao diện web
+3. **Tạo 4 cron jobs** qua giao diện web (chỉ cần URL + schedule)
 4. **Test endpoints** để đảm bảo hoạt động
 
-**Lưu ý**: Cron-job.org hoàn toàn miễn phí và không yêu cầu API key hay thông tin thanh toán.
+**Lưu ý**: Cron-job.org hoàn toàn miễn phí và không yêu cầu API key, authentication hay thông tin thanh toán.
 
 ## 📊 API Endpoints
 
@@ -151,11 +150,11 @@ Sau khi deploy, setup cron jobs với cron-job.org:
 - `GET /api/storage/historical` - Lấy lịch sử phân tích
 - `GET /api/storage/lottery/[date]` - Lấy kết quả xổ số
 
-### Cron Endpoints (Protected)
+### Cron Endpoints (Public)
 - `GET /api/cron/daily-analysis` - Chạy phân tích hàng ngày
 - `GET /api/cron/lottery-check` - Kiểm tra kết quả xổ số
 
-**Authentication**: Requires `Authorization: Bearer ${CRON_SECRET}`
+**Authentication**: Không cần authentication
 
 ## 🎯 Cách Sử Dụng
 
@@ -220,8 +219,7 @@ pnpm run build
 curl http://localhost:3000/api/storage/historical
 
 # Test cron endpoint
-curl http://localhost:3000/api/cron/daily-analysis \
-  -H "Authorization: Bearer your-cron-secret"
+curl http://localhost:3000/api/cron/daily-analysis
 
 # Check build
 pnpm run build

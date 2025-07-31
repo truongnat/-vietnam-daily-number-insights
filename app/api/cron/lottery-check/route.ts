@@ -1,15 +1,9 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { fetchCurrentDayLotteryResult } from '@/services/geminiService';
 import { saveTodaysLotteryResult, getVietnamDateKey } from '@/utils/storage';
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
-    // Verify the request is from a cron job (optional security check)
-    const authHeader = request.headers.get('authorization');
-    if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
     console.log('Starting scheduled lottery result check...');
     
     // Get current Vietnam time

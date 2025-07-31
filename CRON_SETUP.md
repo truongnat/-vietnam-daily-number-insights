@@ -41,10 +41,9 @@ Thay thế Vercel cron jobs bằng cron-job.org để có:
 
 ### 1. Environment Variables
 
-Đảm bảo có các biến môi trường sau trong Vercel:
+Đảm bảo có biến môi trường sau trong Vercel:
 
 ```bash
-CRON_SECRET=your-super-secret-token-here
 GEMINI_API_KEY=your-gemini-api-key
 ```
 
@@ -54,13 +53,13 @@ GEMINI_API_KEY=your-gemini-api-key
 - **Mục đích**: Phân tích tin tức và tạo số may mắn
 - **Lịch trình**: 12:00, 16:00, 17:00 Vietnam time (GMT+7)
 - **Method**: GET
-- **Authentication**: `Authorization: Bearer ${CRON_SECRET}`
+- **Authentication**: Không cần
 
 #### Lottery Check (`/api/cron/lottery-check`)
 - **Mục đích**: Lấy kết quả xổ số và lưu vào database
 - **Lịch trình**: 19:00 Vietnam time (GMT+7) - sau khi có kết quả
 - **Method**: GET
-- **Authentication**: `Authorization: Bearer ${CRON_SECRET}`
+- **Authentication**: Không cần
 
 ## 📅 Lịch trình cron jobs
 
@@ -75,8 +74,6 @@ Title: Vietnam Daily Analysis - 12:00
 URL: https://your-domain.vercel.app/api/cron/daily-analysis
 Method: GET
 Schedule: 0 5 * * *
-Headers:
-  Authorization: Bearer your-super-secret-token-here
 ```
 
 ```
@@ -84,8 +81,6 @@ Title: Vietnam Daily Analysis - 16:00
 URL: https://your-domain.vercel.app/api/cron/daily-analysis
 Method: GET
 Schedule: 0 9 * * *
-Headers:
-  Authorization: Bearer your-super-secret-token-here
 ```
 
 ```
@@ -93,8 +88,6 @@ Title: Vietnam Daily Analysis - 17:00
 URL: https://your-domain.vercel.app/api/cron/daily-analysis
 Method: GET
 Schedule: 0 10 * * *
-Headers:
-  Authorization: Bearer your-super-secret-token-here
 ```
 
 ### Job 2: Lottery Check
@@ -108,8 +101,6 @@ Title: Vietnam Lottery Check
 URL: https://your-domain.vercel.app/api/cron/lottery-check
 Method: GET
 Schedule: 0 12 * * *
-Headers:
-  Authorization: Bearer your-super-secret-token-here
 ```
 
 ## 🚀 Hướng dẫn setup từng bước
@@ -132,10 +123,7 @@ Headers:
 - **URL:** `https://your-domain.vercel.app/api/cron/daily-analysis`
 - **Schedule:** `0 5 * * *` (UTC)
 - **Request method:** `GET`
-- **Request headers:**
-  ```
-  Authorization: Bearer your-super-secret-token-here
-  ```
+- **Request headers:** Không cần
 - **Enable:** ✅
 
 #### Job 2: Daily Analysis 16:00
@@ -143,10 +131,7 @@ Headers:
 - **URL:** `https://your-domain.vercel.app/api/cron/daily-analysis`
 - **Schedule:** `0 9 * * *` (UTC)
 - **Request method:** `GET`
-- **Request headers:**
-  ```
-  Authorization: Bearer your-super-secret-token-here
-  ```
+- **Request headers:** Không cần
 - **Enable:** ✅
 
 #### Job 3: Daily Analysis 17:00
@@ -154,10 +139,7 @@ Headers:
 - **URL:** `https://your-domain.vercel.app/api/cron/daily-analysis`
 - **Schedule:** `0 10 * * *` (UTC)
 - **Request method:** `GET`
-- **Request headers:**
-  ```
-  Authorization: Bearer your-super-secret-token-here
-  ```
+- **Request headers:** Không cần
 - **Enable:** ✅
 
 #### Job 4: Lottery Check 19:00
@@ -165,10 +147,7 @@ Headers:
 - **URL:** `https://your-domain.vercel.app/api/cron/lottery-check`
 - **Schedule:** `0 12 * * *` (UTC)
 - **Request method:** `GET`
-- **Request headers:**
-  ```
-  Authorization: Bearer your-super-secret-token-here
-  ```
+- **Request headers:** Không cần
 - **Enable:** ✅
 
 ### Bước 3: Cấu hình notifications
@@ -213,32 +192,26 @@ Headers:
 
 ## 🔒 Bảo mật
 
-- ✅ **CRON_SECRET** phải được giữ bí mật
-- ✅ Chỉ cron-job.org biết token này
-- ✅ API sẽ từ chối requests không có token đúng
-- ✅ Logs không hiển thị sensitive data
+- ✅ **Endpoints công khai** - Không cần authentication
+- ✅ **Đơn giản** - Chỉ cần URL để gọi
+- ✅ **An toàn** - Chỉ thực hiện read operations
+- ✅ **Logs** không chứa sensitive data
 
 ## 🧪 Test thử manual
 
 ```bash
 # Test daily analysis
-curl https://your-domain.vercel.app/api/cron/daily-analysis \
-  -H "Authorization: Bearer your-cron-secret"
+curl https://your-domain.vercel.app/api/cron/daily-analysis
 
 # Test lottery check
-curl https://your-domain.vercel.app/api/cron/lottery-check \
-  -H "Authorization: Bearer your-cron-secret"
-
-# Test without authorization (sẽ trả về 401)
-curl https://your-domain.vercel.app/api/cron/daily-analysis
 curl https://your-domain.vercel.app/api/cron/lottery-check
+
+# Hoặc mở trực tiếp trên browser:
+# https://your-domain.vercel.app/api/cron/daily-analysis
+# https://your-domain.vercel.app/api/cron/lottery-check
 ```
 
 ## 🆘 Troubleshooting
-
-### Lỗi 401 Unauthorized:
-- Kiểm tra `CRON_SECRET` trong Vercel
-- Đảm bảo header `Authorization` đúng format
 
 ### Lỗi 500 Internal Server Error:
 - Kiểm tra logs trong Vercel
@@ -260,7 +233,7 @@ Nếu gặp vấn đề:
 
 - [ ] Đăng ký tài khoản cron-job.org
 - [ ] Tạo 4 cron jobs (3 daily analysis + 1 lottery check)
-- [ ] Cấu hình headers với CRON_SECRET
+- [ ] Cấu hình URL và schedule cho từng job
 - [ ] Bật email notifications
 - [ ] Test thử từng job
 - [ ] Kiểm tra execution history
@@ -277,7 +250,7 @@ Check your deployment platform's logs for detailed error information:
 
 ## Security Notes
 
-- Keep your CRON_SECRET secure and rotate it periodically
-- The cron endpoints are protected by the authorization header
-- Consider adding IP whitelisting if your platform supports it
-- Monitor for unusual activity on the cron endpoints
+- Cron endpoints are public but safe (read-only operations)
+- No sensitive data exposed through these endpoints
+- Consider monitoring for unusual activity if needed
+- GEMINI_API_KEY remains secure on server-side

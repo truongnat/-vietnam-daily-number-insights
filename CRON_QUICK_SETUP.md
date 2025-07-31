@@ -30,7 +30,6 @@ Title: Vietnam Analysis 12:00
 URL: https://your-domain.vercel.app/api/cron/daily-analysis
 Schedule: 0 5 * * *
 Method: GET
-Headers: Authorization: Bearer your-secret-token
 ```
 
 #### Job 2: Analysis 16:00
@@ -39,7 +38,6 @@ Title: Vietnam Analysis 16:00
 URL: https://your-domain.vercel.app/api/cron/daily-analysis
 Schedule: 0 9 * * *
 Method: GET
-Headers: Authorization: Bearer your-secret-token
 ```
 
 #### Job 3: Analysis 17:00
@@ -48,7 +46,6 @@ Title: Vietnam Analysis 17:00
 URL: https://your-domain.vercel.app/api/cron/daily-analysis
 Schedule: 0 10 * * *
 Method: GET
-Headers: Authorization: Bearer your-secret-token
 ```
 
 #### Job 4: Lottery 19:00
@@ -57,7 +54,6 @@ Title: Vietnam Lottery Check
 URL: https://your-domain.vercel.app/api/cron/lottery-check
 Schedule: 0 12 * * *
 Method: GET
-Headers: Authorization: Bearer your-secret-token
 ```
 
 ### 3. Test
