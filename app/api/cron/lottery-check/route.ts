@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { fetchCurrentDayLotteryResult } from '@/services/geminiService';
 import { saveTodaysLotteryResult, getVietnamDateKey } from '@/utils/server-storage';
-import { setProcessingStatus } from '../status/route';
+import { setProcessingStatus } from '@/utils/processing-status';
 
 // Background processing function
 async function processLotteryCheckInBackground(dateKey: string, currentHour: number) {

@@ -2,77 +2,141 @@
   "analyses": {
     "2025-07-31": {
       "analysis": {
-        "summary": "Kinh tế Việt Nam tiếp tục tăng trưởng ổn định với nhiều dự án hạ tầng trọng điểm được đẩy nhanh tiến độ. Các hoạt động văn hóa, xã hội diễn ra sôi nổi trên cả nước, đồng thời các chỉ số xuất nhập khẩu và đầu tư cũng cho thấy tín hiệu tích cực.",
+        "summary": "Hôm nay, Việt Nam ghi nhận nhiều sự kiện đáng chú ý như khánh thành cầu vượt mới, lượng du khách đổ về Đà Lạt tăng cao, giá vàng có biến động, và đội tuyển U23 Việt Nam giành chiến thắng. Ngoài ra, các tin tức về kinh tế như xuất khẩu, GDP tăng trưởng và các dự án nhà ở xã hội cũng được quan tâm.",
         "bestNumber": {
-          "number": "68",
+          "number": "02",
           "type": "Số Đề May Mắn Nhất",
           "probability": "Cao",
-          "reasoning": "Số 68 (lộc phát) là một con số mang ý nghĩa tài lộc, phát đạt trong văn hóa Việt Nam. Mặc dù không xuất hiện ở giải đặc biệt ngày hôm qua (19), việc nó xuất hiện ở giải tư (6768) cho thấy tiềm năng trở lại. Ngoài ra, trong các tin tức về kinh tế và đầu tư, con số liên quan đến sự phát triển và thịnh vượng thường được nhắc đến, tạo thêm yếu tố may mắn cho số này."
+          "reasoning": "Số 02 xuất hiện nhiều lần trong các tin tức quan trọng hôm nay, liên quan đến lượng du khách và tăng trưởng GDP. Đây là một con số nổi bật và không trùng với hai chữ số cuối của giải đặc biệt ngày hôm qua (19), tăng khả năng xuất hiện trong giải đặc biệt hôm nay."
         },
         "luckyNumbers": [
           {
-            "number": "01",
+            "number": "89",
             "type": "Số Lô Tiềm Năng",
             "probability": "Cao",
-            "reasoning": "Số 01 xuất hiện hai lần trong kết quả lô ngày hôm qua (66801, 201), cho thấy xu hướng lặp lại. Đây cũng là con số khởi đầu, mang ý nghĩa của sự mới mẻ và thành công."
+            "reasoning": "Số 89 xuất hiện trong tin tức về khánh thành cầu vượt trị giá 89 tỷ đồng và cũng là một trong các số lô của ngày hôm qua, cho thấy xu hướng lặp lại."
           },
           {
-            "number": "52",
+            "number": "23",
             "type": "Số Lô Tiềm Năng",
             "probability": "Cao",
-            "reasoning": "Số 52 cũng xuất hiện hai lần trong các giải lô ngày hôm qua (47752, 0052), chứng tỏ sự phổ biến và khả năng về lại cao. Con số này thường được liên kết với sự ổn định và phát triển."
+            "reasoning": "Số 23 liên quan đến chiến thắng của đội tuyển U23 Việt Nam và cũng xuất hiện hai lần trong các giải lô của ngày hôm qua, cho thấy khả năng cao sẽ tiếp tục về."
           },
           {
-            "number": "30",
+            "number": "75",
             "type": "Số Lô Tiềm Năng",
             "probability": "Cao",
-            "reasoning": "Số 30 xuất hiện trong giải nhất ngày hôm qua (98430) và cũng là một số có tần suất xuất hiện cao trong các tin tức về dự án lớn (ví dụ: dự án 300 tỷ đồng), mang lại yếu tố thời sự và may mắn."
+            "reasoning": "Số 75 nổi bật trong tin tức về giá vàng tăng 75 nghìn đồng/lượng, một sự kiện kinh tế được nhiều người quan tâm."
           },
           {
-            "number": "88",
+            "number": "45",
             "type": "Số Lô Tiềm Năng",
             "probability": "Cao",
-            "reasoning": "Số 88 mang ý nghĩa 'song phát' hoặc 'đại phát' trong phong thủy, tượng trưng cho sự thịnh vượng và may mắn gấp đôi. Việc nó xuất hiện trong giải năm ngày hôm qua (0588) cũng cho thấy tiềm năng trở lại."
+            "reasoning": "Số 45 xuất hiện trong tin tức về doanh nghiệp xuất khẩu đạt 45 tỷ USD và cũng là một số lô của ngày hôm qua, cho thấy tiềm năng xuất hiện trở lại."
           }
         ],
         "topNumbers": [
           {
-            "number": "30",
-            "count": 3,
-            "reason": "Liên quan đến các dự án đầu tư lớn (ví dụ: cầu vượt 300 tỷ đồng) và các sự kiện diễn ra vào ngày 30."
-          },
-          {
-            "number": "25",
+            "number": "02",
             "count": 2,
-            "reason": "Liên quan đến các chỉ số kinh tế quan trọng (ví dụ: doanh thu xuất khẩu 25 tỷ USD)."
+            "reason": "Liên quan đến lượng du khách và tăng trưởng GDP."
           },
           {
-            "number": "15",
-            "count": 2,
-            "reason": "Liên quan đến số lượng dự án mới được thu hút đầu tư hoặc các mốc thời gian quan trọng."
-          },
-          {
-            "number": "22",
+            "number": "89",
             "count": 1,
-            "reason": "Liên quan đến các công trình xây dựng hoặc quy hoạch đô thị (ví dụ: tòa nhà 22 tầng)."
+            "reason": "Khánh thành cầu vượt trị giá 89 tỷ đồng."
+          },
+          {
+            "number": "75",
+            "count": 1,
+            "reason": "Giá vàng SJC tăng 75 nghìn đồng/lượng."
+          },
+          {
+            "number": "23",
+            "count": 1,
+            "reason": "Đội tuyển U23 Việt Nam giành chiến thắng."
           }
         ],
         "events": [
           {
-            "title": "Khởi công dự án cầu vượt 300 tỷ đồng tại TP.HCM",
-            "description": "Dự án cầu vượt mới trị giá 300 tỷ đồng đã chính thức được khởi công tại Thành phố Hồ Chí Minh, hứa hẹn giảm ùn tắc giao thông và thúc đẩy phát triển kinh tế khu vực."
+            "title": "Khánh thành cầu vượt mới",
+            "description": "Cầu vượt trị giá 89 tỷ đồng được khánh thành, giúp rút ngắn thời gian di chuyển 30 phút."
           },
           {
-            "title": "Doanh thu xuất khẩu nông sản đạt 25 tỷ USD trong 6 tháng đầu năm",
-            "description": "Ngành nông sản Việt Nam ghi nhận mức doanh thu xuất khẩu ấn tượng 25 tỷ USD trong nửa đầu năm, khẳng định vị thế trên thị trường quốc tế."
+            "title": "Lượng du khách đổ về Đà Lạt tăng cao",
+            "description": "Hơn 50 nghìn du khách đã đổ về Đà Lạt trong 2 ngày cuối tuần."
           },
           {
-            "title": "Hội nghị xúc tiến đầu tư thu hút 15 dự án mới",
-            "description": "Một hội nghị xúc tiến đầu tư lớn đã diễn ra, thành công thu hút 15 dự án mới với tổng vốn đầu tư hàng nghìn tỷ đồng, góp phần vào sự phát triển kinh tế đất nước."
+            "title": "Giá vàng SJC biến động",
+            "description": "Giá vàng SJC tăng 75 nghìn đồng/lượng, đạt mức 70 triệu đồng/lượng."
           },
           {
-            "title": "Thành lập 10 trung tâm đổi mới sáng tạo công nghệ",
-            "description": "Chính phủ công bố kế hoạch thành lập 10 trung tâm đổi mới sáng tạo công nghệ trên cả nước nhằm thúc đẩy nghiên cứu và ứng dụng khoa học công nghệ."
+            "title": "U23 Việt Nam giành chiến thắng",
+            "description": "Đội tuyển U23 Việt Nam giành chiến thắng 2-1 trước đối thủ mạnh."
+          },
+          {
+            "title": "Phát hiện vi phạm nồng độ cồn",
+            "description": "Phát hiện 19 trường hợp vi phạm nồng độ cồn trong đêm."
+          },
+          {
+            "title": "Doanh nghiệp xuất khẩu đạt mốc quan trọng",
+            "description": "Doanh nghiệp xuất khẩu đạt 45 tỷ USD trong 6 tháng đầu năm."
+          },
+          {
+            "title": "Kỷ niệm ngày Thương binh Liệt sĩ",
+            "description": "Lễ kỷ niệm 78 năm ngày Thương binh Liệt sĩ được tổ chức trang trọng."
+          },
+          {
+            "title": "Dự án nhà ở xã hội",
+            "description": "Dự án nhà ở xã hội cung cấp 1200 căn hộ cho người thu nhập thấp."
+          },
+          {
+            "title": "Mở rộng tuyến đường quốc lộ",
+            "description": "Tuyến đường quốc lộ 1A được mở rộng thêm 25 km."
+          },
+          {
+            "title": "Nông dân thu hoạch thanh long",
+            "description": "Nông dân thu hoạch 68 tấn thanh long, giá tăng 15%."
+          },
+          {
+            "title": "Khởi công nhà máy điện mặt trời",
+            "description": "Khởi công xây dựng nhà máy điện mặt trời công suất 99 MW."
+          },
+          {
+            "title": "Số ca sốt xuất huyết giảm",
+            "description": "Số ca mắc sốt xuất huyết giảm 35% so với tuần trước."
+          },
+          {
+            "title": "Hội nghị thượng đỉnh ASEAN",
+            "description": "Hội nghị thượng đỉnh ASEAN lần thứ 42 diễn ra tại Hà Nội."
+          },
+          {
+            "title": "Giá xăng dầu tăng nhẹ",
+            "description": "Giá xăng dầu tăng 05 đồng/lít."
+          },
+          {
+            "title": "Vụ cháy lớn",
+            "description": "Vụ cháy lớn thiêu rụi 10 căn nhà."
+          },
+          {
+            "title": "Hỗ trợ hộ nghèo xây nhà",
+            "description": "Chương trình hỗ trợ 60 hộ nghèo xây nhà mới."
+          },
+          {
+            "title": "Khám phá hang động mới",
+            "description": "Khám phá hang động mới dài 80 mét."
+          },
+          {
+            "title": "Lễ hội hoa đăng thu hút khách",
+            "description": "Lễ hội hoa đăng thu hút 77 nghìn lượt khách."
+          },
+          {
+            "title": "Tăng trưởng GDP quý 2",
+            "description": "Tăng trưởng GDP quý 2 đạt 6.5%."
+          },
+          {
+            "title": "Số lượng xe ô tô đăng ký mới tăng",
+            "description": "Số lượng xe ô tô đăng ký mới tăng 18%."
           }
         ]
       },

@@ -1,32 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getVietnamDateKey } from '@/utils/server-storage';
-
-// Simple in-memory status tracking
-const processingStatus = new Map<string, {
-  type: 'analysis' | 'lottery';
-  status: 'processing' | 'completed' | 'failed';
-  startTime: Date;
-  endTime?: Date;
-  error?: string;
-}>();
-
-export function setProcessingStatus(
-  dateKey: string, 
-  type: 'analysis' | 'lottery', 
-  status: 'processing' | 'completed' | 'failed',
-  error?: string
-) {
-  const key = `${dateKey}-${type}`;
-  const existing = processingStatus.get(key);
-  
-  processingStatus.set(key, {
-    type,
-    status,
-    startTime: existing?.startTime || new Date(),
-    endTime: status !== 'processing' ? new Date() : undefined,
-    error
-  });
-}
+import { getProcessingStatus } from '@/utils/processing-status';
 
 export async function GET() {
   try {
@@ -35,11 +9,8 @@ export async function GET() {
     const vietnamTime = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Ho_Chi_Minh' }));
     const dateKey = getVietnamDateKey(vietnamTime);
     
-    const analysisKey = `${dateKey}-analysis`;
-    const lotteryKey = `${dateKey}-lottery`;
-    
-    const analysisStatus = processingStatus.get(analysisKey);
-    const lotteryStatus = processingStatus.get(lotteryKey);
+    const analysisStatus = getProcessingStatus(dateKey, 'analysis');
+    const lotteryStatus = getProcessingStatus(dateKey, 'lottery');
     
     return NextResponse.json({
       success: true,
