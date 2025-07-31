@@ -40,25 +40,37 @@ export const TimeBasedDisplay: React.FC = () => {
     try {
       setIsLoading(true);
       const dateKey = getDateKey(new Date());
-      
+
       // Fetch analysis data
-      const analysisResponse = await fetch(`/api/storage/analysis/${dateKey}`);
-      if (analysisResponse.ok) {
-        const data = await analysisResponse.json();
-        setAnalysisData(data);
+      try {
+        const analysisResponse = await fetch(`/api/storage/analysis/${dateKey}`);
+        if (analysisResponse.ok) {
+          const data = await analysisResponse.json();
+          setAnalysisData(data);
+        } else {
+          console.log('No analysis data available yet');
+        }
+      } catch (analysisError) {
+        console.error('Error fetching analysis data:', analysisError);
       }
 
       // Fetch lottery result if it's after 19:00
-      const vietnamTime = getVietnamTime();
-      if (vietnamTime.getHours() >= 19) {
-        const lotteryResponse = await fetch(`/api/storage/lottery/${dateKey}`);
-        if (lotteryResponse.ok) {
-          const lotteryData = await lotteryResponse.json();
-          setLotteryResult(lotteryData);
+      try {
+        const vietnamTime = getVietnamTime();
+        if (vietnamTime.getHours() >= 19) {
+          const lotteryResponse = await fetch(`/api/storage/lottery/${dateKey}`);
+          if (lotteryResponse.ok) {
+            const lotteryData = await lotteryResponse.json();
+            setLotteryResult(lotteryData);
+          } else {
+            console.log('No lottery data available yet');
+          }
         }
+      } catch (lotteryError) {
+        console.error('Error fetching lottery data:', lotteryError);
       }
     } catch (error) {
-      console.error('Error fetching data:', error);
+      console.error('Error in fetchTodaysData:', error);
     } finally {
       setIsLoading(false);
     }
@@ -136,30 +148,32 @@ export const TimeBasedDisplay: React.FC = () => {
               </div>
             </div>
 
-            <div className="space-y-6">
-              {/* Analysis Summary */}
-              <p className="text-gray-300 text-center">
-                {analysisData!.analysis.summary}
-              </p>
+            {analysisData && (
+              <div className="space-y-6">
+                {/* Analysis Summary */}
+                <p className="text-gray-300 text-center">
+                  {analysisData.analysis.summary}
+                </p>
 
-              {/* Lucky Numbers */}
-              {analysisData!.analysis.bestNumber && analysisData!.analysis.luckyNumbers && (
-                <LuckyNumberCard
-                  bestNumber={analysisData!.analysis.bestNumber}
-                  luckyNumbers={analysisData!.analysis.luckyNumbers}
-                />
-              )}
+                {/* Lucky Numbers */}
+                {analysisData.analysis.bestNumber && analysisData.analysis.luckyNumbers && (
+                  <LuckyNumberCard
+                    bestNumber={analysisData.analysis.bestNumber}
+                    luckyNumbers={analysisData.analysis.luckyNumbers}
+                  />
+                )}
 
-              {/* Lottery Result (only show for 19:00+ and if available) */}
-              {currentVietnamTime.getHours() >= 19 && lotteryResult &&
-               analysisData!.analysis.bestNumber && analysisData!.analysis.luckyNumbers && (
-                <LotteryResultDisplay
-                  bestNumber={analysisData!.analysis.bestNumber}
-                  luckyNumbers={analysisData!.analysis.luckyNumbers}
-                  lotteryResult={lotteryResult}
-                />
-              )}
-            </div>
+                {/* Lottery Result (only show for 19:00+ and if available) */}
+                {currentVietnamTime.getHours() >= 19 && lotteryResult &&
+                 analysisData.analysis.bestNumber && analysisData.analysis.luckyNumbers && (
+                  <LotteryResultDisplay
+                    bestNumber={analysisData.analysis.bestNumber}
+                    luckyNumbers={analysisData.analysis.luckyNumbers}
+                    lotteryResult={lotteryResult}
+                  />
+                )}
+              </div>
+            )}
           </div>
         );
       })}
