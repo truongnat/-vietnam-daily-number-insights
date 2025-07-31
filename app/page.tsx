@@ -13,6 +13,7 @@ import { TimeStatus } from '@/components/TimeStatus';
 import { ViewToggle } from '@/components/ViewToggle';
 import { FrequencyDashboard } from '@/components/FrequencyDashboard';
 import { HistoricalLog } from '@/components/HistoricalLog';
+import { TimeBasedDisplay } from '@/components/TimeBasedDisplay';
 
 export default function Page() {
   const [analysis, setAnalysis] = useState<AnalysisResult | null>(null);
@@ -22,7 +23,7 @@ export default function Page() {
   const [isVerifying, setIsVerifying] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [verificationError, setVerificationError] = useState<string | null>(null);
-  const [view, setView] = useState<'daily' | 'frequency' | 'history'>('daily');
+  const [view, setView] = useState<'daily' | 'realtime' | 'frequency' | 'history'>('realtime');
 
   const getVietnamTime = () => {
     const now = new Date();
@@ -144,12 +145,14 @@ export default function Page() {
     switch(view) {
       case 'daily':
         return renderDailyView();
+      case 'realtime':
+        return <TimeBasedDisplay />;
       case 'frequency':
         return <FrequencyDashboard />;
       case 'history':
         return <HistoricalLog />;
       default:
-        return renderDailyView();
+        return <TimeBasedDisplay />;
     }
   }
 
