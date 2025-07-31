@@ -29,7 +29,7 @@ Hướng dẫn nhanh thay thế Vercel cron bằng cron-job.org cho **Vietnam Da
 Title: Vietnam Analysis 12:00
 URL: https://your-domain.vercel.app/api/cron/daily-analysis
 Schedule: 0 5 * * *
-Method: POST
+Method: GET
 Headers: Authorization: Bearer your-secret-token
 ```
 
@@ -38,7 +38,7 @@ Headers: Authorization: Bearer your-secret-token
 Title: Vietnam Analysis 16:00
 URL: https://your-domain.vercel.app/api/cron/daily-analysis
 Schedule: 0 9 * * *
-Method: POST
+Method: GET
 Headers: Authorization: Bearer your-secret-token
 ```
 
@@ -47,7 +47,7 @@ Headers: Authorization: Bearer your-secret-token
 Title: Vietnam Analysis 17:00
 URL: https://your-domain.vercel.app/api/cron/daily-analysis
 Schedule: 0 10 * * *
-Method: POST
+Method: GET
 Headers: Authorization: Bearer your-secret-token
 ```
 
@@ -56,7 +56,7 @@ Headers: Authorization: Bearer your-secret-token
 Title: Vietnam Lottery Check
 URL: https://your-domain.vercel.app/api/cron/lottery-check
 Schedule: 0 12 * * *
-Method: POST
+Method: GET
 Headers: Authorization: Bearer your-secret-token
 ```
 

@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { fetchDailyAnalysis } from '@/services/geminiService';
 import { saveTodaysAnalysis, getVietnamDateKey } from '@/utils/storage';
 
-export async function POST(request: NextRequest) {
+export async function GET(request: NextRequest) {
   try {
     // Verify the request is from a cron job (optional security check)
     const authHeader = request.headers.get('authorization');
@@ -56,10 +56,4 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// GET method for manual testing
-export async function GET() {
-  return NextResponse.json({
-    message: 'Daily analysis cron endpoint is active',
-    usage: 'POST with proper authorization to trigger analysis'
-  });
-}
+

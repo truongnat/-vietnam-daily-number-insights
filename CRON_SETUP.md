@@ -53,13 +53,13 @@ GEMINI_API_KEY=your-gemini-api-key
 #### Daily Analysis (`/api/cron/daily-analysis`)
 - **Mục đích**: Phân tích tin tức và tạo số may mắn
 - **Lịch trình**: 12:00, 16:00, 17:00 Vietnam time (GMT+7)
-- **Method**: POST
+- **Method**: GET
 - **Authentication**: `Authorization: Bearer ${CRON_SECRET}`
 
 #### Lottery Check (`/api/cron/lottery-check`)
 - **Mục đích**: Lấy kết quả xổ số và lưu vào database
 - **Lịch trình**: 19:00 Vietnam time (GMT+7) - sau khi có kết quả
-- **Method**: POST
+- **Method**: GET
 - **Authentication**: `Authorization: Bearer ${CRON_SECRET}`
 
 ## 📅 Lịch trình cron jobs
@@ -73,31 +73,28 @@ GEMINI_API_KEY=your-gemini-api-key
 ```
 Title: Vietnam Daily Analysis - 12:00
 URL: https://your-domain.vercel.app/api/cron/daily-analysis
-Method: POST
+Method: GET
 Schedule: 0 5 * * *
 Headers:
   Authorization: Bearer your-super-secret-token-here
-  Content-Type: application/json
 ```
 
 ```
 Title: Vietnam Daily Analysis - 16:00
 URL: https://your-domain.vercel.app/api/cron/daily-analysis
-Method: POST
+Method: GET
 Schedule: 0 9 * * *
 Headers:
   Authorization: Bearer your-super-secret-token-here
-  Content-Type: application/json
 ```
 
 ```
 Title: Vietnam Daily Analysis - 17:00
 URL: https://your-domain.vercel.app/api/cron/daily-analysis
-Method: POST
+Method: GET
 Schedule: 0 10 * * *
 Headers:
   Authorization: Bearer your-super-secret-token-here
-  Content-Type: application/json
 ```
 
 ### Job 2: Lottery Check
@@ -109,11 +106,10 @@ Headers:
 ```
 Title: Vietnam Lottery Check
 URL: https://your-domain.vercel.app/api/cron/lottery-check
-Method: POST
+Method: GET
 Schedule: 0 12 * * *
 Headers:
   Authorization: Bearer your-super-secret-token-here
-  Content-Type: application/json
 ```
 
 ## 🚀 Hướng dẫn setup từng bước
@@ -135,11 +131,10 @@ Headers:
 - **Title:** `Vietnam Daily Analysis - 12:00`
 - **URL:** `https://your-domain.vercel.app/api/cron/daily-analysis`
 - **Schedule:** `0 5 * * *` (UTC)
-- **Request method:** `POST`
+- **Request method:** `GET`
 - **Request headers:**
   ```
   Authorization: Bearer your-super-secret-token-here
-  Content-Type: application/json
   ```
 - **Enable:** ✅
 
@@ -147,11 +142,10 @@ Headers:
 - **Title:** `Vietnam Daily Analysis - 16:00`
 - **URL:** `https://your-domain.vercel.app/api/cron/daily-analysis`
 - **Schedule:** `0 9 * * *` (UTC)
-- **Request method:** `POST`
+- **Request method:** `GET`
 - **Request headers:**
   ```
   Authorization: Bearer your-super-secret-token-here
-  Content-Type: application/json
   ```
 - **Enable:** ✅
 
@@ -159,11 +153,10 @@ Headers:
 - **Title:** `Vietnam Daily Analysis - 17:00`
 - **URL:** `https://your-domain.vercel.app/api/cron/daily-analysis`
 - **Schedule:** `0 10 * * *` (UTC)
-- **Request method:** `POST`
+- **Request method:** `GET`
 - **Request headers:**
   ```
   Authorization: Bearer your-super-secret-token-here
-  Content-Type: application/json
   ```
 - **Enable:** ✅
 
@@ -171,11 +164,10 @@ Headers:
 - **Title:** `Vietnam Lottery Check`
 - **URL:** `https://your-domain.vercel.app/api/cron/lottery-check`
 - **Schedule:** `0 12 * * *` (UTC)
-- **Request method:** `POST`
+- **Request method:** `GET`
 - **Request headers:**
   ```
   Authorization: Bearer your-super-secret-token-here
-  Content-Type: application/json
   ```
 - **Enable:** ✅
 
@@ -230,14 +222,14 @@ Headers:
 
 ```bash
 # Test daily analysis
-curl -X POST https://your-domain.vercel.app/api/cron/daily-analysis \
+curl https://your-domain.vercel.app/api/cron/daily-analysis \
   -H "Authorization: Bearer your-cron-secret"
 
 # Test lottery check
-curl -X POST https://your-domain.vercel.app/api/cron/lottery-check \
+curl https://your-domain.vercel.app/api/cron/lottery-check \
   -H "Authorization: Bearer your-cron-secret"
 
-# Check endpoint status
+# Test without authorization (sẽ trả về 401)
 curl https://your-domain.vercel.app/api/cron/daily-analysis
 curl https://your-domain.vercel.app/api/cron/lottery-check
 ```

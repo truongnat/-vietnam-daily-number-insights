@@ -152,8 +152,8 @@ Sau khi deploy, setup cron jobs với cron-job.org:
 - `GET /api/storage/lottery/[date]` - Lấy kết quả xổ số
 
 ### Cron Endpoints (Protected)
-- `POST /api/cron/daily-analysis` - Chạy phân tích hàng ngày
-- `POST /api/cron/lottery-check` - Kiểm tra kết quả xổ số
+- `GET /api/cron/daily-analysis` - Chạy phân tích hàng ngày
+- `GET /api/cron/lottery-check` - Kiểm tra kết quả xổ số
 
 **Authentication**: Requires `Authorization: Bearer ${CRON_SECRET}`
 
@@ -220,7 +220,7 @@ pnpm run build
 curl http://localhost:3000/api/storage/historical
 
 # Test cron endpoint
-curl -X POST http://localhost:3000/api/cron/daily-analysis \
+curl http://localhost:3000/api/cron/daily-analysis \
   -H "Authorization: Bearer your-cron-secret"
 
 # Check build
