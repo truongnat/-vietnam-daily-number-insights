@@ -33,7 +33,7 @@
 ### ⏰ Tự Động Hóa
 - **3 lần phân tích/ngày**: 12:00, 16:00, 17:00
 - **Kiểm tra kết quả**: 19:00 hàng ngày
-- **Cron jobs** với cron-job.org
+- **Cron jobs** với cron-job.org (miễn phí, không cần API key)
 
 ## 🛠️ Công Nghệ
 
@@ -133,13 +133,16 @@ vietnam-daily-number-insights/
    ```
 4. **Deploy** - Vercel sẽ tự động build và deploy
 
-### Setup Cron Jobs
+### Setup Cron Jobs (Miễn phí)
 
 Sau khi deploy, setup cron jobs với cron-job.org:
 
 1. **Đọc hướng dẫn**: [`CRON_QUICK_SETUP.md`](CRON_QUICK_SETUP.md)
-2. **Tạo 4 cron jobs** tại [cron-job.org](https://cron-job.org)
-3. **Test endpoints** để đảm bảo hoạt động
+2. **Đăng ký miễn phí** tại [cron-job.org](https://cron-job.org) (không cần API key)
+3. **Tạo 4 cron jobs** qua giao diện web
+4. **Test endpoints** để đảm bảo hoạt động
+
+**Lưu ý**: Cron-job.org hoàn toàn miễn phí và không yêu cầu API key hay thông tin thanh toán.
 
 ## 📊 API Endpoints
 

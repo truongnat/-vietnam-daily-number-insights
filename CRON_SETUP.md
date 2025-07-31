@@ -5,11 +5,33 @@ Hướng dẫn thiết lập cron jobs cho **Vietnam Daily Number Insights** s�
 ## 📋 Tổng quan
 
 Thay thế Vercel cron jobs bằng cron-job.org để có:
-- ✅ **Miễn phí** hoàn toàn
+- ✅ **Miễn phí** hoàn toàn (không cần API key)
 - ✅ **Giao diện web** dễ quản lý
 - ✅ **Monitoring** chi tiết
 - ✅ **Email notifications** khi có lỗi
 - ✅ **Logs** đầy đủ
+- ✅ **Không giới hạn** số lượng cron jobs
+- ✅ **Reliable** với uptime cao
+
+## 🔍 Cron-job.org là gì?
+
+**Cron-job.org** là dịch vụ web miễn phí cho phép bạn:
+- **Tạo cron jobs** qua giao diện web (không cần server riêng)
+- **Gọi HTTP requests** theo lịch trình định sẵn
+- **Monitor execution** với logs chi tiết
+- **Nhận notifications** qua email khi có lỗi
+
+**Cách hoạt động:**
+1. Bạn tạo cron job trên cron-job.org
+2. Cron-job.org sẽ gọi HTTP request đến API của bạn theo lịch
+3. API của bạn xử lý và trả về response
+4. Cron-job.org log kết quả và gửi notification nếu cần
+
+**So sánh với Vercel cron:**
+- ✅ **Miễn phí** (Vercel cron cần Pro plan)
+- ✅ **Không giới hạn** số jobs
+- ✅ **Giao diện quản lý** trực quan
+- ✅ **Monitoring** tốt hơn
 
 Ứng dụng có 2 cron jobs chính:
 1. **Daily Analysis** - Chạy 3 lần/ngày: 12:00, 16:00, 17:00 (Vietnam time)
@@ -96,11 +118,12 @@ Headers:
 
 ## 🚀 Hướng dẫn setup từng bước
 
-### Bước 1: Đăng ký tài khoản
+### Bước 1: Đăng ký tài khoản (Hoàn toàn miễn phí)
 
 1. Truy cập [cron-job.org](https://cron-job.org)
-2. Đăng ký tài khoản miễn phí
+2. Đăng ký tài khoản miễn phí (chỉ cần email + password)
 3. Xác nhận email
+4. **Lưu ý**: Không cần API key, credit card hay payment method
 
 ### Bước 2: Tạo cron jobs
 

@@ -4,14 +4,21 @@ Hướng dẫn nhanh thay thế Vercel cron bằng cron-job.org cho **Vietnam Da
 
 ## 🎯 Mục tiêu
 - ✅ Thay thế Vercel cron (đã xóa khỏi vercel.json)
-- ✅ Sử dụng cron-job.org miễn phí
+- ✅ Sử dụng cron-job.org miễn phí (không cần API key)
 - ✅ 4 jobs: 3 daily analysis + 1 lottery check
+
+## 💡 Tại sao cron-job.org?
+- **Hoàn toàn miễn phí** - Không cần API key, credit card
+- **Giao diện web** - Tạo và quản lý jobs dễ dàng
+- **Reliable** - Uptime cao, monitoring tốt
+- **No limits** - Không giới hạn số jobs như Vercel
 
 ## 🚀 Setup nhanh (5 phút)
 
-### 1. Đăng ký
+### 1. Đăng ký (Miễn phí - Không cần API key)
 - Vào [cron-job.org](https://cron-job.org)
-- Đăng ký tài khoản miễn phí
+- Đăng ký tài khoản miễn phí (chỉ cần email)
+- **Không cần** API key hay payment method
 
 ### 2. Tạo 4 jobs
 
