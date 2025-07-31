@@ -1,4 +1,6 @@
 
+'use client';
+
 import React, { useState, useEffect, useCallback } from 'react';
 import { fetchDailyAnalysis, fetchCurrentDayLotteryResult } from './services/geminiService';
 import type { AnalysisResult, GroundingChunk, StoredAnalysis, LotteryResult } from './types';
