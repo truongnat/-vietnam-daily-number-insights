@@ -8,21 +8,21 @@ export const HistoricalLog: React.FC = () => {
     const [historicalData, setHistoricalData] = useState<HistoricalData>({});
     const [sortedKeys, setSortedKeys] = useState<string[]>([]);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const data = await getAllHistoricalData();
-                setHistoricalData(data);
-                // Sort keys in descending order (most recent first)
-                const keys = Object.keys(data).sort((a, b) => new Date(b).getTime() - new Date(a).getTime());
-                setSortedKeys(keys);
-            } catch (error) {
-                console.error("Error fetching historical data:", error);
-                setHistoricalData({});
-                setSortedKeys([]);
-            }
-        };
+    const fetchData = async () => {
+        try {
+            const data = await getAllHistoricalData();
+            setHistoricalData(data);
+            // Sort keys in descending order (most recent first)
+            const keys = Object.keys(data).sort((a, b) => new Date(b).getTime() - new Date(a).getTime());
+            setSortedKeys(keys);
+        } catch (error) {
+            console.error("Error fetching historical data:", error);
+            setHistoricalData({});
+            setSortedKeys([]);
+        }
+    };
 
+    useEffect(() => {
         fetchData();
     }, []);
 
@@ -43,10 +43,11 @@ export const HistoricalLog: React.FC = () => {
             </p>
             <div className="space-y-4">
                 {sortedKeys.map(dateKey => (
-                    <HistoricalLogItem 
-                        key={dateKey} 
-                        dateKey={dateKey} 
-                        storedData={historicalData[dateKey]} 
+                    <HistoricalLogItem
+                        key={dateKey}
+                        dateKey={dateKey}
+                        storedData={historicalData[dateKey]}
+                        onLotteryUpdate={fetchData}
                     />
                 ))}
             </div>

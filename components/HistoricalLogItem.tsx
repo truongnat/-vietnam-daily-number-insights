@@ -103,7 +103,10 @@ export const HistoricalLogItem: React.FC<HistoricalLogItemProps> = ({ dateKey, s
                          )}
                          </>
                     ) : (
-                        <span className="px-2 py-0.5 text-xs font-semibold rounded-full bg-blue-800 text-blue-200">Chưa có KQ</span>
+                        <ForceCheckButton
+                          dateKey={dateKey}
+                          onSuccess={onLotteryUpdate}
+                        />
                     )}
                 </div>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className={`w-5 h-5 text-gray-400 ml-4 transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`}>
