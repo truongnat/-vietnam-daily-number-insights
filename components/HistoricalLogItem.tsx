@@ -124,7 +124,20 @@ export const HistoricalLogItem: React.FC<HistoricalLogItemProps> = ({ dateKey, s
                         <div className="space-y-4">
                             {analysis.bestNumber && (
                                 <div className="bg-yellow-900/30 p-4 rounded-md border-l-4 border-yellow-600">
-                                    <p className="font-bold text-white">{analysis.bestNumber.type}: <span className="text-2xl text-yellow-300">{analysis.bestNumber.number}</span></p>
+                                    <div className="flex items-center justify-between">
+                                        <p className="font-bold text-white">{analysis.bestNumber.type}: <span className="text-2xl text-yellow-300">{analysis.bestNumber.number}</span></p>
+                                        {lotteryResult && (
+                                            <div className="flex items-center space-x-2">
+                                                {lotteryResult.specialPrize === analysis.bestNumber.number ? (
+                                                    <span className="px-2 py-1 text-xs font-bold rounded-full bg-amber-400 text-amber-900">Trúng Đề</span>
+                                                ) : lotteryResult.allPrizes.includes(analysis.bestNumber.number) ? (
+                                                    <span className="px-2 py-1 text-xs font-bold rounded-full bg-green-500 text-green-900">Trúng Lô</span>
+                                                ) : (
+                                                    <span className="px-2 py-1 text-xs font-semibold rounded-full bg-gray-600 text-gray-300">Không trúng</span>
+                                                )}
+                                            </div>
+                                        )}
+                                    </div>
                                     <p className="text-xs text-yellow-200 mt-1">Tỷ lệ: {analysis.bestNumber.probability}</p>
                                     <p className="text-xs text-gray-400 mt-1 italic">"{analysis.bestNumber.reasoning}"</p>
                                 </div>
