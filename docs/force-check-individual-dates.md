@@ -133,6 +133,31 @@ curl https://your-domain.vercel.app/api/storage/lottery/2024-01-15
 - **Future date**: "2025-12-31" → Error  
 - **Invalid date**: "2024-13-45" → Error
 
+## 🎯 Hiển Thị Trạng Thái Trúng/Trượt
+
+Sau khi kiểm tra kết quả thành công, UI tự động cập nhật để hiển thị trạng thái trúng/trượt cho tất cả các số đã dự đoán:
+
+### Phần Tóm Tắt (Header)
+- **Số chính**: Hiển thị với màu nền và viền theo trạng thái
+  - 🟨 **Vàng**: Trúng Đề (Giải Đặc Biệt)
+  - 🟩 **Xanh lá**: Trúng Lô (Giải thường)
+  - ⬜ **Xám**: Không trúng
+
+### Phần Chi Tiết (Khi mở rộng)
+- **Thẻ số**: Mỗi số dự đoán hiển thị badge trạng thái ở góc phải trên
+  - 🏆 **"Trúng Đề"**: Badge vàng cho giải đặc biệt
+  - ✅ **"Trúng Lô"**: Badge xanh lá cho giải thường
+  - ❌ **"Không trúng"**: Badge xám cho số không trúng
+
+- **Gợi ý phân tích**: Mỗi gợi ý hiển thị trạng thái inline
+  - Best Number và Lucky Numbers hiển thị trạng thái trúng/trượt bên cạnh số
+  - Màu nền tương ứng với loại giải
+
+### Màu Sắc Hệ Thống
+- **Amber/Vàng**: Trúng giải đặc biệt (đề)
+- **Green/Xanh lá**: Trúng giải thường (lô)
+- **Gray/Xám**: Không trúng giải nào
+
 ## 🎯 Use Cases
 
 ### 1. Điền Dữ Liệu Thiếu
