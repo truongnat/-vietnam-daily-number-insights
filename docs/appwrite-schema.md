@@ -7,14 +7,23 @@ Stores daily analysis data including AI-generated insights and lucky numbers.
 
 **Attributes:**
 - `dateKey` (string, required) - Date in YYYY-MM-DD format (used as document ID)
-- `summary` (string, required) - Analysis summary
-- `bestNumber` (string, required) - JSON string of BestNumber object
-- `luckyNumbers` (string, required) - JSON string array of LuckyNumber objects
-- `topNumbers` (string, required) - JSON string array of TopNumber objects
-- `events` (string, required) - JSON string array of EventSource objects
-- `groundingChunks` (string, required) - JSON string array of GroundingChunk objects
+- `analysisData` (string, required) - JSON string containing the complete StoredAnalysis object (without lotteryResult)
 - `createdAt` (datetime, required) - Timestamp when analysis was created
 - `updatedAt` (datetime, required) - Timestamp when analysis was last updated
+
+**analysisData JSON Structure:**
+```json
+{
+  "analysis": {
+    "summary": "string",
+    "bestNumber": { "number": "string", "type": "string", "probability": "string", "reasoning": "string" },
+    "luckyNumbers": [{ "number": "string", "type": "string", "probability": "string", "reasoning": "string" }],
+    "topNumbers": [{ "number": "string", "count": number, "reason": "string" }],
+    "events": [{ "title": "string", "description": "string" }]
+  },
+  "groundingChunks": [{ "web": { "uri": "string", "title": "string" } }]
+}
+```
 
 **Indexes:**
 - `dateKey` (unique) - For fast date-based queries
@@ -25,10 +34,17 @@ Stores daily lottery results for comparison with predictions.
 
 **Attributes:**
 - `dateKey` (string, required) - Date in YYYY-MM-DD format (used as document ID)
-- `specialPrize` (string, required) - The special prize number
-- `allPrizes` (string, required) - JSON string array of all prize numbers
+- `lotteryData` (string, required) - JSON string containing the complete LotteryResult object
 - `createdAt` (datetime, required) - Timestamp when result was recorded
 - `updatedAt` (datetime, required) - Timestamp when result was last updated
+
+**lotteryData JSON Structure:**
+```json
+{
+  "specialPrize": "string",
+  "allPrizes": ["string", "string", ...]
+}
+```
 
 **Indexes:**
 - `dateKey` (unique) - For fast date-based queries

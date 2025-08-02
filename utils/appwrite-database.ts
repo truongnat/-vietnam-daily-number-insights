@@ -143,12 +143,10 @@ export async function saveAnalysisForDate(
 
     const documentData = {
       dateKey,
-      summary: data.analysis.summary,
-      bestNumber: JSON.stringify(data.analysis.bestNumber),
-      luckyNumbers: JSON.stringify(data.analysis.luckyNumbers),
-      topNumbers: JSON.stringify(data.analysis.topNumbers),
-      events: JSON.stringify(data.analysis.events),
-      groundingChunks: JSON.stringify(data.groundingChunks),
+      analysisData: JSON.stringify({
+        analysis: data.analysis,
+        groundingChunks: data.groundingChunks
+      }),
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
     };
@@ -192,8 +190,7 @@ export async function saveLotteryResultForDate(dateKey: string, result: LotteryR
 
     const documentData = {
       dateKey,
-      specialPrize: result.specialPrize,
-      allPrizes: JSON.stringify(result.allPrizes),
+      lotteryData: JSON.stringify(result),
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
     };
