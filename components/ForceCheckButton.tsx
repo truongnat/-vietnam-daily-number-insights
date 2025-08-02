@@ -41,9 +41,10 @@ export const ForceCheckButton: React.FC<ForceCheckButtonProps> = ({ dateKey, onS
           onSuccess?.();
         }, 1000);
       } else {
+        console.error('API Error:', data);
         setCheckStatus({
           status: 'error',
-          message: data.error || 'Không thể kiểm tra kết quả xổ số'
+          message: data.error || data.details || 'Không thể kiểm tra kết quả xổ số'
         });
       }
     } catch (error) {

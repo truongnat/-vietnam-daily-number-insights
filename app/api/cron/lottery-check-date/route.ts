@@ -21,16 +21,21 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Check if the date is not in the future (using simple string comparison)
+    // Check if the date is not too far in the future (allow some flexibility for testing)
     const today = new Date();
     const vietnamToday = new Date(today.toLocaleString("en-US", {timeZone: "Asia/Ho_Chi_Minh"}));
     const todayString = vietnamToday.toISOString().split('T')[0]; // YYYY-MM-DD format
 
-    console.log(`Date validation: requested=${dateKey}, today=${todayString}, comparison=${dateKey > todayString}`);
+    // Allow dates up to 7 days in the future for testing purposes
+    const maxDate = new Date(vietnamToday);
+    maxDate.setDate(maxDate.getDate() + 7);
+    const maxDateString = maxDate.toISOString().split('T')[0];
 
-    if (dateKey > todayString) {
+    console.log(`Date validation: requested=${dateKey}, today=${todayString}, maxAllowed=${maxDateString}`);
+
+    if (dateKey > maxDateString) {
       return NextResponse.json(
-        { success: false, error: `Cannot check lottery results for future dates. Today is ${todayString}, requested ${dateKey}` },
+        { success: false, error: `Date too far in future. Today is ${todayString}, max allowed is ${maxDateString}, requested ${dateKey}` },
         { status: 400 }
       );
     }
