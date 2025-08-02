@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getAnalysisForDate, saveAnalysisForDate } from '@/utils/database';
+import { getAnalysisForDate, saveAnalysisForDate } from '@/utils/appwrite-database';
 import type { StoredAnalysis } from '@/types';
 
 export async function GET(
@@ -8,15 +8,15 @@ export async function GET(
 ) {
   try {
     const { date } = await params;
-    const data = getAnalysisForDate(date);
-    
+    const data = await getAnalysisForDate(date);
+
     if (!data) {
       return NextResponse.json(
         { error: 'Analysis not found' },
         { status: 404 }
       );
     }
-    
+
     return NextResponse.json(data);
   } catch (error) {
     console.error('Error fetching analysis:', error);
@@ -34,9 +34,9 @@ export async function POST(
   try {
     const { date } = await params;
     const data: Omit<StoredAnalysis, 'lotteryResult'> = await request.json();
-    
-    saveAnalysisForDate(date, data);
-    
+
+    await saveAnalysisForDate(date, data);
+
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error('Error saving analysis:', error);

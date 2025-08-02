@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { saveLotteryResultForDate } from '@/utils/database';
+import { saveLotteryResultForDate } from '@/utils/appwrite-database';
 import type { LotteryResult } from '@/types';
 
 export async function POST(
@@ -9,9 +9,9 @@ export async function POST(
   try {
     const { date } = await params;
     const result: LotteryResult = await request.json();
-    
-    saveLotteryResultForDate(date, result);
-    
+
+    await saveLotteryResultForDate(date, result);
+
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error('Error saving lottery result:', error);
