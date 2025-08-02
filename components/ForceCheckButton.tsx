@@ -18,68 +18,38 @@ export const ForceCheckButton: React.FC<ForceCheckButtonProps> = ({ dateKey, onS
 
   const runLotteryCheck = async () => {
     setCheckStatus({ status: 'running', message: 'Đang kiểm tra kết quả xổ số...' });
-    
+
     try {
-      // First, try to save lottery result for the specific date
-      const response = await fetch('/api/cron/lottery-check');
+      // Use the new lottery check API for specific dates
+      const response = await fetch('/api/cron/lottery-check-date', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ dateKey })
+      });
+
       const data = await response.json();
-      
+
       if (data.success) {
-        // Check if we can get lottery result for this specific date
-        setTimeout(async () => {
-          try {
-            const lotteryResponse = await fetch(`/api/storage/lottery/${dateKey}`);
-            if (lotteryResponse.ok) {
-              const lotteryData = await lotteryResponse.json();
-              setCheckStatus({ 
-                status: 'success', 
-                message: `Đã tìm thấy kết quả xổ số cho ${dateKey}!` 
-              });
-              onSuccess?.();
-            } else {
-              // Try to fetch and save lottery result for this specific date
-              const manualCheckResponse = await fetch(`/api/storage/lottery/${dateKey}`, {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                  specialPrize: "00000", // Placeholder - would need actual lottery API
-                  allPrizes: ["00000", "11111", "22222"] // Placeholder
-                })
-              });
-              
-              if (manualCheckResponse.ok) {
-                setCheckStatus({ 
-                  status: 'success', 
-                  message: `Đã cập nhật kết quả cho ${dateKey}!` 
-                });
-                onSuccess?.();
-              } else {
-                setCheckStatus({ 
-                  status: 'error', 
-                  message: `Không thể tìm thấy kết quả xổ số cho ngày ${dateKey}. Có thể chưa có dữ liệu hoặc ngày này chưa diễn ra.` 
-                });
-              }
-            }
-          } catch (error) {
-            setCheckStatus({ 
-              status: 'error', 
-              message: `Lỗi khi kiểm tra kết quả: ${error instanceof Error ? error.message : 'Không xác định'}` 
-            });
-          }
-        }, 2000);
-        
+        setCheckStatus({
+          status: 'success',
+          message: `Đã cập nhật kết quả xổ số cho ${dateKey}!`
+        });
+        // Wait a moment then trigger refresh
+        setTimeout(() => {
+          onSuccess?.();
+        }, 1000);
       } else {
-        setCheckStatus({ 
-          status: 'error', 
-          message: `Lỗi: ${data.error || data.message || 'Không thể kiểm tra xổ số'}` 
+        setCheckStatus({
+          status: 'error',
+          message: data.error || 'Không thể kiểm tra kết quả xổ số'
         });
       }
     } catch (error) {
-      setCheckStatus({ 
-        status: 'error', 
-        message: `Lỗi kết nối: ${error instanceof Error ? error.message : 'Không xác định'}` 
+      setCheckStatus({
+        status: 'error',
+        message: `Lỗi kết nối: ${error instanceof Error ? error.message : 'Không xác định'}`
       });
     }
   };

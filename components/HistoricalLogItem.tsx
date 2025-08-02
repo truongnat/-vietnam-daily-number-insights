@@ -3,10 +3,12 @@ import React, { useState, useMemo } from 'react';
 import type { StoredAnalysis } from '@/types';
 import { EventSnippet } from '@/components/EventSnippet';
 import { NumberCard } from '@/components/NumberCard';
+import { ForceCheckButton } from '@/components/ForceCheckButton';
 
 interface HistoricalLogItemProps {
   dateKey: string;
   storedData: StoredAnalysis;
+  onLotteryUpdate?: () => void;
 }
 
 const WinBadge: React.FC<{ count: number, type: 'de' | 'lo' }> = ({ count, type }) => {
@@ -23,7 +25,7 @@ const WinBadge: React.FC<{ count: number, type: 'de' | 'lo' }> = ({ count, type 
     );
 };
 
-export const HistoricalLogItem: React.FC<HistoricalLogItemProps> = ({ dateKey, storedData }) => {
+export const HistoricalLogItem: React.FC<HistoricalLogItemProps> = ({ dateKey, storedData, onLotteryUpdate }) => {
     const [isExpanded, setIsExpanded] = useState(false);
 
     const { analysis, lotteryResult } = storedData;
