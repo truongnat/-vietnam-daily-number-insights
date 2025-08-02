@@ -98,9 +98,14 @@ If you have existing data in the JSON file (`data/vietnam-insights.json`), you c
    - Check collection permissions allow read/write access
    - Verify API key permissions if using authentication
 
-4. **Attribute size errors:**
-   - Ensure attribute sizes are sufficient for your data
-   - Increase sizes if needed in the Appwrite console
+4. **"Maximum number or size of attributes" error:**
+   - This is why we use the simplified schema with only 4 attributes per collection
+   - The `analysisData` and `lotteryData` fields store all complex data as JSON strings
+   - If you still get this error, ensure you're using the updated schema above
+
+5. **Data too large errors:**
+   - Increase the size of `analysisData` to 1000000 (1MB) if needed
+   - Increase the size of `lotteryData` to 10000 if needed
 
 ## Next Steps
 
