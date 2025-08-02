@@ -144,7 +144,20 @@ export const HistoricalLogItem: React.FC<HistoricalLogItemProps> = ({ dateKey, s
                             )}
                             {analysis.luckyNumbers && analysis.luckyNumbers.map((ln, index) => (
                                 <div key={index} className="bg-gray-800 p-3 rounded-md border-l-4 border-gray-600">
-                                    <p className="font-bold text-white">{ln.type}: <span className="text-xl">{ln.number}</span></p>
+                                    <div className="flex items-center justify-between">
+                                        <p className="font-bold text-white">{ln.type}: <span className="text-xl">{ln.number}</span></p>
+                                        {lotteryResult && (
+                                            <div className="flex items-center space-x-2">
+                                                {lotteryResult.specialPrize === ln.number ? (
+                                                    <span className="px-2 py-1 text-xs font-bold rounded-full bg-amber-400 text-amber-900">Trúng Đề</span>
+                                                ) : lotteryResult.allPrizes.includes(ln.number) ? (
+                                                    <span className="px-2 py-1 text-xs font-bold rounded-full bg-green-500 text-green-900">Trúng Lô</span>
+                                                ) : (
+                                                    <span className="px-2 py-1 text-xs font-semibold rounded-full bg-gray-600 text-gray-300">Không trúng</span>
+                                                )}
+                                            </div>
+                                        )}
+                                    </div>
                                     <p className="text-xs text-gray-400 mt-1">Tỷ lệ: {ln.probability}</p>
                                     <p className="text-xs text-gray-400 mt-1 italic">"{ln.reasoning}"</p>
                                 </div>
