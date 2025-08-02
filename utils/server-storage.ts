@@ -32,7 +32,7 @@ export const saveTodaysAnalysis = async (data: Omit<StoredAnalysis, 'lotteryResu
 export const saveTodaysLotteryResult = async (result: LotteryResult) => {
   try {
     const todayKey = getVietnamDateKey(new Date());
-    saveLotteryResultForDate(todayKey, result);
+    await saveLotteryResultForDate(todayKey, result);
   } catch (error) {
     console.error("Failed to save lottery result:", error);
     throw error;
