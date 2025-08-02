@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "test:appwrite": "node scripts/test-appwrite.js"
   },
   "dependencies": {
     "@google/genai": "^1.12.0",
@@ -22,6 +23,7 @@
     "@types/react": "^19.1.9",
     "@types/react-dom": "^19.1.7",
     "autoprefixer": "^10.4.21",
+    "dotenv": "^17.2.1",
     "postcss": "^8.5.6",
     "tailwindcss": "^4.1.11",
     "typescript": "~5.7.3"
