@@ -190,17 +190,23 @@ Sau khi deploy, setup cron jobs với cron-job.org:
   - **Kiểm Tra Xổ Số**: Lấy kết quả xổ số (sau 18:35)
 - Theo dõi trạng thái real-time
 
-### 3. Đọc Phân Tích Chi Tiết
+### 3. Kiểm Tra Kết Quả Từng Ngày
+- Vào **"Nhật Ký Phân Tích"**
+- Tìm những ngày có badge **"Chưa có KQ"**
+- Nhấn nút **"Kiểm tra KQ"** để cập nhật kết quả
+- Xem kết quả trúng/trượt được cập nhật ngay
+
+### 4. Đọc Phân Tích Chi Tiết
 - Scroll xuống xem **Các Con Số Nổi Bật**
 - Đọc **Nguồn Sự Kiện Chính**
 - Hiểu lý do AI chọn các số
 
-### 4. Kiểm Tra Lịch Sử
+### 5. Kiểm Tra Lịch Sử
 - Click **"Xem Lịch Sử"**
 - Xem các dự đoán trước đó
 - Kiểm tra tỷ lệ trúng thực tế
 
-### 5. Đối Chiếu Kết Quả
+### 6. Đối Chiếu Kết Quả
 - Sau 19:00 hàng ngày
 - Hệ thống tự động đối chiếu
 - Hiển thị kết quả trúng/trượt
