@@ -35,6 +35,7 @@
 - **Kiểm tra kết quả**: 19:00 hàng ngày
 - **Cron jobs** với cron-job.org (miễn phí, không cần API key)
 - **🎮 Force Run**: Nút chạy thủ công các tiến trình ngay lập tức
+- **🔍 Force Check**: Nút kiểm tra kết quả xổ số cho từng ngày cụ thể
 
 ## 🛠️ Công Nghệ
 
@@ -169,6 +170,7 @@ Sau khi deploy, setup cron jobs với cron-job.org:
 ### Cron Endpoints (Public)
 - `GET /api/cron/daily-analysis` - Chạy phân tích hàng ngày
 - `GET /api/cron/lottery-check` - Kiểm tra kết quả xổ số
+- `POST /api/cron/lottery-check-date` - Kiểm tra kết quả cho ngày cụ thể
 - `GET /api/cron/status` - Kiểm tra trạng thái các tiến trình
 
 **Authentication**: Không cần authentication
