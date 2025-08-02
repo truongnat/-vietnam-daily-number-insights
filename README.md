@@ -34,6 +34,7 @@
 - **3 lần phân tích/ngày**: 12:00, 16:00, 17:00
 - **Kiểm tra kết quả**: 19:00 hàng ngày
 - **Cron jobs** với cron-job.org (miễn phí, không cần API key)
+- **🎮 Force Run**: Nút chạy thủ công các tiến trình ngay lập tức
 
 ## 🛠️ Công Nghệ
 
@@ -168,6 +169,7 @@ Sau khi deploy, setup cron jobs với cron-job.org:
 ### Cron Endpoints (Public)
 - `GET /api/cron/daily-analysis` - Chạy phân tích hàng ngày
 - `GET /api/cron/lottery-check` - Kiểm tra kết quả xổ số
+- `GET /api/cron/status` - Kiểm tra trạng thái các tiến trình
 
 **Authentication**: Không cần authentication
 
