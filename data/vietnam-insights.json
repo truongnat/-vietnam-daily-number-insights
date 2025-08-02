@@ -141,6 +141,84 @@
         ]
       },
       "groundingChunks": []
+    },
+    "2025-08-02": {
+      "analysis": {
+        "summary": "Hôm nay, thị trường vàng trong nước chứng kiến sự tăng vọt đáng kể, với giá vàng miếng SJC và vàng nhẫn đều tăng mạnh. Các hoạt động xã hội nổi bật bao gồm việc Bí thư Thành ủy Hà Nội cùng người dân ra quân tổng vệ sinh môi trường tại phường Xuân Đỉnh và khai mạc Đại hội Đảng bộ xã An Khánh hướng tới mục tiêu phát triển đô thị xanh. Ngoài ra, nhiều bảo tàng, nhà hát và làng văn hóa sẽ mở cửa miễn phí nhân dịp lễ Quốc khánh 2/9.",
+        "bestNumber": {
+          "number": "21",
+          "type": "Số Đề May Mắn Nhất",
+          "probability": "Cao",
+          "reasoning": "Số 21 có tỷ lệ cao trúng đề vì nó xuất hiện nhiều lần trong tin tức hôm nay, đặc biệt liên quan đến sự kiện nổi bật về giá vàng tăng 2,1 triệu đồng/lượng. Đây là một con số gắn liền với một sự kiện kinh tế quan trọng, thu hút sự chú ý của dư luận, tạo nên yếu tố 'may mắn' theo quan niệm dân gian. Hơn nữa, số 21 không trùng với hai chữ số cuối của giải đặc biệt ngày hôm qua (02)."
+        },
+        "luckyNumbers": [
+          {
+            "number": "16",
+            "type": "Số Lô Tiềm Năng",
+            "probability": "Cao",
+            "reasoning": "Số 16 xuất hiện nhiều lần trong tin tức hôm nay, liên quan đến việc giá vàng tăng 1,6 triệu đồng/lượng. Sự xuất hiện thường xuyên trong các sự kiện kinh tế quan trọng có thể làm tăng khả năng xuất hiện của nó trong kết quả xổ số."
+          },
+          {
+            "number": "11",
+            "type": "Số Lô Tiềm Năng",
+            "probability": "Cao",
+            "reasoning": "Số 11 xuất hiện trong các bản tin thời sự (11h00, 11h30), cho thấy sự hiện diện trong các thông tin quan trọng của ngày. Đây là một con số có tần suất xuất hiện đáng kể trong tin tức."
+          },
+          {
+            "number": "30",
+            "type": "Số Lô Tiềm Năng",
+            "probability": "Cao",
+            "reasoning": "Số 30 xuất hiện trong tin tức liên quan đến mục tiêu phát triển đến năm 2030 của Đại hội Đảng bộ và cũng là một trong các số lô của giải Bảy ngày hôm qua. Sự kết hợp giữa tần suất trong tin tức và việc đã về trong kỳ trước cho thấy tiềm năng xuất hiện lại."
+          },
+          {
+            "number": "26",
+            "type": "Số Lô Tiềm Năng",
+            "probability": "Cao",
+            "reasoning": "Số 26 xuất hiện hai lần trong kết quả xổ số miền Bắc ngày hôm qua (giải Nhất và giải Tư). Việc một số xuất hiện nhiều lần trong cùng một kỳ quay cho thấy một xu hướng tiềm năng và có thể tiếp tục xuất hiện trong kỳ quay tiếp theo."
+          }
+        ],
+        "topNumbers": [
+          {
+            "number": "02",
+            "count": 4,
+            "reason": "Xuất hiện nhiều lần trong các mốc thời gian (ngày 02/08/2025)."
+          },
+          {
+            "number": "16",
+            "count": 3,
+            "reason": "Liên quan đến mức tăng giá vàng (1,6 triệu đồng/lượng)."
+          },
+          {
+            "number": "21",
+            "count": 3,
+            "reason": "Liên quan đến mức tăng giá vàng (2,1 triệu đồng/lượng)."
+          },
+          {
+            "number": "11",
+            "count": 2,
+            "reason": "Xuất hiện trong các khung giờ bản tin thời sự (11h00, 11h30)."
+          }
+        ],
+        "events": [
+          {
+            "title": "Giá vàng tăng vọt",
+            "description": "Giá vàng miếng SJC tăng hơn 2 triệu đồng/lượng, vàng nhẫn tăng hơn 1 triệu đồng/lượng."
+          },
+          {
+            "title": "Tổng vệ sinh môi trường tại Hà Nội",
+            "description": "Bí thư Thành ủy Hà Nội Bùi Thị Minh Hoài và nhân dân phường Xuân Đỉnh ra quân tổng vệ sinh môi trường."
+          },
+          {
+            "title": "Khai mạc Đại hội Đảng bộ xã An Khánh",
+            "description": "Đại hội đại biểu Đảng bộ xã An Khánh lần thứ I, nhiệm kỳ 2025-2030 khai mạc, hướng tới mục tiêu 'đô thị xanh, văn minh, hiện đại và hạnh phúc'."
+          },
+          {
+            "title": "Mở cửa miễn phí bảo tàng dịp Quốc khánh 2/9",
+            "description": "Nhiều bảo tàng, nhà hát và làng văn hóa mở cửa miễn phí dịp lễ Quốc khánh 2/9."
+          }
+        ]
+      },
+      "groundingChunks": []
     }
   },
   "lotteryResults": {}
