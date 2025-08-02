@@ -30,12 +30,7 @@ This guide will help you set up the Appwrite database and collections for the Vi
 
 **Attributes:**
 - `dateKey` (String, Required, Size: 10)
-- `summary` (String, Required, Size: 5000)
-- `bestNumber` (String, Required, Size: 1000)
-- `luckyNumbers` (String, Required, Size: 5000)
-- `topNumbers` (String, Required, Size: 5000)
-- `events` (String, Required, Size: 10000)
-- `groundingChunks` (String, Required, Size: 10000)
+- `analysisData` (String, Required, Size: 1000000)
 - `createdAt` (DateTime, Required)
 - `updatedAt` (DateTime, Required)
 
