@@ -21,14 +21,14 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Check if the date is not in the future
-    const targetDate = new Date(dateKey);
+    // Check if the date is not in the future (using simple string comparison)
     const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    
-    if (targetDate > today) {
+    const vietnamToday = new Date(today.toLocaleString("en-US", {timeZone: "Asia/Ho_Chi_Minh"}));
+    const todayString = vietnamToday.toISOString().split('T')[0]; // YYYY-MM-DD format
+
+    if (dateKey > todayString) {
       return NextResponse.json(
-        { success: false, error: 'Cannot check lottery results for future dates' },
+        { success: false, error: `Cannot check lottery results for future dates. Today is ${todayString}, requested ${dateKey}` },
         { status: 400 }
       );
     }
