@@ -78,15 +78,33 @@ export const HistoricalLogItem: React.FC<HistoricalLogItemProps> = ({ dateKey, s
             >
                 <div className="flex-1 text-left">
                     <p className="font-semibold text-lg text-white">{formattedDate}</p>
-                    <div className="flex items-center gap-3 mt-1">
+                    <div className="flex items-center gap-3 mt-1 flex-wrap">
                         <p className="text-sm text-gray-400">Gợi ý:</p>
                         {analysis.bestNumber && (
-                            <span className="text-lg font-bold text-yellow-300 border border-yellow-600 px-2 py-1 rounded">
+                            <span className={`text-lg font-bold px-2 py-1 rounded border ${
+                                lotteryResult
+                                    ? lotteryResult.specialPrize === analysis.bestNumber.number
+                                        ? 'text-amber-300 border-amber-600 bg-amber-900/30'
+                                        : lotteryResult.allPrizes.includes(analysis.bestNumber.number)
+                                        ? 'text-green-300 border-green-600 bg-green-900/30'
+                                        : 'text-gray-400 border-gray-600 bg-gray-900/30'
+                                    : 'text-yellow-300 border-yellow-600'
+                            }`}>
                                 {analysis.bestNumber.number}
                             </span>
                         )}
                         {analysis.luckyNumbers && analysis.luckyNumbers.map(ln => (
-                             <span key={ln.number} className="text-lg font-bold text-gray-200">{ln.number}</span>
+                             <span key={ln.number} className={`text-lg font-bold px-2 py-1 rounded ${
+                                lotteryResult
+                                    ? lotteryResult.specialPrize === ln.number
+                                        ? 'text-amber-300 bg-amber-900/30'
+                                        : lotteryResult.allPrizes.includes(ln.number)
+                                        ? 'text-green-300 bg-green-900/30'
+                                        : 'text-gray-400 bg-gray-900/30'
+                                    : 'text-gray-200'
+                            }`}>
+                                {ln.number}
+                            </span>
                         ))}
                     </div>
                 </div>
@@ -169,7 +187,14 @@ export const HistoricalLogItem: React.FC<HistoricalLogItemProps> = ({ dateKey, s
                         <h5 className="font-semibold text-gray-300 mb-3">Các Con Số Nổi Bật Trong Tin Tức:</h5>
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                             {analysis.topNumbers.map((item, index) => (
-                                <NumberCard key={index} number={item.number} count={item.count} reason={item.reason} index={index} />
+                                <NumberCard
+                                    key={index}
+                                    number={item.number}
+                                    count={item.count}
+                                    reason={item.reason}
+                                    index={index}
+                                    lotteryResult={lotteryResult}
+                                />
                             ))}
                         </div>
                     </div>
