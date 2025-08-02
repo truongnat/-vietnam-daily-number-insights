@@ -78,11 +78,19 @@ npm install
 ### 3. Environment Setup
 Tạo file `.env.local`:
 ```bash
-GEMINI_API_KEY=your-gemini-api-key-here
+NEXT_PUBLIC_GEMINI_API_KEY=your-gemini-api-key-here
+NEXT_PUBLIC_APPWRITE_PROJECT_ID=your-appwrite-project-id
+NEXT_PUBLIC_APPWRITE_ENDPOINT=https://cloud.appwrite.io/v1
 CRON_SECRET=your-secure-random-string
 ```
 
-### 4. Run Development Server
+### 4. Appwrite Database Setup
+Follow the [Appwrite Setup Guide](docs/appwrite-setup.md) to:
+1. Create database and collections in Appwrite console
+2. Configure proper permissions
+3. Test the connection
+
+### 5. Run Development Server
 ```bash
 pnpm dev
 # hoặc
@@ -110,11 +118,14 @@ vietnam-daily-number-insights/
 ├── services/                     # Business logic
 │   └── geminiService.ts          # Gemini AI integration
 ├── utils/                        # Utilities
-│   ├── database.ts               # JSON storage
+│   ├── appwrite.ts               # Appwrite client config
+│   ├── appwrite-database.ts      # Appwrite database operations
+│   ├── database.ts               # Legacy JSON storage (deprecated)
 │   └── storage.ts                # Data operations
 ├── types.ts                      # TypeScript definitions
-├── data/                         # JSON database
-│   └── vietnam-insights.json     # Stored data
+├── docs/                         # Documentation
+│   ├── appwrite-schema.md        # Database schema
+│   └── appwrite-setup.md         # Setup guide
 ├── CRON_SETUP.md                 # Cron setup guide
 └── CRON_QUICK_SETUP.md           # Quick setup guide
 ```
@@ -129,8 +140,11 @@ vietnam-daily-number-insights/
    - Import GitHub repository
 3. **Set Environment Variables**:
    ```
-   GEMINI_API_KEY=your-gemini-api-key
+   NEXT_PUBLIC_GEMINI_API_KEY=your-gemini-api-key
+   NEXT_PUBLIC_APPWRITE_PROJECT_ID=your-appwrite-project-id
+   NEXT_PUBLIC_APPWRITE_ENDPOINT=https://cloud.appwrite.io/v1
    ```
+4. **Setup Appwrite Database**: Follow [Appwrite Setup Guide](docs/appwrite-setup.md)
 4. **Deploy** - Vercel sẽ tự động build và deploy
 
 ### Setup Cron Jobs (Miễn phí)
@@ -190,8 +204,8 @@ Sau khi deploy, setup cron jobs với cron-job.org:
 
 - **Static Generation**: Next.js pre-renders pages
 - **API Caching**: Intelligent caching strategies
-- **JSON Storage**: Fast file-based database
-- **CDN**: Vercel Edge Network
+- **Appwrite Database**: Fast cloud database with global CDN
+- **CDN**: Vercel Edge Network + Appwrite global infrastructure
 - **Optimized Images**: Next.js Image optimization
 
 ## 🐛 Troubleshooting
