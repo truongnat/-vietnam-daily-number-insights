@@ -48,17 +48,12 @@ export async function getAllHistoricalData(): Promise<HistoricalData> {
     // Process analyses
     for (const doc of analysesResponse.documents) {
       const dateKey = doc.dateKey;
+      const analysisData = JSON.parse(doc.analysisData);
       const storedAnalysis: StoredAnalysis = {
-        analysis: {
-          summary: doc.summary,
-          bestNumber: JSON.parse(doc.bestNumber),
-          luckyNumbers: JSON.parse(doc.luckyNumbers),
-          topNumbers: JSON.parse(doc.topNumbers),
-          events: JSON.parse(doc.events)
-        },
-        groundingChunks: JSON.parse(doc.groundingChunks)
+        analysis: analysisData.analysis,
+        groundingChunks: analysisData.groundingChunks
       };
-      
+
       result[dateKey] = storedAnalysis;
     }
     
@@ -66,10 +61,8 @@ export async function getAllHistoricalData(): Promise<HistoricalData> {
     for (const doc of lotteryResponse.documents) {
       const dateKey = doc.dateKey;
       if (result[dateKey]) {
-        result[dateKey].lotteryResult = {
-          specialPrize: doc.specialPrize,
-          allPrizes: JSON.parse(doc.allPrizes)
-        };
+        const lotteryData = JSON.parse(doc.lotteryData);
+        result[dateKey].lotteryResult = lotteryData;
       }
     }
     
@@ -105,15 +98,10 @@ export async function getAnalysisForDate(dateKey: string): Promise<StoredAnalysi
       throw error;
     }
     
+    const analysisData = JSON.parse(analysisDoc.analysisData);
     const storedAnalysis: StoredAnalysis = {
-      analysis: {
-        summary: analysisDoc.summary,
-        bestNumber: JSON.parse(analysisDoc.bestNumber),
-        luckyNumbers: JSON.parse(analysisDoc.luckyNumbers),
-        topNumbers: JSON.parse(analysisDoc.topNumbers),
-        events: JSON.parse(analysisDoc.events)
-      },
-      groundingChunks: JSON.parse(analysisDoc.groundingChunks)
+      analysis: analysisData.analysis,
+      groundingChunks: analysisData.groundingChunks
     };
     
     // Try to get lottery result
@@ -124,10 +112,8 @@ export async function getAnalysisForDate(dateKey: string): Promise<StoredAnalysi
         documentId
       );
       
-      storedAnalysis.lotteryResult = {
-        specialPrize: lotteryDoc.specialPrize,
-        allPrizes: JSON.parse(lotteryDoc.allPrizes)
-      };
+      const lotteryData = JSON.parse(lotteryDoc.lotteryData);
+      storedAnalysis.lotteryResult = lotteryData;
     } catch (error: any) {
       // Lottery result doesn't exist, that's okay
       if (error.code !== 404) {

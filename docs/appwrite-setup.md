@@ -46,8 +46,7 @@ This guide will help you set up the Appwrite database and collections for the Vi
 
 **Attributes:**
 - `dateKey` (String, Required, Size: 10)
-- `specialPrize` (String, Required, Size: 10)
-- `allPrizes` (String, Required, Size: 1000)
+- `lotteryData` (String, Required, Size: 10000)
 - `createdAt` (DateTime, Required)
 - `updatedAt` (DateTime, Required)
 
