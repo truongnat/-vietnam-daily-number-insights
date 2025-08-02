@@ -123,13 +123,16 @@ export const TimeBasedDisplay: React.FC = () => {
           Phân Tích Theo Thời Gian Thực
         </h2>
         <p className="text-gray-400">
-          Thời gian Việt Nam: {currentVietnamTime.toLocaleTimeString('vi-VN', { 
-            hour: '2-digit', 
+          Thời gian Việt Nam: {currentVietnamTime.toLocaleTimeString('vi-VN', {
+            hour: '2-digit',
             minute: '2-digit',
             timeZone: 'Asia/Ho_Chi_Minh'
           })}
         </p>
       </div>
+
+      {/* Force Run Button */}
+      <ForceRunButton onStatusUpdate={fetchTodaysData} />
 
       {/* Time Slots - Only show if data exists and time has passed */}
       {TIME_SLOTS.filter(timeSlot => hasDataForTimeSlot(timeSlot)).map((timeSlot) => {
