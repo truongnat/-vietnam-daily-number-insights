@@ -1,5 +1,5 @@
 import type { StoredAnalysis, LotteryResult } from '@/types';
-import { saveAnalysisForDate, saveLotteryResultForDate } from '@/utils/database';
+import { saveAnalysisForDate, saveLotteryResultForDate } from '@/utils/appwrite-database';
 
 /**
  * Gets a date key in YYYY-MM-DD format for consistency.
@@ -18,7 +18,7 @@ export const getVietnamDateKey = (date: Date): string => {
 export const saveTodaysAnalysis = async (data: Omit<StoredAnalysis, 'lotteryResult'>) => {
   try {
     const todayKey = getVietnamDateKey(new Date());
-    saveAnalysisForDate(todayKey, data);
+    await saveAnalysisForDate(todayKey, data);
   } catch (error) {
     console.error("Failed to save analysis:", error);
     throw error;

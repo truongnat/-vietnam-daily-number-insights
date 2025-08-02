@@ -1,9 +1,9 @@
 import { NextResponse } from 'next/server';
-import { getAllHistoricalData } from '@/utils/database';
+import { getAllHistoricalData } from '@/utils/appwrite-database';
 
 export async function GET() {
   try {
-    const data = getAllHistoricalData();
+    const data = await getAllHistoricalData();
     return NextResponse.json(data);
   } catch (error) {
     console.error('Error fetching historical data:', error);
