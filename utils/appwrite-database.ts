@@ -1,0 +1,247 @@
+import { Query } from 'appwrite';
+import { 
+  getAppwriteDatabases, 
+  DATABASE_ID, 
+  ANALYSES_COLLECTION_ID, 
+  LOTTERY_RESULTS_COLLECTION_ID,
+  getDocumentId 
+} from './appwrite';
+import type { StoredAnalysis, HistoricalData, LotteryResult, AnalysisResult, GroundingChunk } from '@/types';
+
+/**
+ * Gets a date key in YYYY-MM-DD format for consistency.
+ * @param date The date object to format.
+ * @returns A string in YYYY-MM-DD format.
+ */
+export const getVietnamDateKey = (date: Date): string => {
+  const vietnamTime = new Date(date.toLocaleString('en-US', { timeZone: 'Asia/Ho_Chi_Minh' }));
+  const year = vietnamTime.getFullYear();
+  const month = String(vietnamTime.getMonth() + 1).padStart(2, '0');
+  const day = String(vietnamTime.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
+
+/**
+ * Retrieves all historical data from Appwrite.
+ * @returns A HistoricalData object.
+ */
+export async function getAllHistoricalData(): Promise<HistoricalData> {
+  try {
+    const databases = getAppwriteDatabases();
+    
+    // Fetch all analyses
+    const analysesResponse = await databases.listDocuments(
+      DATABASE_ID,
+      ANALYSES_COLLECTION_ID,
+      [Query.orderDesc('createdAt'), Query.limit(100)]
+    );
+    
+    // Fetch all lottery results
+    const lotteryResponse = await databases.listDocuments(
+      DATABASE_ID,
+      LOTTERY_RESULTS_COLLECTION_ID,
+      [Query.orderDesc('createdAt'), Query.limit(100)]
+    );
+    
+    const result: HistoricalData = {};
+    
+    // Process analyses
+    for (const doc of analysesResponse.documents) {
+      const dateKey = doc.dateKey;
+      const storedAnalysis: StoredAnalysis = {
+        analysis: {
+          summary: doc.summary,
+          bestNumber: JSON.parse(doc.bestNumber),
+          luckyNumbers: JSON.parse(doc.luckyNumbers),
+          topNumbers: JSON.parse(doc.topNumbers),
+          events: JSON.parse(doc.events)
+        },
+        groundingChunks: JSON.parse(doc.groundingChunks)
+      };
+      
+      result[dateKey] = storedAnalysis;
+    }
+    
+    // Add lottery results to corresponding analyses
+    for (const doc of lotteryResponse.documents) {
+      const dateKey = doc.dateKey;
+      if (result[dateKey]) {
+        result[dateKey].lotteryResult = {
+          specialPrize: doc.specialPrize,
+          allPrizes: JSON.parse(doc.allPrizes)
+        };
+      }
+    }
+    
+    return result;
+  } catch (error) {
+    console.error('Failed to retrieve historical data from Appwrite:', error);
+    return {};
+  }
+}
+
+/**
+ * Retrieves analysis data for a specific date from Appwrite.
+ * @param dateKey The date key in YYYY-MM-DD format.
+ * @returns The StoredAnalysis object for the date, or null if it doesn't exist.
+ */
+export async function getAnalysisForDate(dateKey: string): Promise<StoredAnalysis | null> {
+  try {
+    const databases = getAppwriteDatabases();
+    const documentId = getDocumentId(dateKey);
+    
+    // Get analysis
+    let analysisDoc;
+    try {
+      analysisDoc = await databases.getDocument(
+        DATABASE_ID,
+        ANALYSES_COLLECTION_ID,
+        documentId
+      );
+    } catch (error: any) {
+      if (error.code === 404) {
+        return null;
+      }
+      throw error;
+    }
+    
+    const storedAnalysis: StoredAnalysis = {
+      analysis: {
+        summary: analysisDoc.summary,
+        bestNumber: JSON.parse(analysisDoc.bestNumber),
+        luckyNumbers: JSON.parse(analysisDoc.luckyNumbers),
+        topNumbers: JSON.parse(analysisDoc.topNumbers),
+        events: JSON.parse(analysisDoc.events)
+      },
+      groundingChunks: JSON.parse(analysisDoc.groundingChunks)
+    };
+    
+    // Try to get lottery result
+    try {
+      const lotteryDoc = await databases.getDocument(
+        DATABASE_ID,
+        LOTTERY_RESULTS_COLLECTION_ID,
+        documentId
+      );
+      
+      storedAnalysis.lotteryResult = {
+        specialPrize: lotteryDoc.specialPrize,
+        allPrizes: JSON.parse(lotteryDoc.allPrizes)
+      };
+    } catch (error: any) {
+      // Lottery result doesn't exist, that's okay
+      if (error.code !== 404) {
+        console.warn('Error fetching lottery result:', error);
+      }
+    }
+    
+    return storedAnalysis;
+  } catch (error) {
+    console.error(`Failed to retrieve analysis for ${dateKey} from Appwrite:`, error);
+    return null;
+  }
+}
+
+/**
+ * Saves analysis data for a specific date to Appwrite.
+ * @param dateKey The date key in YYYY-MM-DD format.
+ * @param data The analysis data to save.
+ */
+export async function saveAnalysisForDate(
+  dateKey: string,
+  data: Omit<StoredAnalysis, 'lotteryResult'>
+): Promise<void> {
+  try {
+    const databases = getAppwriteDatabases();
+    const documentId = getDocumentId(dateKey);
+
+    const documentData = {
+      dateKey,
+      summary: data.analysis.summary,
+      bestNumber: JSON.stringify(data.analysis.bestNumber),
+      luckyNumbers: JSON.stringify(data.analysis.luckyNumbers),
+      topNumbers: JSON.stringify(data.analysis.topNumbers),
+      events: JSON.stringify(data.analysis.events),
+      groundingChunks: JSON.stringify(data.groundingChunks),
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    };
+
+    try {
+      // Try to update existing document
+      await databases.updateDocument(
+        DATABASE_ID,
+        ANALYSES_COLLECTION_ID,
+        documentId,
+        { ...documentData, updatedAt: new Date().toISOString() }
+      );
+    } catch (error: any) {
+      if (error.code === 404) {
+        // Document doesn't exist, create new one
+        await databases.createDocument(
+          DATABASE_ID,
+          ANALYSES_COLLECTION_ID,
+          documentId,
+          documentData
+        );
+      } else {
+        throw error;
+      }
+    }
+  } catch (error) {
+    console.error(`Failed to save analysis for ${dateKey} to Appwrite:`, error);
+    throw error;
+  }
+}
+
+/**
+ * Saves lottery result for a specific date to Appwrite.
+ * @param dateKey The date key in YYYY-MM-DD format.
+ * @param result The lottery result to save.
+ */
+export async function saveLotteryResultForDate(dateKey: string, result: LotteryResult): Promise<void> {
+  try {
+    const databases = getAppwriteDatabases();
+    const documentId = getDocumentId(dateKey);
+
+    const documentData = {
+      dateKey,
+      specialPrize: result.specialPrize,
+      allPrizes: JSON.stringify(result.allPrizes),
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    };
+
+    try {
+      // Try to update existing document
+      await databases.updateDocument(
+        DATABASE_ID,
+        LOTTERY_RESULTS_COLLECTION_ID,
+        documentId,
+        { ...documentData, updatedAt: new Date().toISOString() }
+      );
+    } catch (error: any) {
+      if (error.code === 404) {
+        // Document doesn't exist, create new one
+        await databases.createDocument(
+          DATABASE_ID,
+          LOTTERY_RESULTS_COLLECTION_ID,
+          documentId,
+          documentData
+        );
+      } else {
+        throw error;
+      }
+    }
+  } catch (error) {
+    console.error(`Failed to save lottery result for ${dateKey} to Appwrite:`, error);
+    throw error;
+  }
+}
+
+/**
+ * Closes the database connection (no-op for Appwrite).
+ */
+export function closeDatabase(): void {
+  // No-op for Appwrite - connections are managed automatically
+}
