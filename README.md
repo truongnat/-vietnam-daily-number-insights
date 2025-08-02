@@ -45,7 +45,7 @@
 
 ### Backend
 - **Next.js API Routes** - Server-side logic
-- **JSON File Storage** - Database replacement
+- **Appwrite Database** - Cloud database storage
 - **Gemini AI API** - News analysis
 - **Cron Jobs** - Automated tasks
 
@@ -60,6 +60,7 @@
 - **Node.js** 18+
 - **pnpm** (recommended) hoặc npm
 - **Gemini API Key**
+- **Appwrite Account** - Free at [cloud.appwrite.io](https://cloud.appwrite.io)
 
 ### 1. Clone Repository
 ```bash
