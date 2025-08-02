@@ -26,6 +26,8 @@ export async function POST(request: NextRequest) {
     const vietnamToday = new Date(today.toLocaleString("en-US", {timeZone: "Asia/Ho_Chi_Minh"}));
     const todayString = vietnamToday.toISOString().split('T')[0]; // YYYY-MM-DD format
 
+    console.log(`Date validation: requested=${dateKey}, today=${todayString}, comparison=${dateKey > todayString}`);
+
     if (dateKey > todayString) {
       return NextResponse.json(
         { success: false, error: `Cannot check lottery results for future dates. Today is ${todayString}, requested ${dateKey}` },
