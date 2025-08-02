@@ -5,6 +5,7 @@ import type { StoredAnalysis, LotteryResult } from '@/types';
 import { LuckyNumberCard } from '@/components/LuckyNumberCard';
 import { LotteryResultDisplay } from '@/components/LotteryResultDisplay';
 import { LoadingSpinner } from '@/components/LoadingSpinner';
+import { ForceRunButton } from '@/components/ForceRunButton';
 
 interface TimeSlot {
   time: string;
