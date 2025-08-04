@@ -1,5 +1,6 @@
 import { GoogleGenAI } from "@google/genai";
 import type { AnalysisResult, GroundingChunk, LotteryResult, HistoricalData } from "@/types";
+import { getAllHistoricalData } from "@/utils/appwrite-database";
 
 function getGeminiAI() {
   if (!process.env.NEXT_PUBLIC_GEMINI_API_KEY) {
@@ -127,10 +128,12 @@ export const fetchDailyAnalysis = async (): Promise<{
       ]
     }
 
-    **Yêu cầu quan trọng:**
+    **Yêu cầu quan trọng về phân tích xác suất thống kê:**
     - Số đề may mắn nhất TUYỆT ĐỐI KHÔNG được trùng với hai chữ số cuối của giải đặc biệt ngày hôm qua.
     - 4 số lô phải khác nhau và khác với số đề may mắn nhất.
-    - Ưu tiên các số có tần suất xuất hiện cao trong tin tức nhưng cân nhắc xu hướng lịch sử.
+    - SỬ DỤNG PHƯƠNG PHÁP THỐNG KÊ: Cân bằng giữa tần suất xuất hiện trong tin tức hôm nay và xác suất dựa trên dữ liệu lịch sử 7 ngày.
+    - TRÁNH CÁC SỐ ĐÃ RA THƯỜNG XUYÊN: Ưu tiên số ít xuất hiện trong lịch sử gần đây nhưng có tín hiệu mạnh từ tin tức.
+    - PHÂN TÍCH XU HƯỚNG: Xem xét chu kỳ và pattern từ dữ liệu lịch sử để tăng độ chính xác.
     - Liệt kê bốn con số xuất hiện thường xuyên nhất trong tin tức vào mảng "topNumbers", sắp xếp theo số lần xuất hiện giảm dần.
     - TOÀN BỘ NỘI DUNG CỦA CÁC TRƯỜNG VĂN BẢN PHẢI LÀ TIẾNG VIỆT.
   `;
@@ -219,13 +222,7 @@ const getVietnamDateStringForPrompt = (): string => {
  */
 const fetchHistoricalLotteryData = async (): Promise<string> => {
   try {
-    const response = await fetch('/api/storage/historical');
-    if (!response.ok) {
-      console.warn('Could not fetch historical data, proceeding without it');
-      return "Không có dữ liệu lịch sử để phân tích.";
-    }
-
-    const historicalData: HistoricalData = await response.json();
+    const historicalData: HistoricalData = await getAllHistoricalData();
     const entries = Object.entries(historicalData);
 
     if (entries.length === 0) {
