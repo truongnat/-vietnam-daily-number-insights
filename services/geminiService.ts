@@ -63,16 +63,22 @@ export const fetchDailyAnalysis = async (): Promise<{
 }> => {
   const model = "gemini-2.5-flash";
 
+  // Fetch historical lottery data for statistical analysis
+  const historicalData = await fetchHistoricalLotteryData();
+
   const prompt = `
-    Phân tích tin tức và kết quả xổ số để đưa ra dự đoán số may mắn. Nhiệm vụ của bạn gồm ba phần:
+    Phân tích tin tức và kết quả xổ số để đưa ra dự đoán số may mắn dựa trên xác suất thống kê. Nhiệm vụ của bạn gồm bốn phần:
 
-    1.  **Phân tích Tin tức Việt Nam Hôm Nay:** Quét các tin tức, bài báo và sự kiện quan trọng ở Việt Nam tính đến 4:00 chiều giờ Việt Nam (GMT+7) hôm nay. Trích xuất tất cả các số có hai chữ số (00-99) và thống kê tần suất xuất hiện của chúng.
+    1.  **Phân tích Tin tức Việt Nam Hôm Nay:** Quét các tin tức, bài báo và sự kiện quan trọng ở Việt Nam tính đến 4:00 chiều giờ Việt Nam (GMT+7) hôm nay. Trích xuất tất cả các số có hai chữ số (00-99) và thống kê tần suất xuất hiện của chúng. Tập trung vào các con số nổi bật nhất trong các sự kiện quan trọng.
 
-    2.  **Tìm Kết quả Xổ số Ngày Hôm Qua:** Sử dụng Google Search, tìm kết quả "Xổ số kiến thiết Miền Bắc" của ngày hôm qua. Phân tích hai chữ số cuối của giải đặc biệt và tất cả các giải lô để tìm ra xu hướng.
+    2.  **Phân tích Dữ liệu Lịch sử:** Sử dụng dữ liệu xổ số lịch sử sau đây để tính toán xác suất thống kê:
+    ${historicalData}
 
-    3.  **Dự đoán Số May Mắn:** Dựa trên phân tích, đưa ra:
-       - 1 SỐ MAY MẮN NHẤT có tỷ lệ cao trúng ĐỀ (giải đặc biệt)
-       - 4 SỐ có tỷ lệ cao trúng LÔ (các giải khác)
+    3.  **Tìm Kết quả Xổ số Ngày Hôm Qua:** Sử dụng Google Search, tìm kết quả "Xổ số kiến thiết Miền Bắc" của ngày hôm qua. Phân tích hai chữ số cuối của giải đặc biệt và tất cả các giải lô để tìm ra xu hướng.
+
+    4.  **Dự đoán Số May Mắn Dựa Trên Xác Suất:** Kết hợp phân tích tin tức, dữ liệu lịch sử và xu hướng để đưa ra:
+       - 1 SỐ MAY MẮN NHẤT có tỷ lệ cao trúng ĐỀ (giải đặc biệt) - ưu tiên số có tần suất cao trong tin tức NHƯNG tránh số đã ra gần đây
+       - 4 SỐ có tỷ lệ cao trúng LÔ (các giải khác) - cân bằng giữa tần suất tin tức và xác suất thống kê
 
     Phản hồi của bạn PHẢI là một chuỗi đối tượng JSON hợp lệ duy nhất và không có gì khác. Không bao gồm bất kỳ văn bản giới thiệu, cuộc trò chuyện hoặc định dạng markdown nào như \`\`\`json. Đối tượng JSON phải tuân thủ cấu trúc chính xác này:
 
@@ -82,32 +88,32 @@ export const fetchDailyAnalysis = async (): Promise<{
         "number": "XX",
         "type": "Số Đề May Mắn Nhất",
         "probability": "Cao",
-        "reasoning": "Giải thích chi tiết tại sao đây là số có tỷ lệ cao nhất trúng đề, dựa trên phân tích tin tức, xu hướng lịch sử và các yếu tố may mắn."
+        "reasoning": "Giải thích chi tiết dựa trên: (1) Tần suất xuất hiện trong tin tức hôm nay, (2) Phân tích xác suất thống kê từ dữ liệu 7 ngày gần nhất, (3) Xu hướng tránh số đã ra gần đây, (4) Mức độ nổi bật của sự kiện liên quan."
       },
       "luckyNumbers": [
         {
           "number": "AA",
           "type": "Số Lô Tiềm Năng",
           "probability": "Cao",
-          "reasoning": "Giải thích tại sao số này có tỷ lệ cao trúng lô, dựa trên tần suất xuất hiện trong tin tức và xu hướng lịch sử."
+          "reasoning": "Phân tích xác suất dựa trên: tần suất trong tin tức, thống kê lịch sử 7 ngày, và mức độ quan trọng của sự kiện liên quan."
         },
         {
           "number": "BB",
           "type": "Số Lô Tiềm Năng",
           "probability": "Cao",
-          "reasoning": "Giải thích tại sao số này có tỷ lệ cao trúng lô."
+          "reasoning": "Phân tích xác suất dựa trên: tần suất trong tin tức, thống kê lịch sử 7 ngày, và mức độ quan trọng của sự kiện liên quan."
         },
         {
           "number": "CC",
           "type": "Số Lô Tiềm Năng",
           "probability": "Cao",
-          "reasoning": "Giải thích tại sao số này có tỷ lệ cao trúng lô."
+          "reasoning": "Phân tích xác suất dựa trên: tần suất trong tin tức, thống kê lịch sử 7 ngày, và mức độ quan trọng của sự kiện liên quan."
         },
         {
           "number": "DD",
           "type": "Số Lô Tiềm Năng",
           "probability": "Cao",
-          "reasoning": "Giải thích tại sao số này có tỷ lệ cao trúng lô."
+          "reasoning": "Phân tích xác suất dựa trên: tần suất trong tin tức, thống kê lịch sử 7 ngày, và mức độ quan trọng của sự kiện liên quan."
         }
       ],
       "topNumbers": [
