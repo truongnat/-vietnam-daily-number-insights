@@ -91,18 +91,16 @@ export const TimeBasedDisplay: React.FC = () => {
   }, []);
 
   const hasDataForTimeSlot = (timeSlot: TimeSlot): boolean => {
-    if (!analysisData) return false;
-
-    // Check if we have data and current time is past the time slot
-    // This ensures we only show sections after cron jobs have had a chance to run
-    const currentHour = currentVietnamTime.getHours();
-    return currentHour >= timeSlot.hour;
+    // If we have analysis data, show it immediately regardless of time
+    // This allows users to see data as soon as it's available
+    return !!analysisData;
   };
 
-  const getTimeSlotStatus = (timeSlot: TimeSlot): 'completed' | 'upcoming' => {
+  const getTimeSlotStatus = (timeSlot: TimeSlot): 'completed' | 'upcoming' | 'available' => {
     const currentHour = currentVietnamTime.getHours();
 
     if (currentHour >= timeSlot.hour) return 'completed';
+    if (analysisData) return 'available'; // Data is available before scheduled time
     return 'upcoming';
   };
 
@@ -146,9 +144,11 @@ export const TimeBasedDisplay: React.FC = () => {
               </h3>
               <div className={`px-3 py-1 rounded-full text-sm font-medium ${
                 status === 'completed' ? 'bg-green-900/50 text-green-300 border border-green-500/50' :
+                status === 'available' ? 'bg-blue-900/50 text-blue-300 border border-blue-500/50' :
                 'bg-gray-900/50 text-gray-400 border border-gray-500/50'
               }`}>
-                {status === 'completed' ? 'Đã hoàn thành' : 'Chưa tới giờ'}
+                {status === 'completed' ? 'Đã hoàn thành' :
+                 status === 'available' ? 'Có dữ liệu sớm' : 'Chưa tới giờ'}
               </div>
             </div>
 
