@@ -197,21 +197,7 @@ export const TimeBasedDisplay: React.FC = () => {
         </div>
       )}
 
-      {/* Show message when no time slots are visible yet */}
-      {analysisData && TIME_SLOTS.filter(timeSlot => hasDataForTimeSlot(timeSlot)).length === 0 && (
-        <div className="text-center py-12">
-          <p className="text-gray-400 text-lg">
-            Có dữ liệu nhưng chưa tới giờ hiển thị.
-          </p>
-          <p className="text-gray-500 text-sm mt-2">
-            Thời gian hiện tại: {currentVietnamTime.toLocaleTimeString('vi-VN', {
-              hour: '2-digit',
-              minute: '2-digit',
-              timeZone: 'Asia/Ho_Chi_Minh'
-            })}
-          </p>
-        </div>
-      )}
+      {/* This section is no longer needed since we show data immediately when available */}
     </div>
   );
 };

@@ -1,5 +1,5 @@
 import { GoogleGenAI } from "@google/genai";
-import type { AnalysisResult, GroundingChunk, LotteryResult } from "@/types";
+import type { AnalysisResult, GroundingChunk, LotteryResult, HistoricalData } from "@/types";
 
 function getGeminiAI() {
   if (!process.env.NEXT_PUBLIC_GEMINI_API_KEY) {
@@ -206,6 +206,70 @@ const getVietnamDateStringForPrompt = (): string => {
   const month = String(vietnamTime.getMonth() + 1).padStart(2, "0");
   const year = vietnamTime.getFullYear();
   return `${day}/${month}/${year}`;
+};
+
+/**
+ * Fetches historical lottery data for the past 7 days for statistical analysis
+ */
+const fetchHistoricalLotteryData = async (): Promise<string> => {
+  try {
+    const response = await fetch('/api/storage/historical');
+    if (!response.ok) {
+      console.warn('Could not fetch historical data, proceeding without it');
+      return "Không có dữ liệu lịch sử để phân tích.";
+    }
+
+    const historicalData: HistoricalData = await response.json();
+    const entries = Object.entries(historicalData);
+
+    if (entries.length === 0) {
+      return "Không có dữ liệu lịch sử để phân tích.";
+    }
+
+    // Get the last 7 days of data that have lottery results
+    const recentEntries = entries
+      .filter(([_, data]) => data.lotteryResult)
+      .slice(0, 7);
+
+    if (recentEntries.length === 0) {
+      return "Không có kết quả xổ số lịch sử để phân tích.";
+    }
+
+    let historicalSummary = `Dữ liệu xổ số ${recentEntries.length} ngày gần nhất:\n`;
+
+    const allNumbers: string[] = [];
+    const specialNumbers: string[] = [];
+
+    recentEntries.forEach(([dateKey, data]) => {
+      if (data.lotteryResult) {
+        const { specialPrize, allPrizes } = data.lotteryResult;
+        historicalSummary += `- ${dateKey}: Đặc biệt: ${specialPrize}, Tất cả: [${allPrizes.join(', ')}]\n`;
+
+        specialNumbers.push(specialPrize);
+        allNumbers.push(...allPrizes);
+      }
+    });
+
+    // Calculate frequency statistics
+    const numberFrequency: { [key: string]: number } = {};
+    allNumbers.forEach(num => {
+      numberFrequency[num] = (numberFrequency[num] || 0) + 1;
+    });
+
+    const sortedByFrequency = Object.entries(numberFrequency)
+      .sort(([,a], [,b]) => b - a)
+      .slice(0, 10);
+
+    historicalSummary += `\nThống kê tần suất xuất hiện (top 10):\n`;
+    sortedByFrequency.forEach(([num, count]) => {
+      historicalSummary += `- Số ${num}: ${count} lần\n`;
+    });
+
+    return historicalSummary;
+  } catch (error) {
+    console.error('Error fetching historical data:', error);
+    return "Lỗi khi lấy dữ liệu lịch sử.";
+  }
 };
 
 export const fetchCurrentDayLotteryResult =
