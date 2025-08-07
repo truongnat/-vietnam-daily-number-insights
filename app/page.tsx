@@ -15,6 +15,7 @@ import { FrequencyDashboard } from '@/components/FrequencyDashboard';
 import { HistoricalLog } from '@/components/HistoricalLog';
 import { TimeBasedDisplay } from '@/components/TimeBasedDisplay';
 import { ForceRunButton } from '@/components/ForceRunButton';
+import { HistoricalDataManager } from '@/components/HistoricalDataManager';
 
 export default function Page() {
   const [analysis, setAnalysis] = useState<AnalysisResult | null>(null);
@@ -136,6 +137,7 @@ export default function Page() {
   const renderDailyView = () => (
     <>
       <TimeStatus isAfterCutoff={isAfterCutoff} />
+      <HistoricalDataManager />
       <ForceRunButton onStatusUpdate={handleFetchData} />
       {isLoading && <LoadingSpinner />}
       {error && <ErrorDisplay message={error} />}
