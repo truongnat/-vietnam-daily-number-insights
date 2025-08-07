@@ -102,7 +102,7 @@ export const fetchDailyAnalysis = async (): Promise<{
           "number": "AA",
           "type": "Số Lô Tiềm Năng",
           "probability": "Cao",
-          "reasoning": "Phân tích xác suất dựa trên: tần suất trong tin tức, thống kê lịch sử 7 ngày, và mức độ quan trọng của sự kiện liên quan."
+          "reasoning": "Phân tích xác suất dựa trên: (1) Thống kê AI 14 ngày, (2) Phân tích mẫu hình và chu kỳ, (3) Xu hướng số 'lạnh' chuyển 'nóng', (4) Tần suất trong tin tức, (5) Phân tích tổ hợp số, (6) Mức độ quan trọng của sự kiện liên quan."
         }
       ],
       "topNumbers": [
@@ -331,6 +331,76 @@ const generateBasicStatisticalAnalysis = (
 };
 
 /**
+ * Searches for missing historical lottery results using AI
+ */
+const searchMissingLotteryResults = async (missingDates: string[]): Promise<{ [date: string]: LotteryResult }> => {
+  const results: { [date: string]: LotteryResult } = {};
+
+  for (const dateKey of missingDates.slice(0, 5)) { // Limit to 5 searches to avoid rate limits
+    try {
+      const vietnamDate = new Date(dateKey + 'T12:00:00+07:00');
+      const dateString = vietnamDate.toLocaleDateString('vi-VN', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        timeZone: 'Asia/Ho_Chi_Minh'
+      });
+
+      const prompt = `
+      Sử dụng Google Search, tìm kết quả "Xổ số kiến thiết Miền Bắc" (KQXSMB) cho ngày ${dateString} (${dateKey}).
+
+      Nhiệm vụ: Trích xuất hai chữ số cuối của TẤT CẢ các giải xổ số.
+
+      Nếu tìm thấy kết quả, trả về JSON với format:
+      {
+        "specialPrize": "XX",
+        "allPrizes": ["XX", "YY", "ZZ", ...]
+      }
+
+      Nếu không tìm thấy, trả về:
+      {
+        "specialPrize": null,
+        "allPrizes": []
+      }
+      `;
+
+      const ai = getGeminiAI();
+      const response = await ai.models.generateContent({
+        model: "gemini-2.5-flash",
+        contents: prompt,
+        config: {
+          tools: [{ googleSearch: {} }],
+          temperature: 0.0,
+        },
+      });
+
+      if (response.text) {
+        const result = parseJsonResponse<{
+          specialPrize: string | null;
+          allPrizes: string[];
+        }>(response.text);
+
+        if (result && result.specialPrize && result.allPrizes.length > 0) {
+          results[dateKey] = {
+            specialPrize: result.specialPrize,
+            allPrizes: result.allPrizes
+          };
+          console.log(`Found missing lottery result for ${dateKey}`);
+        }
+      }
+
+      // Add delay to avoid rate limiting
+      await new Promise(resolve => setTimeout(resolve, 1000));
+    } catch (error) {
+      console.error(`Error searching lottery result for ${dateKey}:`, error);
+    }
+  }
+
+  return results;
+};
+
+/**
  * Fetches and analyzes historical lottery data for the past 14 days using AI for enhanced statistical analysis
  */
 const fetchHistoricalLotteryData = async (): Promise<string> => {
@@ -338,18 +408,60 @@ const fetchHistoricalLotteryData = async (): Promise<string> => {
     const historicalData: HistoricalData = await getAllHistoricalData();
     const entries = Object.entries(historicalData);
 
-    if (entries.length === 0) {
-      return "Không có dữ liệu lịch sử để phân tích.";
-    }
-
     // Get the last 14 days of data that have lottery results
-    const recentEntries = entries
+    let recentEntries = entries
       .filter(([_, data]) => data.lotteryResult)
       .slice(0, 14);
+
+    // If we don't have enough data, try to search for missing results
+    if (recentEntries.length < 10) {
+      console.log(`Only ${recentEntries.length} days of data available, searching for missing results...`);
+
+      // Generate list of dates we should have data for
+      const today = new Date();
+      const targetDates: string[] = [];
+      for (let i = 1; i <= 14; i++) {
+        const date = new Date(today);
+        date.setDate(date.getDate() - i);
+        const dateKey = date.toISOString().split('T')[0];
+        targetDates.push(dateKey);
+      }
+
+      // Find missing dates
+      const existingDates = new Set(entries.map(([dateKey]) => dateKey));
+      const missingDates = targetDates.filter(date => !existingDates.has(date));
+
+      if (missingDates.length > 0) {
+        console.log(`Searching for ${missingDates.length} missing lottery results...`);
+        const foundResults = await searchMissingLotteryResults(missingDates);
+
+        // Add found results to our analysis (but don't save to DB here)
+        Object.entries(foundResults).forEach(([dateKey, lotteryResult]) => {
+          const mockAnalysis: StoredAnalysis = {
+            analysis: {
+              summary: "Dữ liệu được tìm kiếm tự động",
+              bestNumber: { number: "00", type: "", probability: "", reasoning: "" },
+              luckyNumbers: [],
+              topNumbers: [],
+              events: []
+            },
+            groundingChunks: [],
+            lotteryResult
+          };
+          recentEntries.push([dateKey, mockAnalysis]);
+        });
+
+        // Re-sort by date
+        recentEntries.sort(([a], [b]) => b.localeCompare(a));
+        recentEntries = recentEntries.slice(0, 14);
+      }
+    }
 
     if (recentEntries.length === 0) {
       return "Không có kết quả xổ số lịch sử để phân tích.";
     }
+
+    console.log(`Analyzing ${recentEntries.length} days of lottery data...`);
 
     // Generate AI-enhanced statistical analysis
     const aiAnalysis = await generateAIStatisticalAnalysis(recentEntries);
