@@ -79,7 +79,7 @@ export const fetchDailyAnalysis = async (): Promise<{
 
     4.  **Dự đoán Số May Mắn Dựa Trên Xác Suất:** Kết hợp phân tích tin tức, dữ liệu lịch sử và xu hướng để đưa ra:
        - 1 SỐ MAY MẮN NHẤT có tỷ lệ cao trúng ĐỀ (giải đặc biệt) - ưu tiên số có tần suất cao trong tin tức NHƯNG tránh số đã ra gần đây
-       - 4 SỐ có tỷ lệ cao trúng LÔ (các giải khác) - cân bằng giữa tần suất tin tức và xác suất thống kê
+       - 1 SỐ có tỷ lệ cao trúng LÔ (các giải khác) - cân bằng giữa tần suất tin tức và xác suất thống kê
 
     Phản hồi của bạn PHẢI là một chuỗi đối tượng JSON hợp lệ duy nhất và không có gì khác. Không bao gồm bất kỳ văn bản giới thiệu, cuộc trò chuyện hoặc định dạng markdown nào như \`\`\`json. Đối tượng JSON phải tuân thủ cấu trúc chính xác này:
 
@@ -94,24 +94,6 @@ export const fetchDailyAnalysis = async (): Promise<{
       "luckyNumbers": [
         {
           "number": "AA",
-          "type": "Số Lô Tiềm Năng",
-          "probability": "Cao",
-          "reasoning": "Phân tích xác suất dựa trên: tần suất trong tin tức, thống kê lịch sử 7 ngày, và mức độ quan trọng của sự kiện liên quan."
-        },
-        {
-          "number": "BB",
-          "type": "Số Lô Tiềm Năng",
-          "probability": "Cao",
-          "reasoning": "Phân tích xác suất dựa trên: tần suất trong tin tức, thống kê lịch sử 7 ngày, và mức độ quan trọng của sự kiện liên quan."
-        },
-        {
-          "number": "CC",
-          "type": "Số Lô Tiềm Năng",
-          "probability": "Cao",
-          "reasoning": "Phân tích xác suất dựa trên: tần suất trong tin tức, thống kê lịch sử 7 ngày, và mức độ quan trọng của sự kiện liên quan."
-        },
-        {
-          "number": "DD",
           "type": "Số Lô Tiềm Năng",
           "probability": "Cao",
           "reasoning": "Phân tích xác suất dựa trên: tần suất trong tin tức, thống kê lịch sử 7 ngày, và mức độ quan trọng của sự kiện liên quan."

@@ -80,17 +80,19 @@ export const LuckyNumberCard: React.FC<LuckyNumberCardProps> = ({ bestNumber, lu
       <h3 className="text-xl md:text-2xl font-bold text-center mb-2 text-transparent bg-clip-text bg-gradient-to-r from-teal-300 to-blue-400">
         Số May Mắn Hôm Nay
       </h3>
-      <p className="text-sm text-center text-gray-400 mb-6">1 số đề may mắn nhất và 4 số lô tiềm năng</p>
+      <p className="text-sm text-center text-gray-400 mb-6">1 số đề may mắn nhất và 1 số lô tiềm năng</p>
 
       {/* Số đề may mắn nhất */}
       <div className="mb-8">
         <BestNumberCard bestNumber={bestNumber} />
       </div>
 
-      {/* 4 số lô tiềm năng */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      {/* 1 số lô tiềm năng */}
+      <div className="flex justify-center">
         {luckyNumbers.map((ln, index) => (
-          <LuckyNumberSmallCard key={index} luckyNumber={ln} index={index} />
+          <div key={index} className="w-full max-w-md">
+            <LuckyNumberSmallCard luckyNumber={ln} index={index} />
+          </div>
         ))}
       </div>
     </div>
