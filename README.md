@@ -182,7 +182,7 @@ Sau khi deploy, setup cron jobs với cron-job.org:
 ### 1. Xem Số May Mắn Hôm Nay
 - Truy cập trang chủ
 - Xem **Số Đề May Mắn Nhất** (card vàng lớn)
-- Xem **4 Số Lô Tiềm Năng** (grid nhỏ)
+- Xem **1 Số Lô Tiềm Năng** (card nhỏ)
 
 ### 2. Chạy Thủ Công (Force Run) - Chỉ ở Tab Realtime
 - Chuyển sang tab **"Realtime"** (tab Daily không có Force Run)
