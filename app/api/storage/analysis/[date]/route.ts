@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getAnalysisForDate, saveAnalysisForDate } from '@/utils/appwrite-database';
+import { getAnalysisForDate, saveAnalysisForDate, deleteAnalysisForDate } from '@/utils/appwrite-database';
 import type { StoredAnalysis } from '@/types';
 
 export async function GET(
@@ -42,6 +42,24 @@ export async function POST(
     console.error('Error saving analysis:', error);
     return NextResponse.json(
       { error: 'Failed to save analysis' },
+      { status: 500 }
+    );
+  }
+}
+
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: Promise<{ date: string }> }
+) {
+  try {
+    const { date } = await params;
+    await deleteAnalysisForDate(date);
+
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error('Error deleting analysis:', error);
+    return NextResponse.json(
+      { error: 'Failed to delete analysis' },
       { status: 500 }
     );
   }
