@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { fetchDailyAnalysis } from '@/services/geminiService';
 import { saveTodaysAnalysis, getVietnamDateKey } from '@/utils/server-storage';
 import { setProcessingStatus } from '@/utils/processing-status';
+import { getAnalysisForDate } from '@/utils/appwrite-database';
 
 // Background processing function
 async function processAnalysisInBackground(dateKey: string, currentHour: number) {
@@ -43,6 +44,19 @@ export async function GET() {
     const dateKey = getVietnamDateKey(vietnamTime);
 
     console.log(`Running analysis at ${currentHour}:00 Vietnam time for date ${dateKey}`);
+
+    // Check if analysis already exists for today (prevent multiple runs per day)
+    const existingAnalysis = await getAnalysisForDate(dateKey);
+    if (existingAnalysis) {
+      console.log(`Analysis already exists for ${dateKey}, skipping...`);
+      return NextResponse.json({
+        success: true,
+        message: `Analysis already completed for ${dateKey}`,
+        dateKey,
+        status: 'already_completed',
+        note: 'Analysis was already run today. Only one analysis per day is allowed.'
+      });
+    }
 
     // Start background processing (fire-and-forget)
     processAnalysisInBackground(dateKey, currentHour).catch(error => {
