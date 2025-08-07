@@ -97,3 +97,54 @@ export const saveTodaysLotteryResult = async (result: LotteryResult) => {
     throw error;
   }
 };
+
+/**
+ * Deletes today's analysis via the API.
+ */
+export const deleteTodaysAnalysis = async () => {
+  try {
+    const todayKey = getVietnamDateKey(new Date());
+    const response = await fetch(`/api/storage/analysis/${todayKey}`, {
+      method: 'DELETE',
+    });
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+  } catch (error) {
+    console.error("Failed to delete today's analysis:", error);
+    throw error;
+  }
+};
+
+/**
+ * Deletes today's lottery result via the API.
+ */
+export const deleteTodaysLotteryResult = async () => {
+  try {
+    const todayKey = getVietnamDateKey(new Date());
+    const response = await fetch(`/api/storage/lottery/${todayKey}`, {
+      method: 'DELETE',
+    });
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+  } catch (error) {
+    console.error("Failed to delete today's lottery result:", error);
+    throw error;
+  }
+};
+
+/**
+ * Deletes all of today's data (analysis and lottery result).
+ */
+export const deleteTodaysData = async () => {
+  try {
+    await Promise.all([
+      deleteTodaysAnalysis(),
+      deleteTodaysLotteryResult()
+    ]);
+  } catch (error) {
+    console.error("Failed to delete today's data:", error);
+    throw error;
+  }
+};
