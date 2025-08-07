@@ -88,18 +88,9 @@ export const TimeBasedDisplay: React.FC = () => {
     };
   }, []);
 
-  const hasDataForTimeSlot = (timeSlot: TimeSlot): boolean => {
-    // If we have analysis data, show it immediately regardless of time
-    // This allows users to see data as soon as it's available
+  // Simplified: just check if we have data
+  const hasData = (): boolean => {
     return !!analysisData;
-  };
-
-  const getTimeSlotStatus = (timeSlot: TimeSlot): 'completed' | 'upcoming' | 'available' => {
-    const currentHour = currentVietnamTime.getHours();
-
-    if (currentHour >= timeSlot.hour) return 'completed';
-    if (analysisData) return 'available'; // Data is available before scheduled time
-    return 'upcoming';
   };
 
   if (isLoading) {
@@ -130,55 +121,44 @@ export const TimeBasedDisplay: React.FC = () => {
       {/* Force Run Button */}
       <ForceRunButton onStatusUpdate={fetchTodaysData} />
 
-      {/* Time Slots - Only show if data exists and time has passed */}
-      {TIME_SLOTS.filter(timeSlot => hasDataForTimeSlot(timeSlot)).map((timeSlot) => {
-        const status = getTimeSlotStatus(timeSlot);
-
-        return (
-          <div key={timeSlot.time} className="border border-gray-700 rounded-lg p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-xl font-semibold text-white">
-                {timeSlot.label} ({timeSlot.time})
-              </h3>
-              <div className={`px-3 py-1 rounded-full text-sm font-medium ${
-                status === 'completed' ? 'bg-green-900/50 text-green-300 border border-green-500/50' :
-                status === 'available' ? 'bg-blue-900/50 text-blue-300 border border-blue-500/50' :
-                'bg-gray-900/50 text-gray-400 border border-gray-500/50'
-              }`}>
-                {status === 'completed' ? 'Đã hoàn thành' :
-                 status === 'available' ? 'Có dữ liệu sớm' : 'Chưa tới giờ'}
-              </div>
+      {/* Analysis Data - Show if available */}
+      {hasData() && (
+        <div className="border border-gray-700 rounded-lg p-6">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-xl font-semibold text-white">
+              Phân Tích Hàng Ngày (12:00)
+            </h3>
+            <div className="px-3 py-1 rounded-full text-sm font-medium bg-green-900/50 text-green-300 border border-green-500/50">
+              Đã hoàn thành
             </div>
+          </div>
 
-            {analysisData && (
-              <div className="space-y-6">
-                {/* Analysis Summary */}
-                <p className="text-gray-300 text-center">
-                  {analysisData.analysis.summary}
-                </p>
+          <div className="space-y-6">
+            {/* Analysis Summary */}
+            <p className="text-gray-300 text-center">
+              {analysisData!.analysis.summary}
+            </p>
 
-                {/* Lucky Numbers */}
-                {analysisData.analysis.bestNumber && analysisData.analysis.luckyNumbers && (
-                  <LuckyNumberCard
-                    bestNumber={analysisData.analysis.bestNumber}
-                    luckyNumbers={analysisData.analysis.luckyNumbers}
-                  />
-                )}
+            {/* Lucky Numbers */}
+            {analysisData!.analysis.bestNumber && analysisData!.analysis.luckyNumbers && (
+              <LuckyNumberCard
+                bestNumber={analysisData!.analysis.bestNumber}
+                luckyNumbers={analysisData!.analysis.luckyNumbers}
+              />
+            )}
 
-                {/* Lottery Result (only show for 19:00+ and if available) */}
-                {currentVietnamTime.getHours() >= 19 && lotteryResult &&
-                 analysisData.analysis.bestNumber && analysisData.analysis.luckyNumbers && (
-                  <LotteryResultDisplay
-                    bestNumber={analysisData.analysis.bestNumber}
-                    luckyNumbers={analysisData.analysis.luckyNumbers}
-                    lotteryResult={lotteryResult}
-                  />
-                )}
-              </div>
+            {/* Lottery Result (only show for 19:00+ and if available) */}
+            {currentVietnamTime.getHours() >= 19 && lotteryResult &&
+             analysisData!.analysis.bestNumber && analysisData!.analysis.luckyNumbers && (
+              <LotteryResultDisplay
+                bestNumber={analysisData!.analysis.bestNumber}
+                luckyNumbers={analysisData!.analysis.luckyNumbers}
+                lotteryResult={lotteryResult}
+              />
             )}
           </div>
-        );
-      })}
+        </div>
+      )}
 
       {/* No Data Message */}
       {!analysisData && (
@@ -187,10 +167,10 @@ export const TimeBasedDisplay: React.FC = () => {
             Chưa có dữ liệu phân tích cho hôm nay.
           </p>
           <p className="text-gray-500 text-sm mt-2">
-            Dữ liệu sẽ xuất hiện sau khi cron jobs chạy vào 12:00, 16:00, và 17:00.
+            Dữ liệu sẽ xuất hiện sau khi cron job chạy vào 12:00.
           </p>
           <p className="text-gray-500 text-sm mt-1">
-            Refresh trang để xem kết quả mới nhất.
+            Hoặc sử dụng nút "Chạy Thủ Công" để tạo ngay.
           </p>
         </div>
       )}
