@@ -22,18 +22,10 @@ export const ForceRunButton: React.FC<ForceRunButtonProps> = ({ onStatusUpdate }
     setAnalysisStatus({ status: 'running', message: 'Đang xóa dữ liệu cũ và chạy phân tích mới...' });
 
     try {
-      // First, delete today's existing data
-      try {
-        await deleteTodaysData();
-        console.log('Successfully deleted today\'s existing data');
-      } catch (deleteError) {
-        console.warn('Failed to delete existing data (may not exist):', deleteError);
-        // Continue with analysis even if deletion fails
-      }
-
-      setAnalysisStatus({ status: 'running', message: 'Đang chạy phân tích hàng ngày...' });
-
-      const response = await fetch('/api/cron/daily-analysis');
+      // Use force analysis endpoint which handles deletion automatically
+      const response = await fetch('/api/cron/force-analysis', {
+        method: 'POST'
+      });
       const data = await response.json();
       
       if (data.success) {
