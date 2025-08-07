@@ -35,7 +35,6 @@ export default function Page() {
   };
 
   const vietnamTime = getVietnamTime();
-  const isAfterCutoff = vietnamTime.getHours() >= 16;
   const isAfterLotteryTime = vietnamTime.getHours() > 18 || (vietnamTime.getHours() === 18 && vietnamTime.getMinutes() >= 35);
 
   const handleFetchData = useCallback(async () => {
@@ -136,7 +135,7 @@ export default function Page() {
 
   const renderDailyView = () => (
     <>
-      <TimeStatus isAfterCutoff={isAfterCutoff} />
+      <TimeStatus />
       <HistoricalDataManager />
       {/* No Force Run button in Daily view - this tab only generates without saving */}
       {isLoading && <LoadingSpinner />}

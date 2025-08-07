@@ -2,10 +2,10 @@
 import React from 'react';
 
 interface TimeStatusProps {
-    isAfterCutoff: boolean;
+    // No props needed anymore
 }
 
-export const TimeStatus: React.FC<TimeStatusProps> = ({ isAfterCutoff }) => {
+export const TimeStatus: React.FC<TimeStatusProps> = () => {
     const getVietnamDateString = () => {
         const now = new Date();
         return new Intl.DateTimeFormat('vi-VN', {
@@ -22,9 +22,7 @@ export const TimeStatus: React.FC<TimeStatusProps> = ({ isAfterCutoff }) => {
                 Ngày hôm nay (Việt Nam): {getVietnamDateString()}
             </p>
             <p className="text-sm text-gray-400 mt-1">
-                {isAfterCutoff
-                    ? "Phân tích dựa trên các sự kiện được báo cáo trước 4:00 chiều."
-                    : "Đang chờ dữ liệu đầy đủ của ngày hôm nay. Phân tích sẽ hoàn tất sau 4:00 chiều giờ Việt Nam."}
+                Phân tích số may mắn dựa trên tin tức và dữ liệu thống kê hàng ngày.
             </p>
         </div>
     );
