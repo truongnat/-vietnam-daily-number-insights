@@ -10,6 +10,17 @@ Nút Force Run xuất hiện ở:
 - **Trang chính** - Tab "Realtime" (mặc định)
 - **Không hiển thị** ở Tab "Daily" (vì tab này chỉ generate tạm thời, không lưu database)
 
+### 🔄 Sự Khác Biệt Giữa Các Tab
+
+| Tab | Force Run | Lưu Database | Mục Đích |
+|-----|-----------|--------------|----------|
+| **Daily** | ❌ Không có | ❌ Không lưu | Generate số tạm thời để xem |
+| **Realtime** | ✅ Có | ✅ Lưu | Generate và lưu số chính thức |
+
+**Lý do thiết kế:**
+- **Tab Daily**: Dành cho việc thử nghiệm, xem số may mắn mà không ảnh hưởng dữ liệu chính
+- **Tab Realtime**: Dành cho việc tạo và lưu số may mắn chính thức vào hệ thống
+
 ## 🔧 Chức Năng
 
 ### 1. Phân Tích Hàng Ngày (Chỉ ở Tab Realtime)
@@ -19,10 +30,11 @@ Nút Force Run xuất hiện ở:
 - **Đặc điểm**: Xóa dữ liệu cũ trước khi tạo mới
 - **Kết quả**: Lưu vào database Appwrite
 
-### 2. Kiểm Tra Xổ Số
-- **Mục đích**: Lấy kết quả xổ số và lưu vào database
-- **API**: `/api/cron/lottery-check`
-- **Thời gian**: Chỉ hoạt động sau 18:35 giờ Việt Nam
+### 2. Kiểm Tra Xổ Số (Chỉ ở Tab Realtime)
+- **Mục đích**: Lấy kết quả xổ số hôm nay và đối chiếu, lưu vào database
+- **API**: `/api/cron/force-lottery` (POST)
+- **Thời gian**: Có thể chạy bất cứ lúc nào (không giới hạn 18:35)
+- **Đặc điểm**: Xóa dữ liệu cũ trước khi tạo mới
 - **Kết quả**: Lưu vào database Appwrite
 
 ## 🎨 Giao Diện
