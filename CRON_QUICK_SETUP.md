@@ -5,7 +5,7 @@ Hướng dẫn nhanh thay thế Vercel cron bằng cron-job.org cho **Vietnam Da
 ## 🎯 Mục tiêu
 - ✅ Thay thế Vercel cron (đã xóa khỏi vercel.json)
 - ✅ Sử dụng cron-job.org miễn phí (không cần API key)
-- ✅ 4 jobs: 3 daily analysis + 1 lottery check
+- ✅ 2 jobs: 1 daily analysis + 1 lottery check
 
 ## 💡 Tại sao cron-job.org?
 - **Hoàn toàn miễn phí** - Không cần API key, credit card
@@ -20,9 +20,9 @@ Hướng dẫn nhanh thay thế Vercel cron bằng cron-job.org cho **Vietnam Da
 - Đăng ký tài khoản miễn phí (chỉ cần email)
 - **Không cần** API key hay payment method
 
-### 2. Tạo 4 jobs
+### 2. Tạo 2 jobs
 
-**Thay `your-domain.vercel.app` và `your-secret-token` bằng giá trị thực:**
+**Thay `your-domain.vercel.app` bằng giá trị thực:**
 
 #### Job 1: Analysis 12:00
 ```
@@ -32,23 +32,7 @@ Schedule: 0 5 * * *
 Method: GET
 ```
 
-#### Job 2: Analysis 16:00
-```
-Title: Vietnam Analysis 16:00
-URL: https://your-domain.vercel.app/api/cron/daily-analysis
-Schedule: 0 9 * * *
-Method: GET
-```
-
-#### Job 3: Analysis 17:00
-```
-Title: Vietnam Analysis 17:00
-URL: https://your-domain.vercel.app/api/cron/daily-analysis
-Schedule: 0 10 * * *
-Method: GET
-```
-
-#### Job 4: Lottery 19:00
+#### Job 2: Lottery 19:00
 ```
 Title: Vietnam Lottery Check
 URL: https://your-domain.vercel.app/api/cron/lottery-check
@@ -82,7 +66,7 @@ openssl rand -base64 32
 
 ## ✅ Checklist
 - [ ] Đăng ký cron-job.org
-- [ ] Tạo 4 jobs với đúng URL và headers
+- [ ] Tạo 2 jobs với đúng URL
 - [ ] Test thành công tất cả jobs
 - [ ] Bật email notifications
 - [ ] Xóa vercel.json cron config (✅ đã xong)

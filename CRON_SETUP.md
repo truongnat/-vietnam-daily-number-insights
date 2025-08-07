@@ -63,10 +63,10 @@ GEMINI_API_KEY=your-gemini-api-key
 
 ## 📅 Lịch trình cron jobs
 
-### Job 1: Daily Analysis (3 lần/ngày)
+### Job 1: Daily Analysis (1 lần/ngày)
 
-**Thời gian Vietnam:** 12:00, 16:00, 17:00
-**Thời gian UTC:** 05:00, 09:00, 10:00
+**Thời gian Vietnam:** 12:00
+**Thời gian UTC:** 05:00
 
 **Cấu hình cron-job.org:**
 ```
@@ -74,20 +74,6 @@ Title: Vietnam Daily Analysis - 12:00
 URL: https://your-domain.vercel.app/api/cron/daily-analysis
 Method: GET
 Schedule: 0 5 * * *
-```
-
-```
-Title: Vietnam Daily Analysis - 16:00
-URL: https://your-domain.vercel.app/api/cron/daily-analysis
-Method: GET
-Schedule: 0 9 * * *
-```
-
-```
-Title: Vietnam Daily Analysis - 17:00
-URL: https://your-domain.vercel.app/api/cron/daily-analysis
-Method: GET
-Schedule: 0 10 * * *
 ```
 
 ### Job 2: Lottery Check
