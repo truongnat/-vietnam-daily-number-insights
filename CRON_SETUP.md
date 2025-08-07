@@ -34,7 +34,7 @@ Thay thế Vercel cron jobs bằng cron-job.org để có:
 - ✅ **Monitoring** tốt hơn
 
 Ứng dụng có 2 cron jobs chính:
-1. **Daily Analysis** - Chạy 3 lần/ngày: 12:00, 16:00, 17:00 (Vietnam time)
+1. **Daily Analysis** - Chạy 1 lần/ngày: 12:00 (Vietnam time)
 2. **Lottery Check** - Chạy lúc 19:00 (Vietnam time)
 
 ## 🔧 Cấu hình cần thiết
@@ -51,7 +51,7 @@ GEMINI_API_KEY=your-gemini-api-key
 
 #### Daily Analysis (`/api/cron/daily-analysis`)
 - **Mục đích**: Phân tích tin tức và tạo số may mắn
-- **Lịch trình**: 12:00, 16:00, 17:00 Vietnam time (GMT+7)
+- **Lịch trình**: 12:00 Vietnam time (GMT+7)
 - **Method**: GET
 - **Authentication**: Không cần
 

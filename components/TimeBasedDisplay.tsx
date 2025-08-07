@@ -14,9 +14,7 @@ interface TimeSlot {
 }
 
 const TIME_SLOTS: TimeSlot[] = [
-  { time: '12:00', hour: 12, label: 'Phân Tích Buổi Trưa' },
-  { time: '16:00', hour: 16, label: 'Phân Tích Buổi Chiều' },
-  { time: '17:00', hour: 17, label: 'Phân Tích Cuối Ngày' },
+  { time: '12:00', hour: 12, label: 'Phân Tích Hàng Ngày' },
 ];
 
 export const TimeBasedDisplay: React.FC = () => {
