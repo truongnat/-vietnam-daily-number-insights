@@ -7,15 +7,7 @@ import { LotteryResultDisplay } from '@/components/LotteryResultDisplay';
 import { LoadingSpinner } from '@/components/LoadingSpinner';
 import { ForceRunButton } from '@/components/ForceRunButton';
 
-interface TimeSlot {
-  time: string;
-  hour: number;
-  label: string;
-}
-
-const TIME_SLOTS: TimeSlot[] = [
-  { time: '12:00', hour: 12, label: 'Phân Tích Hàng Ngày' },
-];
+// Simplified - no need for time slots array anymore
 
 export const TimeBasedDisplay: React.FC = () => {
   const [analysisData, setAnalysisData] = useState<StoredAnalysis | null>(null);

@@ -33,7 +33,7 @@
 - **Lịch sử phân tích** chi tiết
 
 ### ⏰ Tự Động Hóa
-- **3 lần phân tích/ngày**: 12:00, 16:00, 17:00
+- **1 lần phân tích/ngày**: 12:00 (trưa)
 - **Kiểm tra kết quả**: 19:00 hàng ngày
 - **Cron jobs** với cron-job.org (miễn phí, không cần API key)
 - **🎮 Force Run**: Nút chạy thủ công các tiến trình ngay lập tức (chỉ ở tab Realtime)

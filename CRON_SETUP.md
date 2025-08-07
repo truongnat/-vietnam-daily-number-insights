@@ -112,23 +112,7 @@ Schedule: 0 12 * * *
 - **Request headers:** Không cần
 - **Enable:** ✅
 
-#### Job 2: Daily Analysis 16:00
-- **Title:** `Vietnam Daily Analysis - 16:00`
-- **URL:** `https://your-domain.vercel.app/api/cron/daily-analysis`
-- **Schedule:** `0 9 * * *` (UTC)
-- **Request method:** `GET`
-- **Request headers:** Không cần
-- **Enable:** ✅
-
-#### Job 3: Daily Analysis 17:00
-- **Title:** `Vietnam Daily Analysis - 17:00`
-- **URL:** `https://your-domain.vercel.app/api/cron/daily-analysis`
-- **Schedule:** `0 10 * * *` (UTC)
-- **Request method:** `GET`
-- **Request headers:** Không cần
-- **Enable:** ✅
-
-#### Job 4: Lottery Check 19:00
+#### Job 2: Lottery Check 19:00
 - **Title:** `Vietnam Lottery Check`
 - **URL:** `https://your-domain.vercel.app/api/cron/lottery-check`
 - **Schedule:** `0 12 * * *` (UTC)
