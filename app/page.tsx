@@ -138,7 +138,7 @@ export default function Page() {
     <>
       <TimeStatus isAfterCutoff={isAfterCutoff} />
       <HistoricalDataManager />
-      <ForceRunButton onStatusUpdate={handleFetchData} />
+      {/* No Force Run button in Daily view - this tab only generates without saving */}
       {isLoading && <LoadingSpinner />}
       {error && <ErrorDisplay message={error} />}
       {analysis && !isLoading &&
@@ -150,12 +150,12 @@ export default function Page() {
         />}
       {!isLoading && !analysis && !error && (
         <div className="text-center mt-16">
-          <p className="text-gray-400">Không tìm thấy dữ liệu được lưu trữ cho ngày hôm nay.</p>
+          <p className="text-gray-400">Nhấn nút bên dưới để tạo số may mắn cho ngày hôm nay.</p>
           <button
             onClick={handleFetchData}
             className="mt-4 px-6 py-3 bg-blue-600 hover:bg-blue-700 rounded-lg text-white font-semibold transition-colors duration-300 shadow-lg"
           >
-            Lấy Số Hôm Nay
+            Tạo Số May Mắn Hôm Nay
           </button>
         </div>
       )}

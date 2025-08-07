@@ -8,14 +8,15 @@
 
 Nút Force Run xuất hiện ở:
 - **Trang chính** - Tab "Realtime" (mặc định)
-- **Trang chính** - Tab "Daily" 
+- **Không hiển thị** ở Tab "Daily" (vì tab này chỉ generate tạm thời, không lưu database)
 
 ## 🔧 Chức Năng
 
-### 1. Phân Tích Hàng Ngày
-- **Mục đích**: Chạy phân tích tin tức và tạo số may mắn
-- **API**: `/api/cron/daily-analysis`
+### 1. Phân Tích Hàng Ngày (Chỉ ở Tab Realtime)
+- **Mục đích**: Chạy phân tích tin tức và tạo số may mắn, lưu vào database
+- **API**: `/api/cron/force-analysis` (POST)
 - **Thời gian**: Có thể chạy bất cứ lúc nào
+- **Đặc điểm**: Xóa dữ liệu cũ trước khi tạo mới
 - **Kết quả**: Lưu vào database Appwrite
 
 ### 2. Kiểm Tra Xổ Số
