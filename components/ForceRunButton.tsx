@@ -2,7 +2,6 @@
 
 import React, { useState } from 'react';
 import { PlayIcon, ClockIcon, CheckCircleIcon, ExclamationTriangleIcon } from '@heroicons/react/24/outline';
-import { deleteTodaysData } from '@/utils/storage';
 
 interface ForceRunButtonProps {
   onStatusUpdate?: () => void;
@@ -75,18 +74,10 @@ export const ForceRunButton: React.FC<ForceRunButtonProps> = ({ onStatusUpdate }
     setLotteryStatus({ status: 'running', message: 'Đang xóa kết quả xổ số cũ và kiểm tra mới...' });
 
     try {
-      // First, delete today's existing lottery result
-      try {
-        await deleteTodaysData();
-        console.log('Successfully deleted today\'s existing lottery data');
-      } catch (deleteError) {
-        console.warn('Failed to delete existing lottery data (may not exist):', deleteError);
-        // Continue with lottery check even if deletion fails
-      }
-
-      setLotteryStatus({ status: 'running', message: 'Đang kiểm tra kết quả xổ số...' });
-
-      const response = await fetch('/api/cron/lottery-check');
+      // Use force lottery endpoint which handles deletion automatically
+      const response = await fetch('/api/cron/force-lottery', {
+        method: 'POST'
+      });
       const data = await response.json();
       
       if (data.success) {
