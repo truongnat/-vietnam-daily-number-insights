@@ -25,7 +25,7 @@ export const ViewToggle: React.FC<ViewToggleProps> = ({ view, setView }) => {
         className={`${baseClasses} ${view === 'realtime' ? activeClasses : inactiveClasses}`}
         aria-pressed={view === 'realtime'}
       >
-        Theo giờ
+        Realtime
       </button>
       <button
         onClick={() => setView('frequency')}
