@@ -68,18 +68,24 @@ export const fetchDailyAnalysis = async (): Promise<{
   const historicalData = await fetchHistoricalLotteryData();
 
   const prompt = `
-    Phân tích tin tức và kết quả xổ số để đưa ra dự đoán số may mắn dựa trên xác suất thống kê. Nhiệm vụ của bạn gồm bốn phần:
+    Phân tích tin tức và kết quả xổ số để đưa ra dự đoán số may mắn dựa trên xác suất thống kê nâng cao. Nhiệm vụ của bạn gồm năm phần:
 
     1.  **Phân tích Tin tức Việt Nam Hôm Nay:** Quét các tin tức, bài báo và sự kiện quan trọng ở Việt Nam tính đến 4:00 chiều giờ Việt Nam (GMT+7) hôm nay. Trích xuất tất cả các số có hai chữ số (00-99) và thống kê tần suất xuất hiện của chúng. Tập trung vào các con số nổi bật nhất trong các sự kiện quan trọng.
 
-    2.  **Phân tích Dữ liệu Lịch sử:** Sử dụng dữ liệu xổ số lịch sử sau đây để tính toán xác suất thống kê:
+    2.  **Phân tích Thống kê AI Nâng cao 14 Ngày:** Sử dụng phân tích thống kê AI chuyên sâu sau đây để hiểu rõ các mẫu hình và xu hướng:
     ${historicalData}
 
     3.  **Tìm Kết quả Xổ số Ngày Hôm Qua:** Sử dụng Google Search, tìm kết quả "Xổ số kiến thiết Miền Bắc" của ngày hôm qua. Phân tích hai chữ số cuối của giải đặc biệt và tất cả các giải lô để tìm ra xu hướng.
 
-    4.  **Dự đoán Số May Mắn Dựa Trên Xác Suất:** Kết hợp phân tích tin tức, dữ liệu lịch sử và xu hướng để đưa ra:
-       - 1 SỐ MAY MẮN NHẤT có tỷ lệ cao trúng ĐỀ (giải đặc biệt) - ưu tiên số có tần suất cao trong tin tức NHƯNG tránh số đã ra gần đây
-       - 1 SỐ có tỷ lệ cao trúng LÔ (các giải khác) - cân bằng giữa tần suất tin tức và xác suất thống kê
+    4.  **Tích hợp Phân tích Mẫu hình và Chu kỳ:** Dựa trên phân tích thống kê AI, xác định:
+       - Các mẫu hình lặp lại trong 14 ngày qua
+       - Số "nóng" và "lạnh" theo chu kỳ
+       - Các tổ hợp số có xu hướng xuất hiện cùng nhau
+       - Khoảng cách trung bình giữa các lần xuất hiện
+
+    5.  **Dự đoán Số May Mắn Dựa Trên Xác Suất Nâng cao:** Kết hợp TẤT CẢ các yếu tố trên để đưa ra:
+       - 1 SỐ MAY MẮN NHẤT có tỷ lệ cao trúng ĐỀ (giải đặc biệt) - ưu tiên dựa trên: (a) tần suất tin tức, (b) phân tích mẫu hình AI, (c) chu kỳ xuất hiện, (d) tránh số đã ra gần đây
+       - 1 SỐ có tỷ lệ cao trúng LÔ (các giải khác) - dựa trên: (a) phân tích thống kê AI, (b) xu hướng "lạnh" chuyển "nóng", (c) tổ hợp số tiềm năng
 
     Phản hồi của bạn PHẢI là một chuỗi đối tượng JSON hợp lệ duy nhất và không có gì khác. Không bao gồm bất kỳ văn bản giới thiệu, cuộc trò chuyện hoặc định dạng markdown nào như \`\`\`json. Đối tượng JSON phải tuân thủ cấu trúc chính xác này:
 
@@ -89,7 +95,7 @@ export const fetchDailyAnalysis = async (): Promise<{
         "number": "XX",
         "type": "Số Đề May Mắn Nhất",
         "probability": "Cao",
-        "reasoning": "Giải thích chi tiết dựa trên: (1) Tần suất xuất hiện trong tin tức hôm nay, (2) Phân tích xác suất thống kê từ dữ liệu 7 ngày gần nhất, (3) Xu hướng tránh số đã ra gần đây, (4) Mức độ nổi bật của sự kiện liên quan."
+        "reasoning": "Giải thích chi tiết dựa trên: (1) Tần suất xuất hiện trong tin tức hôm nay, (2) Phân tích thống kê AI từ 14 ngày dữ liệu, (3) Mẫu hình và chu kỳ xuất hiện, (4) Xu hướng tránh số đã ra gần đây, (5) Phân tích tổ hợp số tiềm năng, (6) Mức độ nổi bật của sự kiện liên quan."
       },
       "luckyNumbers": [
         {
