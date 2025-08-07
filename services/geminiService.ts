@@ -1,5 +1,5 @@
 import { GoogleGenAI } from "@google/genai";
-import type { AnalysisResult, GroundingChunk, LotteryResult, HistoricalData } from "@/types";
+import type { AnalysisResult, GroundingChunk, LotteryResult, HistoricalData, StoredAnalysis } from "@/types";
 import { getAllHistoricalData } from "@/utils/appwrite-database";
 
 function getGeminiAI() {
