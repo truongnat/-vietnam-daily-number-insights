@@ -5,7 +5,7 @@ import { setProcessingStatus } from '@/utils/processing-status';
 import { deleteLotteryResultForDate } from '@/utils/appwrite-database';
 
 // Background processing function for force lottery check
-async function processForceL otteryCheckInBackground(dateKey: string, currentHour: number) {
+async function processForceLotteryCheckInBackground(dateKey: string, currentHour: number) {
   try {
     console.log(`Background processing: Starting FORCE lottery check for ${dateKey} at ${currentHour}:00`);
     setProcessingStatus(dateKey, 'lottery', 'processing');
@@ -51,7 +51,7 @@ export async function POST() {
     }
 
     // Start background processing (fire-and-forget)
-    processForceL otteryCheckInBackground(dateKey, currentHour).catch(error => {
+    processForceLotteryCheckInBackground(dateKey, currentHour).catch(error => {
       console.error('Background processing failed:', error);
     });
 
