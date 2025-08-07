@@ -179,6 +179,64 @@ export async function saveAnalysisForDate(
 }
 
 /**
+ * Deletes analysis data for a specific date from Appwrite.
+ * @param dateKey The date key in YYYY-MM-DD format.
+ */
+export async function deleteAnalysisForDate(dateKey: string): Promise<void> {
+  try {
+    const databases = getAppwriteDatabases();
+    const documentId = getDocumentId(dateKey);
+
+    try {
+      await databases.deleteDocument(
+        DATABASE_ID,
+        ANALYSES_COLLECTION_ID,
+        documentId
+      );
+    } catch (error: any) {
+      if (error.code === 404) {
+        // Document doesn't exist, that's okay
+        console.log(`Analysis for ${dateKey} doesn't exist, nothing to delete`);
+        return;
+      }
+      throw error;
+    }
+  } catch (error) {
+    console.error(`Failed to delete analysis for ${dateKey} from Appwrite:`, error);
+    throw error;
+  }
+}
+
+/**
+ * Deletes lottery result for a specific date from Appwrite.
+ * @param dateKey The date key in YYYY-MM-DD format.
+ */
+export async function deleteLotteryResultForDate(dateKey: string): Promise<void> {
+  try {
+    const databases = getAppwriteDatabases();
+    const documentId = getDocumentId(dateKey);
+
+    try {
+      await databases.deleteDocument(
+        DATABASE_ID,
+        LOTTERY_RESULTS_COLLECTION_ID,
+        documentId
+      );
+    } catch (error: any) {
+      if (error.code === 404) {
+        // Document doesn't exist, that's okay
+        console.log(`Lottery result for ${dateKey} doesn't exist, nothing to delete`);
+        return;
+      }
+      throw error;
+    }
+  } catch (error) {
+    console.error(`Failed to delete lottery result for ${dateKey} from Appwrite:`, error);
+    throw error;
+  }
+}
+
+/**
  * Saves lottery result for a specific date to Appwrite.
  * @param dateKey The date key in YYYY-MM-DD format.
  * @param result The lottery result to save.
