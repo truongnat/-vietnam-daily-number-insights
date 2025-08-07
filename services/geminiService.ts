@@ -200,7 +200,132 @@ const getVietnamDateStringForPrompt = (): string => {
 };
 
 /**
- * Fetches historical lottery data for the past 7 days for statistical analysis
+ * Uses AI to generate enhanced statistical analysis of historical lottery data
+ */
+const generateAIStatisticalAnalysis = async (
+  recentEntries: [string, StoredAnalysis][]
+): Promise<string> => {
+  try {
+    const model = "gemini-2.5-flash";
+
+    // Prepare raw data for AI analysis
+    let rawData = `Dữ liệu xổ số ${recentEntries.length} ngày gần nhất:\n`;
+    const allNumbers: string[] = [];
+    const specialNumbers: string[] = [];
+    const dailyResults: { date: string; special: string; all: string[] }[] = [];
+
+    recentEntries.forEach(([dateKey, data]) => {
+      if (data.lotteryResult) {
+        const { specialPrize, allPrizes } = data.lotteryResult;
+        rawData += `- ${dateKey}: Đặc biệt: ${specialPrize}, Tất cả: [${allPrizes.join(', ')}]\n`;
+
+        specialNumbers.push(specialPrize);
+        allNumbers.push(...allPrizes);
+        dailyResults.push({ date: dateKey, special: specialPrize, all: allPrizes });
+      }
+    });
+
+    const prompt = `
+    Phân tích thống kê chuyên sâu dữ liệu xổ số sau đây để tìm ra các mẫu hình (patterns) và xu hướng:
+
+    ${rawData}
+
+    Hãy thực hiện phân tích toán học và thống kê chi tiết:
+
+    1. **Phân tích tần suất**: Tính toán tần suất xuất hiện của từng số (00-99)
+    2. **Phân tích chu kỳ**: Tìm các mẫu hình lặp lại theo thời gian
+    3. **Phân tích khoảng cách**: Tính khoảng cách trung bình giữa các lần xuất hiện của mỗi số
+    4. **Phân tích xu hướng**: Xác định số nào đang "nóng" (xuất hiện nhiều gần đây) và "lạnh" (chưa xuất hiện lâu)
+    5. **Phân tích tổ hợp**: Tìm các cặp/nhóm số thường xuất hiện cùng nhau
+    6. **Phân tích xác suất**: Tính xác suất xuất hiện của từng số dựa trên dữ liệu lịch sử
+    7. **Dự đoán xu hướng**: Dựa trên các mẫu hình đã phát hiện, đưa ra nhận định về xu hướng tiếp theo
+
+    Trả về phân tích dưới dạng văn bản có cấu trúc, bao gồm:
+    - Thống kê tần suất chi tiết
+    - Các mẫu hình đã phát hiện
+    - Số "nóng" và "lạnh" hiện tại
+    - Khuyến nghị về xác suất cho ngày tiếp theo
+    - Phân tích rủi ro và cơ hội
+
+    Sử dụng ngôn ngữ tiếng Việt và trình bày một cách khoa học, chính xác.
+    `;
+
+    const ai = getGeminiAI();
+    const response = await ai.models.generateContent({
+      model: model,
+      contents: prompt,
+      config: {
+        temperature: 0.1, // Low temperature for more consistent analysis
+      },
+    });
+
+    if (response.text) {
+      return response.text;
+    } else {
+      // Fallback to basic analysis if AI fails
+      return generateBasicStatisticalAnalysis(recentEntries);
+    }
+  } catch (error) {
+    console.error('Error generating AI statistical analysis:', error);
+    // Fallback to basic analysis
+    return generateBasicStatisticalAnalysis(recentEntries);
+  }
+};
+
+/**
+ * Fallback basic statistical analysis
+ */
+const generateBasicStatisticalAnalysis = (
+  recentEntries: [string, StoredAnalysis][]
+): string => {
+  let historicalSummary = `Dữ liệu xổ số ${recentEntries.length} ngày gần nhất:\n`;
+
+  const allNumbers: string[] = [];
+  const specialNumbers: string[] = [];
+
+  recentEntries.forEach(([dateKey, data]) => {
+    if (data.lotteryResult) {
+      const { specialPrize, allPrizes } = data.lotteryResult;
+      historicalSummary += `- ${dateKey}: Đặc biệt: ${specialPrize}, Tất cả: [${allPrizes.join(', ')}]\n`;
+
+      specialNumbers.push(specialPrize);
+      allNumbers.push(...allPrizes);
+    }
+  });
+
+  // Calculate frequency statistics
+  const numberFrequency: { [key: string]: number } = {};
+  allNumbers.forEach(num => {
+    numberFrequency[num] = (numberFrequency[num] || 0) + 1;
+  });
+
+  const sortedByFrequency = Object.entries(numberFrequency)
+    .sort(([,a], [,b]) => b - a)
+    .slice(0, 15);
+
+  historicalSummary += `\nThống kê tần suất xuất hiện (top 15):\n`;
+  sortedByFrequency.forEach(([num, count]) => {
+    const percentage = ((count / allNumbers.length) * 100).toFixed(1);
+    historicalSummary += `- Số ${num}: ${count} lần (${percentage}%)\n`;
+  });
+
+  // Find cold numbers (haven't appeared recently)
+  const recentNumbers = new Set(allNumbers.slice(-20)); // Last 20 numbers
+  const coldNumbers = [];
+  for (let i = 0; i <= 99; i++) {
+    const num = i.toString().padStart(2, '0');
+    if (!recentNumbers.has(num)) {
+      coldNumbers.push(num);
+    }
+  }
+
+  historicalSummary += `\nSố "lạnh" (chưa xuất hiện trong 20 số gần nhất): ${coldNumbers.slice(0, 10).join(', ')}\n`;
+
+  return historicalSummary;
+};
+
+/**
+ * Fetches and analyzes historical lottery data for the past 14 days using AI for enhanced statistical analysis
  */
 const fetchHistoricalLotteryData = async (): Promise<string> => {
   try {
@@ -211,46 +336,19 @@ const fetchHistoricalLotteryData = async (): Promise<string> => {
       return "Không có dữ liệu lịch sử để phân tích.";
     }
 
-    // Get the last 7 days of data that have lottery results
+    // Get the last 14 days of data that have lottery results
     const recentEntries = entries
       .filter(([_, data]) => data.lotteryResult)
-      .slice(0, 7);
+      .slice(0, 14);
 
     if (recentEntries.length === 0) {
       return "Không có kết quả xổ số lịch sử để phân tích.";
     }
 
-    let historicalSummary = `Dữ liệu xổ số ${recentEntries.length} ngày gần nhất:\n`;
+    // Generate AI-enhanced statistical analysis
+    const aiAnalysis = await generateAIStatisticalAnalysis(recentEntries);
 
-    const allNumbers: string[] = [];
-    const specialNumbers: string[] = [];
-
-    recentEntries.forEach(([dateKey, data]) => {
-      if (data.lotteryResult) {
-        const { specialPrize, allPrizes } = data.lotteryResult;
-        historicalSummary += `- ${dateKey}: Đặc biệt: ${specialPrize}, Tất cả: [${allPrizes.join(', ')}]\n`;
-
-        specialNumbers.push(specialPrize);
-        allNumbers.push(...allPrizes);
-      }
-    });
-
-    // Calculate frequency statistics
-    const numberFrequency: { [key: string]: number } = {};
-    allNumbers.forEach(num => {
-      numberFrequency[num] = (numberFrequency[num] || 0) + 1;
-    });
-
-    const sortedByFrequency = Object.entries(numberFrequency)
-      .sort(([,a], [,b]) => b - a)
-      .slice(0, 10);
-
-    historicalSummary += `\nThống kê tần suất xuất hiện (top 10):\n`;
-    sortedByFrequency.forEach(([num, count]) => {
-      historicalSummary += `- Số ${num}: ${count} lần\n`;
-    });
-
-    return historicalSummary;
+    return aiAnalysis;
   } catch (error) {
     console.error('Error fetching historical data:', error);
     return "Lỗi khi lấy dữ liệu lịch sử.";
