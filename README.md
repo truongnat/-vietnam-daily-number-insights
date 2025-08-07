@@ -19,7 +19,7 @@
 
 ### 🎲 Số May Mắn Hàng Ngày
 - **1 Số Đề May Mắn Nhất** - Tỷ lệ cao trúng giải đặc biệt
-- **4 Số Lô Tiềm Năng** - Tỷ lệ cao trúng các giải khác
+- **1 Số Lô Tiềm Năng** - Tỷ lệ cao trúng các giải khác
 - **Phân tích chi tiết** lý do chọn từng số
 
 ### 📊 Đối Chiếu Kết Quả
@@ -36,7 +36,7 @@
 - **3 lần phân tích/ngày**: 12:00, 16:00, 17:00
 - **Kiểm tra kết quả**: 19:00 hàng ngày
 - **Cron jobs** với cron-job.org (miễn phí, không cần API key)
-- **🎮 Force Run**: Nút chạy thủ công các tiến trình ngay lập tức
+- **🎮 Force Run**: Nút chạy thủ công các tiến trình ngay lập tức (chỉ ở tab Realtime)
 - **🔍 Force Check**: Nút kiểm tra kết quả xổ số cho từng ngày cụ thể
 
 ## 🛠️ Công Nghệ
@@ -184,12 +184,13 @@ Sau khi deploy, setup cron jobs với cron-job.org:
 - Xem **Số Đề May Mắn Nhất** (card vàng lớn)
 - Xem **4 Số Lô Tiềm Năng** (grid nhỏ)
 
-### 2. Chạy Thủ Công (Force Run)
-- Tìm nút **"Chạy Thủ Công"** trên trang chủ
+### 2. Chạy Thủ Công (Force Run) - Chỉ ở Tab Realtime
+- Chuyển sang tab **"Realtime"** (tab Daily không có Force Run)
+- Tìm nút **"Chạy Thủ Công"** trên trang
 - Click để mở rộng panel
 - Nhấn **"Chạy Ngay"** cho:
-  - **Phân Tích Hàng Ngày**: Tạo số may mắn mới
-  - **Kiểm Tra Xổ Số**: Lấy kết quả xổ số (sau 18:35)
+  - **Phân Tích Hàng Ngày**: Tạo số may mắn mới và lưu vào database
+  - **Kiểm Tra Xổ Số**: Lấy kết quả xổ số và lưu vào database
 - Theo dõi trạng thái real-time
 
 ### 3. Kiểm Tra Kết Quả Từng Ngày
