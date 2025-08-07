@@ -42,20 +42,25 @@ export default function Page() {
     setError(null);
     setLotteryResult(null);
 
-    try {
-      const storedData = await getTodaysAnalysis();
-      if (storedData) {
-        setAnalysis(storedData.analysis);
-        setGroundingChunks(storedData.groundingChunks);
-        if (storedData.lotteryResult) {
-          setLotteryResult(storedData.lotteryResult);
+    // Only try to load stored data if NOT in daily view (daily view always generates fresh)
+    if (view !== 'daily') {
+      try {
+        const storedData = await getTodaysAnalysis();
+        if (storedData) {
+          setAnalysis(storedData.analysis);
+          setGroundingChunks(storedData.groundingChunks);
+          if (storedData.lotteryResult) {
+            setLotteryResult(storedData.lotteryResult);
+          }
+          setIsLoading(false);
+          return;
         }
-        setIsLoading(false);
-        return;
+      } catch (error) {
+        console.error("Error fetching stored data:", error);
+        // Continue to fetch fresh data if stored data fails
       }
-    } catch (error) {
-      console.error("Error fetching stored data:", error);
-      // Continue to fetch fresh data if stored data fails
+    } else {
+      console.log("Daily view: Skipping stored data, generating fresh analysis");
     }
 
     try {
@@ -63,11 +68,17 @@ export default function Page() {
       if (result.analysis && result.analysis.luckyNumbers && result.analysis.luckyNumbers.length > 0) {
         setAnalysis(result.analysis);
         setGroundingChunks(result.groundingChunks);
-        try {
-          await saveTodaysAnalysis({ analysis: result.analysis, groundingChunks: result.groundingChunks });
-        } catch (saveError) {
-          console.error("Error saving analysis:", saveError);
-          // Don't fail the whole operation if saving fails
+
+        // Only save to database if NOT in daily view (daily view is for temporary generation only)
+        if (view !== 'daily') {
+          try {
+            await saveTodaysAnalysis({ analysis: result.analysis, groundingChunks: result.groundingChunks });
+          } catch (saveError) {
+            console.error("Error saving analysis:", saveError);
+            // Don't fail the whole operation if saving fails
+          }
+        } else {
+          console.log("Daily view: Analysis generated but not saved to database");
         }
       } else {
         setError("Không thể truy xuất phân tích hợp lệ. Mô hình có thể đã trả về phản hồi trống hoặc không hợp lệ.");
@@ -96,11 +107,17 @@ export default function Page() {
                 const result = await fetchCurrentDayLotteryResult();
                 if (result) {
                     setLotteryResult(result);
-                    try {
-                        await saveTodaysLotteryResult(result);
-                    } catch (saveError) {
-                        console.error("Error saving lottery result:", saveError);
-                        // Don't fail the whole operation if saving fails
+
+                    // Only save to database if NOT in daily view (daily view is for temporary generation only)
+                    if (view !== 'daily') {
+                        try {
+                            await saveTodaysLotteryResult(result);
+                        } catch (saveError) {
+                            console.error("Error saving lottery result:", saveError);
+                            // Don't fail the whole operation if saving fails
+                        }
+                    } else {
+                        console.log("Daily view: Lottery result fetched but not saved to database");
                     }
                 } else {
                     setVerificationError("Không thể lấy kết quả xổ số. Phản hồi không hợp lệ.");
