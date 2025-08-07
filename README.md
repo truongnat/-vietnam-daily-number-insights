@@ -13,7 +13,9 @@
 ### 🤖 AI-Powered Analysis
 - **Phân tích tin tức** tự động từ các nguồn Việt Nam
 - **Gemini AI** để xử lý và phân tích dữ liệu
-- **Dự đoán thông minh** dựa trên xu hướng và sự kiện
+- **Phân tích thống kê AI nâng cao** với dữ liệu 14 ngày
+- **Tìm kiếm dữ liệu lịch sử** tự động bằng AI
+- **Dự đoán thông minh** dựa trên mẫu hình và chu kỳ
 
 ### 🎲 Số May Mắn Hàng Ngày
 - **1 Số Đề May Mắn Nhất** - Tỷ lệ cao trúng giải đặc biệt
