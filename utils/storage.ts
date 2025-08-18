@@ -18,77 +18,44 @@ export const getVietnamDateKey = (date: Date): string => {
  * Retrieves all historical data from the API.
  * @returns A HistoricalData object, or an empty object if none exists or an error occurs.
  */
-export const getAllHistoricalData = async (): Promise<HistoricalData> => {
   try {
-    const response = await fetch('/api/storage/historical');
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    return await response.json();
+    const data = localStorage.getItem('historicalData');
+    return data ? JSON.parse(data) : {};
   } catch (error) {
-    console.error("Failed to fetch historical data:", error);
+    console.error("Failed to fetch historical data from localStorage:", error);
     return {};
   }
 };
-    const data = localStorage.getItem('historicalData');
-    return data ? JSON.parse(data) : {};
-  };
 /**
  * Retrieves today's analysis from the API.
  * @returns The StoredAnalysis object for today, or null if it doesn't exist.
  */
-export const getTodaysAnalysis = async (): Promise<StoredAnalysis | null> => {
   try {
     const todayKey = getVietnamDateKey(new Date());
-    const response = await fetch(`/api/storage/analysis/${todayKey}`);
-    if (!response.ok) {
-      if (response.status === 404) {
-        return null;
-      }
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    return await response.json();
+    const data = localStorage.getItem(`analysis_${todayKey}`);
+    return data ? JSON.parse(data) : null;
   } catch (error) {
-    console.error("Failed to fetch today's analysis:", error);
+    console.error("Failed to fetch today's analysis from localStorage:", error);
     return null;
   }
 };
-    const data = localStorage.getItem(`analysis_${todayKey}`);
-    return data ? JSON.parse(data) : null;
-  };
 /**
  * Saves today's analysis via the API.
  * @param data The StoredAnalysis object for today.
  */
-export const saveTodaysAnalysis = async (data: Omit<StoredAnalysis, 'lotteryResult'>) => {
   try {
     const todayKey = getVietnamDateKey(new Date());
-    const response = await fetch(`/api/storage/analysis/${todayKey}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    });
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
+    localStorage.setItem(`analysis_${todayKey}`, JSON.stringify(data));
+    const historicalData = await getAllHistoricalData();
+    historicalData[todayKey] = data;
+    localStorage.setItem('historicalData', JSON.stringify(historicalData));
   } catch (error) {
-    console.error("Failed to save analysis:", error);
+    console.error("Failed to save today's analysis to localStorage:", error);
     throw error;
   }
 };
 
-/**
- * Saves today's lottery result via the API, merging it with existing data.
- * @param result The LotteryResult object for today.
- */
-export const saveTodaysLotteryResult = async (result: LotteryResult) => {
-        localStorage.setItem(`analysis_${todayKey}`, JSON.stringify(data));
-        const historicalData = await getAllHistoricalData();
-        historicalData[todayKey] = data;
-        localStorage.setItem('historicalData', JSON.stringify(historicalData));
-      };
+// Removed duplicate/invalid block
 /**
  * Retrieves today's lottery result from localStorage.
  */
@@ -106,12 +73,11 @@ export const getTodaysLotteryResult = async (): Promise<LotteryResult | null> =>
 /**
  * Saves today's lottery result to localStorage.
  */
-export const saveTodaysLotteryResult = async (result: LotteryResult) => {
   try {
     const todayKey = getVietnamDateKey(new Date());
     localStorage.setItem(`lottery_${todayKey}`, JSON.stringify(result));
     const historicalData = await getAllHistoricalData();
-    if (!historicalData[todayKey]) historicalData[todayKey] = {};
+    if (!historicalData[todayKey]) historicalData[todayKey] = {} as StoredAnalysis;
     historicalData[todayKey].lotteryResult = result;
     localStorage.setItem('historicalData', JSON.stringify(historicalData));
   } catch (error) {
@@ -123,7 +89,6 @@ export const saveTodaysLotteryResult = async (result: LotteryResult) => {
 /**
  * Deletes today's analysis from localStorage.
  */
-export const deleteTodaysAnalysis = async () => {
   try {
     const todayKey = getVietnamDateKey(new Date());
     localStorage.removeItem(`analysis_${todayKey}`);
@@ -138,7 +103,6 @@ export const deleteTodaysAnalysis = async () => {
 /**
  * Deletes today's lottery result from localStorage.
  */
-export const deleteTodaysLotteryResult = async () => {
   try {
     const todayKey = getVietnamDateKey(new Date());
     localStorage.removeItem(`lottery_${todayKey}`);
@@ -153,7 +117,6 @@ export const deleteTodaysLotteryResult = async () => {
 /**
  * Deletes all of today's data (analysis and lottery result) from localStorage.
  */
-export const deleteTodaysData = async () => {
   try {
     await deleteTodaysAnalysis();
     await deleteTodaysLotteryResult();
