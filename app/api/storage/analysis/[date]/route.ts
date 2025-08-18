@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getAnalysisForDate, saveAnalysisForDate, deleteAnalysisForDate } from '@/utils/appwrite-database';
+import { getAnalysisForDate, saveAnalysisForDate, deleteAnalysisForDate } from '@/utils/server-file-storage';
 import type { StoredAnalysis } from '@/types';
 
 export async function GET(
