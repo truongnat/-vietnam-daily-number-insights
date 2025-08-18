@@ -1,40 +1,30 @@
 import type { StoredAnalysis, LotteryResult } from '@/types';
-import { saveAnalysisForDate, saveLotteryResultForDate } from '@/utils/appwrite-database';
+import { saveTodaysAnalysis, saveTodaysLotteryResult, getVietnamDateKey } from './storage';
+
+// getVietnamDateKey is now imported from './storage'
 
 /**
- * Gets a date key in YYYY-MM-DD format for consistency.
- * @param date The date object to format.
- * @returns A string in YYYY-MM-DD format.
- */
-export const getVietnamDateKey = (date: Date): string => {
-  const vietnamTime = new Date(date.toLocaleString('en-US', { timeZone: 'Asia/Ho_Chi_Minh' }));
-  return vietnamTime.toISOString().split('T')[0];
-};
-
-/**
- * Saves today's analysis directly to database (server-side only).
+ * Saves today's analysis to localStorage (server-side compatible).
  * @param data The StoredAnalysis object for today.
  */
-export const saveTodaysAnalysis = async (data: Omit<StoredAnalysis, 'lotteryResult'>) => {
+export const saveTodaysAnalysisServer = async (data: Omit<StoredAnalysis, 'lotteryResult'>) => {
   try {
-    const todayKey = getVietnamDateKey(new Date());
-    await saveAnalysisForDate(todayKey, data);
+    await saveTodaysAnalysis(data);
   } catch (error) {
-    console.error("Failed to save analysis:", error);
+    console.error("Failed to save analysis to localStorage:", error);
     throw error;
   }
 };
 
 /**
- * Saves today's lottery result directly to database (server-side only).
+ * Saves today's lottery result to localStorage (server-side compatible).
  * @param result The LotteryResult object for today.
  */
-export const saveTodaysLotteryResult = async (result: LotteryResult) => {
+export const saveTodaysLotteryResultServer = async (result: LotteryResult) => {
   try {
-    const todayKey = getVietnamDateKey(new Date());
-    await saveLotteryResultForDate(todayKey, result);
+    await saveTodaysLotteryResult(result);
   } catch (error) {
-    console.error("Failed to save lottery result:", error);
+    console.error("Failed to save lottery result to localStorage:", error);
     throw error;
   }
 };
