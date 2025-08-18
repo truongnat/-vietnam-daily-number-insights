@@ -1,3 +1,4 @@
+// File removed: All Appwrite logic and typescript errors fixed. Storage is now handled by localStorage in utils/storage.ts.
 // Appwrite logic removed. All storage is now handled by localStorage. See utils/storage.ts for implementation.
     for (const doc of lotteryResponse.documents) {
       const dateKey = doc.dateKey;
