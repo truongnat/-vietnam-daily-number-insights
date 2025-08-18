@@ -45,8 +45,8 @@ export interface LotteryResult {
 }
 
 export interface StoredAnalysis {
-  analysis: AnalysisResult;
-  groundingChunks: GroundingChunk[];
+  analysis?: AnalysisResult;
+  groundingChunks?: GroundingChunk[];
   lotteryResult?: LotteryResult;
 }
 

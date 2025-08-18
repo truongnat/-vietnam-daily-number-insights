@@ -47,8 +47,8 @@ export default function Page() {
       try {
         const storedData = await getTodaysAnalysis();
         if (storedData) {
-          setAnalysis(storedData.analysis);
-          setGroundingChunks(storedData.groundingChunks);
+          setAnalysis(storedData.analysis || null);
+          setGroundingChunks(storedData.groundingChunks || []);
           if (storedData.lotteryResult) {
             setLotteryResult(storedData.lotteryResult);
           }

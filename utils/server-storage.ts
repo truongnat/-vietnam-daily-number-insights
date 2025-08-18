@@ -1,8 +1,12 @@
 import type { StoredAnalysis, LotteryResult } from '@/types';
-import { saveTodaysAnalysis, saveTodaysLotteryResult, getVietnamDateKey } from './storage';
+import { 
+  saveTodaysAnalysis as saveTodaysAnalysisClient, 
+  saveTodaysLotteryResult as saveTodaysLotteryResultClient, 
+  getVietnamDateKey as getVietnamDateKeyClient 
+} from './storage';
 
 // Re-export getVietnamDateKey for compatibility
-export { getVietnamDateKey };
+export const getVietnamDateKey = getVietnamDateKeyClient;
 
 /**
  * Saves today's analysis to localStorage (server-side compatible).
@@ -10,7 +14,7 @@ export { getVietnamDateKey };
  */
 export const saveTodaysAnalysisServer = async (data: Omit<StoredAnalysis, 'lotteryResult'>) => {
   try {
-    await saveTodaysAnalysis(data);
+    await saveTodaysAnalysisClient(data);
   } catch (error) {
     console.error("Failed to save analysis to localStorage:", error);
     throw error;
@@ -26,7 +30,7 @@ export const saveTodaysAnalysis = saveTodaysAnalysisServer;
  */
 export const saveTodaysLotteryResultServer = async (result: LotteryResult) => {
   try {
-    await saveTodaysLotteryResult(result);
+    await saveTodaysLotteryResultClient(result);
   } catch (error) {
     console.error("Failed to save lottery result to localStorage:", error);
     throw error;

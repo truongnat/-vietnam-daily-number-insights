@@ -100,8 +100,11 @@ export const deleteTodaysAnalysis = async () => {
     const todayKey = getVietnamDateKey(new Date());
     localStorage.removeItem(`analysis_${todayKey}`);
     const historicalData = await getAllHistoricalData();
-    if (historicalData[todayKey]) {
-      delete historicalData[todayKey].analysis;
+    if (historicalData[todayKey] && historicalData[todayKey].analysis) {
+      historicalData[todayKey] = {
+        ...historicalData[todayKey],
+        analysis: undefined
+      };
     }
     localStorage.setItem('historicalData', JSON.stringify(historicalData));
   } catch (error) {
@@ -117,8 +120,11 @@ export const deleteTodaysLotteryResult = async () => {
     const todayKey = getVietnamDateKey(new Date());
     localStorage.removeItem(`lottery_${todayKey}`);
     const historicalData = await getAllHistoricalData();
-    if (historicalData[todayKey]) {
-      delete historicalData[todayKey].lotteryResult;
+    if (historicalData[todayKey] && historicalData[todayKey].lotteryResult) {
+      historicalData[todayKey] = {
+        ...historicalData[todayKey],
+        lotteryResult: undefined
+      };
     }
     localStorage.setItem('historicalData', JSON.stringify(historicalData));
   } catch (error) {
