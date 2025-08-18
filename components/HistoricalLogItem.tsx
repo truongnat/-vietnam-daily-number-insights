@@ -40,7 +40,7 @@ export const HistoricalLogItem: React.FC<HistoricalLogItemProps> = ({ dateKey, s
     }, [dateKey]);
 
     const winStats = useMemo(() => {
-        if (!lotteryResult || (!analysis.bestNumber && !analysis.luckyNumbers)) {
+        if (!lotteryResult || !analysis || (!analysis.bestNumber && !analysis.luckyNumbers)) {
             return { de: 0, lo: 0, total: 0 };
         }
         let de = 0;
@@ -67,7 +67,7 @@ export const HistoricalLogItem: React.FC<HistoricalLogItemProps> = ({ dateKey, s
         }
 
         return { de, lo, total: de + lo };
-    }, [lotteryResult, analysis.bestNumber, analysis.luckyNumbers]);
+    }, [lotteryResult, analysis, analysis?.bestNumber, analysis?.luckyNumbers]);
 
     return (
         <div className="bg-gray-800/70 border border-gray-700 rounded-lg text-left overflow-hidden">
@@ -80,7 +80,7 @@ export const HistoricalLogItem: React.FC<HistoricalLogItemProps> = ({ dateKey, s
                     <p className="font-semibold text-lg text-white">{formattedDate}</p>
                     <div className="flex items-center gap-3 mt-1 flex-wrap">
                         <p className="text-sm text-gray-400">Gợi ý:</p>
-                        {analysis.bestNumber && (
+                        {analysis?.bestNumber && (
                             <span className={`text-lg font-bold px-2 py-1 rounded border ${
                                 lotteryResult
                                     ? lotteryResult.specialPrize === analysis.bestNumber.number
@@ -93,7 +93,7 @@ export const HistoricalLogItem: React.FC<HistoricalLogItemProps> = ({ dateKey, s
                                 {analysis.bestNumber.number}
                             </span>
                         )}
-                        {analysis.luckyNumbers && analysis.luckyNumbers.map(ln => (
+                        {analysis?.luckyNumbers && analysis.luckyNumbers.map(ln => (
                              <span key={ln.number} className={`text-lg font-bold px-2 py-1 rounded ${
                                 lotteryResult
                                     ? lotteryResult.specialPrize === ln.number

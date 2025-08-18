@@ -37,7 +37,7 @@ export const FrequencyDashboard: React.FC = () => {
 
                 Object.entries(historicalData).forEach(([dateStr, data]) => {
                     const entryDate = new Date(dateStr);
-                    if (entryDate >= rangeCutoff) {
+                    if (entryDate >= rangeCutoff && data.analysis && data.analysis.topNumbers) {
                         data.analysis.topNumbers.forEach(num => {
                             const currentCount = freqMap.get(num.number) || 0;
                             freqMap.set(num.number, currentCount + 1);
@@ -59,7 +59,7 @@ export const FrequencyDashboard: React.FC = () => {
                     let potentialNumber: string | undefined = undefined;
                     const yesterdayKey = getVietnamDateKey(new Date(Date.now() - 864e5));
                     const yesterdayData = historicalData[yesterdayKey];
-                    if (yesterdayData) {
+                    if (yesterdayData && yesterdayData.analysis && yesterdayData.analysis.topNumbers) {
                         const yesterdayNumbers = yesterdayData.analysis.topNumbers.map(n => n.number);
                         const candidates = yesterdayNumbers.filter(n => (freqMap.get(n) || 0) <= 2);
                         if (candidates.length > 0) {
