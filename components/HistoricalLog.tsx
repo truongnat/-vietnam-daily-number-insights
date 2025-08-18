@@ -1,6 +1,5 @@
 
 import React, { useState, useEffect } from 'react';
-import { getAllHistoricalData } from '@/utils/storage';
 import type { HistoricalData } from '@/types';
 import { HistoricalLogItem } from '@/components/HistoricalLogItem';
 
@@ -10,7 +9,9 @@ export const HistoricalLog: React.FC = () => {
 
     const fetchData = async () => {
         try {
-            const data = await getAllHistoricalData();
+            // Fetch historical data from API
+            const response = await fetch('/api/storage/historical');
+            const data: HistoricalData = response.ok ? await response.json() : {};
             setHistoricalData(data);
             // Sort keys in descending order (most recent first)
             const keys = Object.keys(data).sort((a, b) => new Date(b).getTime() - new Date(a).getTime());
