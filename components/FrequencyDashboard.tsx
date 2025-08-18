@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { getAllHistoricalData, getVietnamDateKey } from '@/utils/storage';
+import { getVietnamDateKey } from '@/utils/storage';
 import { FrequencyChart } from '@/components/FrequencyChart';
 import { StatCard } from '@/components/StatCard';
+import type { HistoricalData } from '@/types';
 
 const FireIcon = (props: React.SVGProps<SVGSVGElement>) => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" {...props}>
@@ -29,7 +30,9 @@ export const FrequencyDashboard: React.FC = () => {
     useEffect(() => {
         const fetchAndAnalyzeData = async () => {
             try {
-                const historicalData = await getAllHistoricalData();
+                // Fetch historical data from API
+                const response = await fetch('/api/storage/historical');
+                const historicalData: HistoricalData = response.ok ? await response.json() : {};
                 const rangeCutoff = new Date();
                 rangeCutoff.setDate(rangeCutoff.getDate() - dateRange);
 

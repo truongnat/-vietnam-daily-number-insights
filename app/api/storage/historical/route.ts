@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getAllHistoricalData } from '@/utils/appwrite-database';
+import { getAllHistoricalData } from '@/utils/server-file-storage';
 
 export async function GET() {
   try {

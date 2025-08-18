@@ -14,30 +14,56 @@ export const getVietnamDateKey = (date: Date): string => {
 };
 
 /**
- * Retrieves all historical data from localStorage.
+ * Check if we're running on the client side
+ */
+const isClient = typeof window !== 'undefined';
+
+/**
+ * Retrieves all historical data from localStorage or API.
  * @returns A HistoricalData object, or an empty object if none exists or an error occurs.
  */
 export const getAllHistoricalData = async (): Promise<HistoricalData> => {
   try {
-    const data = localStorage.getItem('historicalData');
-    return data ? JSON.parse(data) : {};
+    if (isClient) {
+      // Client-side: use localStorage
+      const data = localStorage.getItem('historicalData');
+      return data ? JSON.parse(data) : {};
+    } else {
+      // Server-side: use API
+      const response = await fetch('/api/storage/historical');
+      if (response.ok) {
+        return await response.json();
+      }
+      return {};
+    }
   } catch (error) {
-    console.error('Failed to fetch historical data from localStorage:', error);
+    console.error('Failed to fetch historical data:', error);
     return {};
   }
 };
 
 /**
- * Retrieves today's analysis from localStorage.
+ * Retrieves today's analysis from localStorage or API.
  * @returns The StoredAnalysis object for today, or null if it doesn't exist.
  */
 export const getTodaysAnalysis = async (): Promise<StoredAnalysis | null> => {
   try {
     const todayKey = getVietnamDateKey(new Date());
-    const data = localStorage.getItem(`analysis_${todayKey}`);
-    return data ? JSON.parse(data) : null;
+    
+    if (isClient) {
+      // Client-side: use localStorage
+      const data = localStorage.getItem(`analysis_${todayKey}`);
+      return data ? JSON.parse(data) : null;
+    } else {
+      // Server-side: use API
+      const response = await fetch(`/api/storage/analysis/${todayKey}`);
+      if (response.ok) {
+        return await response.json();
+      }
+      return null;
+    }
   } catch (error) {
-    console.error('Failed to fetch today\'s analysis from localStorage:', error);
+    console.error('Failed to fetch today\'s analysis:', error);
     return null;
   }
 };
@@ -49,27 +75,55 @@ export const getTodaysAnalysis = async (): Promise<StoredAnalysis | null> => {
 export const saveTodaysAnalysis = async (data: Omit<StoredAnalysis, 'lotteryResult'>) => {
   try {
     const todayKey = getVietnamDateKey(new Date());
-    localStorage.setItem(`analysis_${todayKey}`, JSON.stringify(data));
-    const historicalData = await getAllHistoricalData();
-    historicalData[todayKey] = { ...historicalData[todayKey], ...data };
-    localStorage.setItem('historicalData', JSON.stringify(historicalData));
+    
+    if (isClient) {
+      // Client-side: use localStorage
+      localStorage.setItem(`analysis_${todayKey}`, JSON.stringify(data));
+      const historicalData = await getAllHistoricalData();
+      historicalData[todayKey] = { ...historicalData[todayKey], ...data };
+      localStorage.setItem('historicalData', JSON.stringify(historicalData));
+    } else {
+      // Server-side: use API
+      const response = await fetch(`/api/storage/analysis/${todayKey}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+    }
   } catch (error) {
-    console.error('Failed to save today\'s analysis to localStorage:', error);
+    console.error('Failed to save today\'s analysis:', error);
     throw error;
   }
 };
 
 /**
- * Retrieves today's lottery result from localStorage.
+ * Retrieves today's lottery result from localStorage or API.
  * @returns The LotteryResult object for today, or null if it doesn't exist.
  */
 export const getTodaysLotteryResult = async (): Promise<LotteryResult | null> => {
   try {
     const todayKey = getVietnamDateKey(new Date());
-    const data = localStorage.getItem(`lottery_${todayKey}`);
-    return data ? JSON.parse(data) : null;
+    
+    if (isClient) {
+      // Client-side: use localStorage
+      const data = localStorage.getItem(`lottery_${todayKey}`);
+      return data ? JSON.parse(data) : null;
+    } else {
+      // Server-side: use API
+      const response = await fetch(`/api/storage/lottery/${todayKey}`);
+      if (response.ok) {
+        return await response.json();
+      }
+      return null;
+    }
   } catch (error) {
-    console.error('Failed to fetch today\'s lottery result from localStorage:', error);
+    console.error('Failed to fetch today\'s lottery result:', error);
     return null;
   }
 };
@@ -81,13 +135,30 @@ export const getTodaysLotteryResult = async (): Promise<LotteryResult | null> =>
 export const saveTodaysLotteryResult = async (result: LotteryResult) => {
   try {
     const todayKey = getVietnamDateKey(new Date());
-    localStorage.setItem(`lottery_${todayKey}`, JSON.stringify(result));
-    const historicalData = await getAllHistoricalData();
-    if (!historicalData[todayKey]) historicalData[todayKey] = {} as StoredAnalysis;
-    historicalData[todayKey].lotteryResult = result;
-    localStorage.setItem('historicalData', JSON.stringify(historicalData));
+    
+    if (isClient) {
+      // Client-side: use localStorage
+      localStorage.setItem(`lottery_${todayKey}`, JSON.stringify(result));
+      const historicalData = await getAllHistoricalData();
+      if (!historicalData[todayKey]) historicalData[todayKey] = {} as StoredAnalysis;
+      historicalData[todayKey].lotteryResult = result;
+      localStorage.setItem('historicalData', JSON.stringify(historicalData));
+    } else {
+      // Server-side: use API
+      const response = await fetch(`/api/storage/lottery/${todayKey}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(result),
+      });
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+    }
   } catch (error) {
-    console.error('Failed to save today\'s lottery result to localStorage:', error);
+    console.error('Failed to save today\'s lottery result:', error);
     throw error;
   }
 };
@@ -98,17 +169,30 @@ export const saveTodaysLotteryResult = async (result: LotteryResult) => {
 export const deleteTodaysAnalysis = async () => {
   try {
     const todayKey = getVietnamDateKey(new Date());
-    localStorage.removeItem(`analysis_${todayKey}`);
-    const historicalData = await getAllHistoricalData();
-    if (historicalData[todayKey] && historicalData[todayKey].analysis) {
-      historicalData[todayKey] = {
-        ...historicalData[todayKey],
-        analysis: undefined
-      };
+    
+    if (isClient) {
+      // Client-side: use localStorage
+      localStorage.removeItem(`analysis_${todayKey}`);
+      const historicalData = await getAllHistoricalData();
+      if (historicalData[todayKey] && historicalData[todayKey].analysis) {
+        historicalData[todayKey] = {
+          ...historicalData[todayKey],
+          analysis: undefined
+        };
+      }
+      localStorage.setItem('historicalData', JSON.stringify(historicalData));
+    } else {
+      // Server-side: use API
+      const response = await fetch(`/api/storage/analysis/${todayKey}`, {
+        method: 'DELETE',
+      });
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
     }
-    localStorage.setItem('historicalData', JSON.stringify(historicalData));
   } catch (error) {
-    console.error('Failed to delete today\'s analysis from localStorage:', error);
+    console.error('Failed to delete today\'s analysis:', error);
   }
 };
 
@@ -118,17 +202,30 @@ export const deleteTodaysAnalysis = async () => {
 export const deleteTodaysLotteryResult = async () => {
   try {
     const todayKey = getVietnamDateKey(new Date());
-    localStorage.removeItem(`lottery_${todayKey}`);
-    const historicalData = await getAllHistoricalData();
-    if (historicalData[todayKey] && historicalData[todayKey].lotteryResult) {
-      historicalData[todayKey] = {
-        ...historicalData[todayKey],
-        lotteryResult: undefined
-      };
+    
+    if (isClient) {
+      // Client-side: use localStorage
+      localStorage.removeItem(`lottery_${todayKey}`);
+      const historicalData = await getAllHistoricalData();
+      if (historicalData[todayKey] && historicalData[todayKey].lotteryResult) {
+        historicalData[todayKey] = {
+          ...historicalData[todayKey],
+          lotteryResult: undefined
+        };
+      }
+      localStorage.setItem('historicalData', JSON.stringify(historicalData));
+    } else {
+      // Server-side: use API
+      const response = await fetch(`/api/storage/lottery/${todayKey}`, {
+        method: 'DELETE',
+      });
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
     }
-    localStorage.setItem('historicalData', JSON.stringify(historicalData));
   } catch (error) {
-    console.error('Failed to delete today\'s lottery result from localStorage:', error);
+    console.error('Failed to delete today\'s lottery result:', error);
   }
 };
 
@@ -140,6 +237,6 @@ export const deleteTodaysData = async () => {
     await deleteTodaysAnalysis();
     await deleteTodaysLotteryResult();
   } catch (error) {
-    console.error('Failed to delete today\'s data from localStorage:', error);
+    console.error('Failed to delete today\'s data:', error);
   }
 };
