@@ -128,23 +128,23 @@ export const TimeBasedDisplay: React.FC = () => {
           <div className="space-y-6">
             {/* Analysis Summary */}
             <p className="text-gray-300 text-center">
-              {analysisData!.analysis.summary}
+              {analysisData?.analysis?.summary}
             </p>
 
             {/* Lucky Numbers */}
-            {analysisData!.analysis.bestNumber && analysisData!.analysis.luckyNumbers && (
+            {analysisData?.analysis?.bestNumber && analysisData?.analysis?.luckyNumbers && (
               <LuckyNumberCard
-                bestNumber={analysisData!.analysis.bestNumber}
-                luckyNumbers={analysisData!.analysis.luckyNumbers}
+                bestNumber={analysisData.analysis.bestNumber}
+                luckyNumbers={analysisData.analysis.luckyNumbers}
               />
             )}
 
             {/* Lottery Result (only show for 19:00+ and if available) */}
             {currentVietnamTime.getHours() >= 19 && lotteryResult &&
-             analysisData!.analysis.bestNumber && analysisData!.analysis.luckyNumbers && (
+             analysisData?.analysis?.bestNumber && analysisData?.analysis?.luckyNumbers && (
               <LotteryResultDisplay
-                bestNumber={analysisData!.analysis.bestNumber}
-                luckyNumbers={analysisData!.analysis.luckyNumbers}
+                bestNumber={analysisData.analysis.bestNumber}
+                luckyNumbers={analysisData.analysis.luckyNumbers}
                 lotteryResult={lotteryResult}
               />
             )}

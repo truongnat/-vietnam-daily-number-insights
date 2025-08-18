@@ -132,7 +132,7 @@ export const HistoricalLogItem: React.FC<HistoricalLogItemProps> = ({ dateKey, s
                 </svg>
 
             </button>
-            {isExpanded && (
+            {isExpanded && analysis && (
                 <div className="p-4 md:p-6 border-t border-gray-700 bg-gray-900/50 animate-fade-in-down">
                     <h4 className="text-lg font-semibold text-teal-300 mb-4">Chi Tiết Phân Tích</h4>
                     <p className="text-sm text-gray-400 italic mb-6">"{analysis.summary}"</p>
@@ -183,30 +183,34 @@ export const HistoricalLogItem: React.FC<HistoricalLogItemProps> = ({ dateKey, s
                         </div>
                     </div>
                     
-                    <div className="mb-6">
-                        <h5 className="font-semibold text-gray-300 mb-3">Các Con Số Nổi Bật Trong Tin Tức:</h5>
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                            {analysis.topNumbers.map((item, index) => (
-                                <NumberCard
-                                    key={index}
-                                    number={item.number}
-                                    count={item.count}
-                                    reason={item.reason}
-                                    index={index}
-                                    lotteryResult={lotteryResult}
-                                />
-                            ))}
+                    {analysis.topNumbers && (
+                        <div className="mb-6">
+                            <h5 className="font-semibold text-gray-300 mb-3">Các Con Số Nổi Bật Trong Tin Tức:</h5>
+                            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                {analysis.topNumbers.map((item, index) => (
+                                    <NumberCard
+                                        key={index}
+                                        number={item.number}
+                                        count={item.count}
+                                        reason={item.reason}
+                                        index={index}
+                                        lotteryResult={lotteryResult}
+                                    />
+                                ))}
+                            </div>
                         </div>
-                    </div>
+                    )}
 
-                    <div>
-                        <h5 className="font-semibold text-gray-300 mb-3">Nguồn Sự Kiện Chính:</h5>
-                        <div className="space-y-3">
-                            {analysis.events.map((event, index) => (
-                                <EventSnippet key={index} title={event.title} description={event.description} />
-                            ))}
+                    {analysis.events && (
+                        <div>
+                            <h5 className="font-semibold text-gray-300 mb-3">Nguồn Sự Kiện Chính:</h5>
+                            <div className="space-y-3">
+                                {analysis.events.map((event, index) => (
+                                    <EventSnippet key={index} title={event.title} description={event.description} />
+                                ))}
+                            </div>
                         </div>
-                    </div>
+                    )}
                 </div>
             )}
         </div>
