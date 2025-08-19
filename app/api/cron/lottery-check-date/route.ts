@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { saveLotteryResultForDate } from '@/utils/appwrite-database';
+import { saveLotteryResultForDate } from '@/utils/storage';
 
 export async function POST(request: NextRequest) {
   try {

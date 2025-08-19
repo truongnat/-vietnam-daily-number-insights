@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { fetchDailyAnalysis } from '@/services/geminiService';
 import { saveTodaysAnalysis, getVietnamDateKey } from '@/utils/server-storage';
 import { setProcessingStatus } from '@/utils/processing-status';
-import { deleteAnalysisForDate } from '@/utils/appwrite-database';
+import { deleteAnalysisForDate } from '@/utils/storage';
 
 // Background processing function for force run
 async function processForceAnalysisInBackground(dateKey: string, currentHour: number) {
