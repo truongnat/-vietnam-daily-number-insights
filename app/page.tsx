@@ -8,6 +8,7 @@ import { FrequencyDashboard } from '@/components/FrequencyDashboard';
 import { HistoricalLog } from '@/components/HistoricalLog';
 import { TimeBasedDisplay } from '@/components/TimeBasedDisplay';
 import { HistoricalDataManager } from '@/components/HistoricalDataManager';
+import { XSMBResults } from '@/components/XSMBResults';
 
 export default function Page() {
   const [view, setView] = useState<'realtime' | 'frequency' | 'history'>('realtime');
@@ -32,6 +33,11 @@ export default function Page() {
         <HistoricalDataManager />
         <ViewToggle view={view} setView={setView} />
         {renderContent()}
+        
+        {/* XSMB Results Section - Always visible below main content */}
+        <div className="w-full mt-12 pt-8 border-t border-gray-700">
+          <XSMBResults />
+        </div>
       </main>
       <Footer groundingChunks={[]} />
     </div>
