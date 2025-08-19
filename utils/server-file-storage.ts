@@ -229,3 +229,9 @@ export const deleteLotteryResultForDate = async (dateKey: string): Promise<void>
     throw error;
   }
 };
+// Server-specific function aliases for compatibility
+export const getAllHistoricalDataServer = getAllHistoricalData;
+export const getAnalysisForDateServer = getAnalysisForDate;
+export const getLotteryResultForDateServer = getLotteryResultForDate;
+export const deleteAnalysisForDateServer = deleteAnalysisForDate;
+export const deleteLotteryResultForDateServer = deleteLotteryResultForDate;
