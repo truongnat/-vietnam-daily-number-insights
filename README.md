@@ -49,7 +49,8 @@
 
 ### Backend
 - **Next.js API Routes** - Server-side logic
-- **Appwrite Database** - Cloud database storage
+- **Local Storage** - Client-side data storage
+- **File System Storage** - Server-side data storage
 - **Gemini AI API** - News analysis
 - **Cron Jobs** - Automated tasks
 
@@ -64,7 +65,6 @@
 - **Node.js** 18+
 - **pnpm** (recommended) hoặc npm
 - **Gemini API Key**
-- **Appwrite Account** - Free at [cloud.appwrite.io](https://cloud.appwrite.io)
 
 ### 1. Clone Repository
 ```bash
@@ -83,18 +83,10 @@ npm install
 Tạo file `.env.local`:
 ```bash
 NEXT_PUBLIC_GEMINI_API_KEY=your-gemini-api-key-here
-NEXT_PUBLIC_APPWRITE_PROJECT_ID=your-appwrite-project-id
-NEXT_PUBLIC_APPWRITE_ENDPOINT=https://cloud.appwrite.io/v1
 CRON_SECRET=your-secure-random-string
 ```
 
-### 4. Appwrite Database Setup
-Follow the [Appwrite Setup Guide](docs/appwrite-setup.md) to:
-1. Create database and collections in Appwrite console
-2. Configure proper permissions
-3. Test the connection
-
-### 5. Run Development Server
+### 4. Run Development Server
 ```bash
 pnpm dev
 # hoặc
@@ -117,19 +109,16 @@ vietnam-daily-number-insights/
 ├── components/                   # React components
 │   ├── LuckyNumberCard.tsx       # Số may mắn display
 │   ├── ResultsDisplay.tsx        # Kết quả phân tích
-│   ├── LotteryResultDisplay.tsx  # Đối chiếu xổ số
+│   ├── LotteryResultDisplay.tsx  # Đối chi��u xổ số
 │   └── ...                       # Các components khác
 ├── services/                     # Business logic
 │   └── geminiService.ts          # Gemini AI integration
 ├── utils/                        # Utilities
-│   ├── appwrite.ts               # Appwrite client config
-│   ├── appwrite-database.ts      # Appwrite database operations
-│   ├── database.ts               # Legacy JSON storage (deprecated)
-│   └── storage.ts                # Data operations
+│   ├── storage.ts                # Local storage operations
+│   ├── server-storage.ts         # Server-side storage
+│   └── database.ts               # Legacy JSON storage (deprecated)
 ├── types.ts                      # TypeScript definitions
 ├── docs/                         # Documentation
-│   ├── appwrite-schema.md        # Database schema
-│   └── appwrite-setup.md         # Setup guide
 ├── CRON_SETUP.md                 # Cron setup guide
 └── CRON_QUICK_SETUP.md           # Quick setup guide
 ```
@@ -145,10 +134,8 @@ vietnam-daily-number-insights/
 3. **Set Environment Variables**:
    ```
    NEXT_PUBLIC_GEMINI_API_KEY=your-gemini-api-key
-   NEXT_PUBLIC_APPWRITE_PROJECT_ID=your-appwrite-project-id
-   NEXT_PUBLIC_APPWRITE_ENDPOINT=https://cloud.appwrite.io/v1
+   CRON_SECRET=your-secure-random-string
    ```
-4. **Setup Appwrite Database**: Follow [Appwrite Setup Guide](docs/appwrite-setup.md)
 4. **Deploy** - Vercel sẽ tự động build và deploy
 
 ### Setup Cron Jobs (Miễn phí)
@@ -156,7 +143,7 @@ vietnam-daily-number-insights/
 Sau khi deploy, setup cron jobs với cron-job.org:
 
 1. **Đọc hướng dẫn**: [`CRON_QUICK_SETUP.md`](CRON_QUICK_SETUP.md)
-2. **Đăng ký miễn phí** tại [cron-job.org](https://cron-job.org) (không cần API key)
+2. **Đăng ký miễn phí** tại [cron-job.org](https://cron-job.org) (không c��n API key)
 3. **Tạo 4 cron jobs** qua giao diện web (chỉ cần URL + schedule)
 4. **Test endpoints** để đảm bảo hoạt động
 
@@ -225,8 +212,8 @@ Sau khi deploy, setup cron jobs với cron-job.org:
 
 - **Static Generation**: Next.js pre-renders pages
 - **API Caching**: Intelligent caching strategies
-- **Appwrite Database**: Fast cloud database with global CDN
-- **CDN**: Vercel Edge Network + Appwrite global infrastructure
+- **Local Storage**: Fast client-side data access
+- **CDN**: Vercel Edge Network
 - **Optimized Images**: Next.js Image optimization
 
 ## 🐛 Troubleshooting
