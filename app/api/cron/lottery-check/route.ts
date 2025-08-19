@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server';
 import { fetchCurrentDayLotteryResult } from '@/services/geminiService';
-import { saveTodaysLotteryResult, getVietnamDateKey } from '@/utils/server-storage';
+import { saveLotteryResultForDate, getVietnamDateKey } from '@/utils/server-storage';
 import { setProcessingStatus } from '@/utils/processing-status';
+import { getLotteryResultForDate } from '@/utils/server-file-storage';
 
 // Background processing function
 async function processLotteryCheckInBackground(dateKey: string, currentHour: number) {
@@ -14,7 +15,7 @@ async function processLotteryCheckInBackground(dateKey: string, currentHour: num
 
     if (result) {
       // Save the lottery result
-      await saveTodaysLotteryResult(result);
+      await saveLotteryResultForDate(dateKey, result);
 
       console.log(`Background processing: Lottery result saved for ${dateKey}:`, result);
       setProcessingStatus(dateKey, 'lottery', 'completed');
@@ -40,12 +41,16 @@ export async function GET() {
 
     console.log(`Checking lottery results at ${currentHour}:00 Vietnam time for date ${dateKey}`);
 
-    // Only check lottery results after 18:35 (6:35 PM) Vietnam time
-    if (currentHour < 18 || (currentHour === 18 && vietnamTime.getMinutes() < 35)) {
+    // Check if lottery result already exists for today (prevent multiple runs per day)
+    const existingResult = await getLotteryResultForDate(dateKey);
+    if (existingResult) {
+      console.log(`Lottery result already exists for ${dateKey}, skipping...`);
       return NextResponse.json({
-        success: false,
-        message: 'Lottery results are not available yet. Check after 18:35 Vietnam time.',
-        currentTime: vietnamTime.toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' })
+        success: true,
+        message: `Lottery result already exists for ${dateKey}`,
+        dateKey,
+        status: 'already_completed',
+        note: 'Lottery result was already fetched today. Only one check per day is allowed.'
       });
     }
 
@@ -71,5 +76,3 @@ export async function GET() {
     }, { status: 500 });
   }
 }
-
-
