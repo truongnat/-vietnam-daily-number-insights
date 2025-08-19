@@ -1,6 +1,6 @@
 import { GoogleGenAI } from "@google/genai";
 import type { AnalysisResult, GroundingChunk, LotteryResult, HistoricalData, StoredAnalysis } from "@/types";
-import { getAllHistoricalData } from "@/utils/storage";
+import { getAllHistoricalData } from "@/utils/server-file-storage";
 
 function getGeminiAI() {
   if (!process.env.NEXT_PUBLIC_GEMINI_API_KEY) {
