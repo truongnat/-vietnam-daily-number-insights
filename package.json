@@ -6,13 +6,11 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
-    "test:appwrite": "node scripts/test-appwrite.js"
+    "start": "next start"
   },
   "dependencies": {
     "@google/genai": "^1.12.0",
     "@heroicons/react": "^2.2.0",
-    "appwrite": "^18.2.0",
     "next": "^15.4.5",
     "react": "^19.1.1",
     "react-dom": "^19.1.1"
