@@ -19,22 +19,8 @@ export const getVietnamDateKey = (date: Date): string => {
 const isClient = typeof window !== 'undefined';
 
 /**
- * Get the base URL for API calls
- */
-const getBaseUrl = (): string => {
-  if (isClient) {
-    return window.location.origin;
-  }
-  // For server-side, we need to determine the base URL
-  return process.env.VERCEL_URL 
-    ? `https://${process.env.VERCEL_URL}` 
-    : process.env.NODE_ENV === 'development' 
-      ? 'http://localhost:3000' 
-      : 'http://localhost:3000';
-};
-
-/**
- * Retrieves all historical data from localStorage or API.
+ * Retrieves all historical data from localStorage (client-side only).
+ * For server-side, this returns empty object as it should use server-storage directly.
  * @returns A HistoricalData object, or an empty object if none exists or an error occurs.
  */
 export const getAllHistoricalData = async (): Promise<HistoricalData> => {
@@ -44,9 +30,8 @@ export const getAllHistoricalData = async (): Promise<HistoricalData> => {
       const data = localStorage.getItem('historicalData');
       return data ? JSON.parse(data) : {};
     } else {
-      // Server-side: use server-storage functions directly
-      const { getAllHistoricalDataServer } = await import('@/utils/server-file-storage');
-      return await getAllHistoricalDataServer();
+      // Server-side: return empty object, server functions should use server-storage directly
+      return {};
     }
   } catch (error) {
     console.error('Failed to fetch historical data:', error);
@@ -55,7 +40,7 @@ export const getAllHistoricalData = async (): Promise<HistoricalData> => {
 };
 
 /**
- * Retrieves today's analysis from localStorage or API.
+ * Retrieves today's analysis from localStorage (client-side only).
  * @returns The StoredAnalysis object for today, or null if it doesn't exist.
  */
 export const getTodaysAnalysis = async (): Promise<StoredAnalysis | null> => {
@@ -67,9 +52,8 @@ export const getTodaysAnalysis = async (): Promise<StoredAnalysis | null> => {
       const data = localStorage.getItem(`analysis_${todayKey}`);
       return data ? JSON.parse(data) : null;
     } else {
-      // Server-side: use server-storage functions directly
-      const { getAnalysisForDateServer } = await import('@/utils/server-file-storage');
-      return await getAnalysisForDateServer(todayKey);
+      // Server-side: return null, server functions should use server-storage directly
+      return null;
     }
   } catch (error) {
     console.error('Failed to fetch today\'s analysis:', error);
@@ -78,7 +62,7 @@ export const getTodaysAnalysis = async (): Promise<StoredAnalysis | null> => {
 };
 
 /**
- * Saves today's analysis to localStorage and updates historicalData.
+ * Saves today's analysis to localStorage (client-side only).
  * @param data The analysis data to save.
  */
 export const saveTodaysAnalysis = async (data: Omit<StoredAnalysis, 'lotteryResult'>) => {
@@ -92,9 +76,8 @@ export const saveTodaysAnalysis = async (data: Omit<StoredAnalysis, 'lotteryResu
       historicalData[todayKey] = { ...historicalData[todayKey], ...data };
       localStorage.setItem('historicalData', JSON.stringify(historicalData));
     } else {
-      // Server-side: use server-storage functions directly
-      const { saveAnalysisForDate } = await import('@/utils/server-file-storage');
-      await saveAnalysisForDate(todayKey, data);
+      // Server-side: do nothing, server functions should use server-storage directly
+      console.log('Server-side saveTodaysAnalysis called - should use server-storage directly');
     }
   } catch (error) {
     console.error('Failed to save today\'s analysis:', error);
@@ -103,7 +86,7 @@ export const saveTodaysAnalysis = async (data: Omit<StoredAnalysis, 'lotteryResu
 };
 
 /**
- * Retrieves today's lottery result from localStorage or API.
+ * Retrieves today's lottery result from localStorage (client-side only).
  * @returns The LotteryResult object for today, or null if it doesn't exist.
  */
 export const getTodaysLotteryResult = async (): Promise<LotteryResult | null> => {
@@ -115,9 +98,8 @@ export const getTodaysLotteryResult = async (): Promise<LotteryResult | null> =>
       const data = localStorage.getItem(`lottery_${todayKey}`);
       return data ? JSON.parse(data) : null;
     } else {
-      // Server-side: use server-storage functions directly
-      const { getLotteryResultForDateServer } = await import('@/utils/server-file-storage');
-      return await getLotteryResultForDateServer(todayKey);
+      // Server-side: return null, server functions should use server-storage directly
+      return null;
     }
   } catch (error) {
     console.error('Failed to fetch today\'s lottery result:', error);
@@ -126,7 +108,7 @@ export const getTodaysLotteryResult = async (): Promise<LotteryResult | null> =>
 };
 
 /**
- * Saves today's lottery result to localStorage and updates historicalData.
+ * Saves today's lottery result to localStorage (client-side only).
  * @param result The lottery result to save.
  */
 export const saveTodaysLotteryResult = async (result: LotteryResult) => {
@@ -141,9 +123,8 @@ export const saveTodaysLotteryResult = async (result: LotteryResult) => {
       historicalData[todayKey].lotteryResult = result;
       localStorage.setItem('historicalData', JSON.stringify(historicalData));
     } else {
-      // Server-side: use server-storage functions directly
-      const { saveLotteryResultForDate } = await import('@/utils/server-file-storage');
-      await saveLotteryResultForDate(todayKey, result);
+      // Server-side: do nothing, server functions should use server-storage directly
+      console.log('Server-side saveTodaysLotteryResult called - should use server-storage directly');
     }
   } catch (error) {
     console.error('Failed to save today\'s lottery result:', error);
@@ -152,7 +133,7 @@ export const saveTodaysLotteryResult = async (result: LotteryResult) => {
 };
 
 /**
- * Deletes today's analysis from localStorage and updates historicalData.
+ * Deletes today's analysis from localStorage (client-side only).
  */
 export const deleteTodaysAnalysis = async () => {
   try {
@@ -170,9 +151,8 @@ export const deleteTodaysAnalysis = async () => {
       }
       localStorage.setItem('historicalData', JSON.stringify(historicalData));
     } else {
-      // Server-side: use server-storage functions directly
-      const { deleteAnalysisForDateServer } = await import('@/utils/server-file-storage');
-      await deleteAnalysisForDateServer(todayKey);
+      // Server-side: do nothing, server functions should use server-storage directly
+      console.log('Server-side deleteTodaysAnalysis called - should use server-storage directly');
     }
   } catch (error) {
     console.error('Failed to delete today\'s analysis:', error);
@@ -180,7 +160,7 @@ export const deleteTodaysAnalysis = async () => {
 };
 
 /**
- * Deletes today's lottery result from localStorage and updates historicalData.
+ * Deletes today's lottery result from localStorage (client-side only).
  */
 export const deleteTodaysLotteryResult = async () => {
   try {
@@ -198,9 +178,8 @@ export const deleteTodaysLotteryResult = async () => {
       }
       localStorage.setItem('historicalData', JSON.stringify(historicalData));
     } else {
-      // Server-side: use server-storage functions directly
-      const { deleteLotteryResultForDateServer } = await import('@/utils/server-file-storage');
-      await deleteLotteryResultForDateServer(todayKey);
+      // Server-side: do nothing, server functions should use server-storage directly
+      console.log('Server-side deleteTodaysLotteryResult called - should use server-storage directly');
     }
   } catch (error) {
     console.error('Failed to delete today\'s lottery result:', error);
@@ -222,7 +201,7 @@ export const deleteTodaysData = async () => {
 // Additional functions for date-specific operations
 
 /**
- * Gets analysis for a specific date
+ * Gets analysis for a specific date (client-side only)
  */
 export const getAnalysisForDate = async (dateKey: string): Promise<StoredAnalysis | null> => {
   try {
@@ -231,9 +210,8 @@ export const getAnalysisForDate = async (dateKey: string): Promise<StoredAnalysi
       const data = localStorage.getItem(`analysis_${dateKey}`);
       return data ? JSON.parse(data) : null;
     } else {
-      // Server-side: use server-storage functions directly
-      const { getAnalysisForDateServer } = await import('@/utils/server-file-storage');
-      return await getAnalysisForDateServer(dateKey);
+      // Server-side: return null, server functions should use server-storage directly
+      return null;
     }
   } catch (error) {
     console.error(`Failed to fetch analysis for ${dateKey}:`, error);
@@ -242,7 +220,7 @@ export const getAnalysisForDate = async (dateKey: string): Promise<StoredAnalysi
 };
 
 /**
- * Saves lottery result for a specific date
+ * Saves lottery result for a specific date (client-side only)
  */
 export const saveLotteryResultForDate = async (dateKey: string, result: LotteryResult) => {
   try {
@@ -254,9 +232,8 @@ export const saveLotteryResultForDate = async (dateKey: string, result: LotteryR
       historicalData[dateKey].lotteryResult = result;
       localStorage.setItem('historicalData', JSON.stringify(historicalData));
     } else {
-      // Server-side: use server-storage functions directly
-      const { saveLotteryResultForDate: saveLotteryResultForDateServer } = await import('@/utils/server-file-storage');
-      await saveLotteryResultForDateServer(dateKey, result);
+      // Server-side: do nothing, server functions should use server-storage directly
+      console.log('Server-side saveLotteryResultForDate called - should use server-storage directly');
     }
   } catch (error) {
     console.error(`Failed to save lottery result for ${dateKey}:`, error);
@@ -265,7 +242,7 @@ export const saveLotteryResultForDate = async (dateKey: string, result: LotteryR
 };
 
 /**
- * Deletes lottery result for a specific date
+ * Deletes lottery result for a specific date (client-side only)
  */
 export const deleteLotteryResultForDate = async (dateKey: string) => {
   try {
@@ -281,9 +258,8 @@ export const deleteLotteryResultForDate = async (dateKey: string) => {
       }
       localStorage.setItem('historicalData', JSON.stringify(historicalData));
     } else {
-      // Server-side: use server-storage functions directly
-      const { deleteLotteryResultForDateServer } = await import('@/utils/server-file-storage');
-      await deleteLotteryResultForDateServer(dateKey);
+      // Server-side: do nothing, server functions should use server-storage directly
+      console.log('Server-side deleteLotteryResultForDate called - should use server-storage directly');
     }
   } catch (error) {
     console.error(`Failed to delete lottery result for ${dateKey}:`, error);
@@ -291,7 +267,7 @@ export const deleteLotteryResultForDate = async (dateKey: string) => {
 };
 
 /**
- * Deletes analysis for a specific date
+ * Deletes analysis for a specific date (client-side only)
  */
 export const deleteAnalysisForDate = async (dateKey: string) => {
   try {
@@ -307,9 +283,8 @@ export const deleteAnalysisForDate = async (dateKey: string) => {
       }
       localStorage.setItem('historicalData', JSON.stringify(historicalData));
     } else {
-      // Server-side: use server-storage functions directly
-      const { deleteAnalysisForDateServer } = await import('@/utils/server-file-storage');
-      await deleteAnalysisForDateServer(dateKey);
+      // Server-side: do nothing, server functions should use server-storage directly
+      console.log('Server-side deleteAnalysisForDate called - should use server-storage directly');
     }
   } catch (error) {
     console.error(`Failed to delete analysis for ${dateKey}:`, error);
