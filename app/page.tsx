@@ -7,7 +7,6 @@ import { ViewToggle } from '@/components/ViewToggle';
 import { FrequencyDashboard } from '@/components/FrequencyDashboard';
 import { HistoricalLog } from '@/components/HistoricalLog';
 import { TimeBasedDisplay } from '@/components/TimeBasedDisplay';
-import { HistoricalDataManager } from '@/components/HistoricalDataManager';
 import { XSMBResults } from '@/components/XSMBResults';
 
 export default function Page() {
@@ -30,7 +29,6 @@ export default function Page() {
     <div className="min-h-screen bg-gray-900 text-white flex flex-col font-sans">
       <Header />
       <main className="flex-grow container mx-auto p-4 md:p-8 flex flex-col items-center">
-        <HistoricalDataManager />
         <ViewToggle view={view} setView={setView} />
         {renderContent()}
         
