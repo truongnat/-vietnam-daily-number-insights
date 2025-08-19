@@ -1,9 +1,8 @@
-
 import React from 'react';
 
 interface ViewToggleProps {
-  view: 'daily' | 'realtime' | 'frequency' | 'history';
-  setView: (view: 'daily' | 'realtime' | 'frequency' | 'history') => void;
+  view: 'realtime' | 'frequency' | 'history';
+  setView: (view: 'realtime' | 'frequency' | 'history') => void;
 }
 
 export const ViewToggle: React.FC<ViewToggleProps> = ({ view, setView }) => {
@@ -13,13 +12,6 @@ export const ViewToggle: React.FC<ViewToggleProps> = ({ view, setView }) => {
 
   return (
     <div className="flex items-center justify-center p-1 bg-gray-800 rounded-full mb-8 shadow-inner">
-      <button
-        onClick={() => setView('daily')}
-        className={`${baseClasses} ${view === 'daily' ? activeClasses : inactiveClasses}`}
-        aria-pressed={view === 'daily'}
-      >
-        Hôm nay
-      </button>
       <button
         onClick={() => setView('realtime')}
         className={`${baseClasses} ${view === 'realtime' ? activeClasses : inactiveClasses}`}
