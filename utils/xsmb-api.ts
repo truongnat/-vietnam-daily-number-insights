@@ -62,12 +62,10 @@ export const getVietnameseDateString = (dateStr: string): string => {
 };
 
 /**
- * Fetch XSMB results for a single date
+ * Fetch XSMB results for a single date using our proxy API
  */
 export const fetchXSMBSingleDate = async (date: string): Promise<XSMBResponse> => {
-  const response = await fetch(
-    `https://v0-next-js-app-for-xoso.vercel.app/api/xoso?date=${date}`
-  );
+  const response = await fetch(`/api/xsmb?date=${date}`);
   
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`);
@@ -77,12 +75,10 @@ export const fetchXSMBSingleDate = async (date: string): Promise<XSMBResponse> =
 };
 
 /**
- * Fetch XSMB results for a date range
+ * Fetch XSMB results for a date range using our proxy API
  */
 export const fetchXSMBDateRange = async (startDate: string, endDate: string): Promise<XSMBResponse> => {
-  const response = await fetch(
-    `https://v0-next-js-app-for-xoso.vercel.app/api/xoso?start=${startDate}&end=${endDate}`
-  );
+  const response = await fetch(`/api/xsmb?start=${startDate}&end=${endDate}`);
   
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`);
