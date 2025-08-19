@@ -1,0 +1,78 @@
+{
+  "analysis": {
+    "summary": "Hôm nay, Việt Nam chứng kiến sự kiện trọng đại là lễ khởi công và khánh thành đồng loạt 250 công trình, dự án trên khắp cả nước với tổng mức đầu tư lên đến 1,28 triệu tỷ đồng, chào mừng kỷ niệm 80 năm Quốc khánh 2/9. Ngoài ra, các tin tức nổi bật khác bao gồm ngày hội giao lưu văn hóa Lào - Việt Nam sắp diễn ra và tình hình giá cà phê, hồ tiêu ổn định.",
+    "bestNumber": {
+      "number": "80",
+      "type": "Số Đề May Mắn Nhất",
+      "probability": "Cao",
+      "reasoning": "Số 80 được dự đoán là số may mắn nhất cho giải Đề dựa trên nhiều yếu tố. Thứ nhất, số 80 xuất hiện với tần suất cao trong tin tức hôm nay (3 lần), đặc biệt nổi bật trong sự kiện 'kỷ niệm 80 năm Quốc khánh nước Cộng hòa xã hội chủ nghĩa Việt Nam 2/9' và 'Trải qua 80 năm xây dựng, chiến đấu và trưởng thành' của lực lượng Công an nhân dân [2, 8]. Đây là một con số mang ý nghĩa lịch sử và cột mốc quan trọng. Thứ hai, phân tích kết quả xổ số miền Bắc ngày 18/8/2025 cho thấy số 80 không xuất hiện trong giải đặc biệt (45) cũng như các giải lô khác [1]. Điều này phù hợp với xu hướng tránh các số đã ra gần đây cho giải đặc biệt. Mặc dù không có dữ liệu lịch sử 14 ngày để phân tích mẫu hình AI chuyên sâu, sự nổi bật của số 80 trong các sự kiện trọng đại hôm nay làm tăng xác suất xuất hiện của nó."
+    },
+    "luckyNumbers": [
+      {
+        "number": "19",
+        "type": "Số Lô Tiềm Năng",
+        "probability": "Cao",
+        "reasoning": "Số 19 có tiềm năng cao cho các giải lô. Nó xuất hiện 2 lần trong tin tức hôm nay, liên quan trực tiếp đến 'ngày 19-8' (ngày hiện tại) và 'ngày 19-8-1945' (Cách mạng Tháng Tám) [8]. Số 19 không xuất hiện trong bất kỳ giải nào của xổ số miền Bắc ngày 18/8/2025 [1], cho thấy đây là một số 'lạnh' có tín hiệu mạnh từ tin tức, phù hợp với xu hướng 'lạnh' chuyển 'nóng' khi có sự kiện nổi bật liên quan."
+      },
+      {
+        "number": "07",
+        "type": "Số Lô Tiềm Năng",
+        "probability": "Cao",
+        "reasoning": "Số 07 được chọn vì xuất hiện trong tin tức liên quan đến 'tháng 7-2025' khi Công an thành phố Hà Nội đón nhận Huân chương Chiến công hạng Nhất [8]. Mặc dù chỉ xuất hiện 1 lần, đây là một con số cụ thể và có ý nghĩa trong một sự kiện quan trọng. Số 07 không có mặt trong kết quả xổ số miền Bắc ngày hôm qua [1], tăng khả năng xuất hiện trong các giải lô hôm nay."
+      },
+      {
+        "number": "28",
+        "type": "Số Lô Tiềm Năng",
+        "probability": "Cao",
+        "reasoning": "Số 28 liên quan đến tổng mức đầu tư '1,28 triệu tỉ đồng' cho 250 công trình, dự án được khởi công/khánh thành hôm nay [2]. Đây là một con số cụ thể trong một sự kiện kinh tế lớn. Số 28 không xuất hiện trong kết quả xổ số miền Bắc ngày 18/8/2025 [1], cho thấy tiềm năng xuất hiện như một số 'lạnh' có tín hiệu từ tin tức."
+      },
+      {
+        "number": "34",
+        "type": "Số Lô Tiềm Năng",
+        "probability": "Cao",
+        "reasoning": "Số 34 xuất hiện trong ngữ cảnh 'tại 34 tỉnh, thành phố' đồng loạt khởi công, khánh thành các dự án [11]. Đây là một con số cụ thể về quy mô địa lý của sự kiện quốc gia. Tương tự các số lô khác, 34 không có trong kết quả xổ số miền Bắc ngày hôm qua [1], làm tăng khả năng xuất hiện trong các giải lô hôm nay."
+      }
+    ],
+    "topNumbers": [
+      {
+        "number": "25",
+        "count": 5,
+        "reason": "Liên quan đến '250 công trình, dự án' và năm '2025' trong nhiều sự kiện quan trọng."
+      },
+      {
+        "number": "80",
+        "count": 3,
+        "reason": "Nổi bật trong '80 năm Quốc khánh' và '80 năm xây dựng' của lực lượng Công an."
+      },
+      {
+        "number": "02",
+        "count": 3,
+        "reason": "Liên quan đến '2/9' - Quốc khánh Việt Nam."
+      },
+      {
+        "number": "09",
+        "count": 3,
+        "reason": "Liên quan đến '2/9' - Quốc khánh Việt Nam."
+      }
+    ],
+    "events": [
+      {
+        "title": "Khởi công, khánh thành 250 công trình, dự án trị giá 1,28 triệu tỉ đồng",
+        "description": "Cả nước đồng loạt khởi công, khánh thành 250 công trình, dự án tại 34 tỉnh, thành phố với tổng mức đầu tư 1,28 triệu tỉ đồng, chào mừng 80 năm Quốc khánh 2/9."
+      },
+      {
+        "title": "Ngày hội giao lưu văn hóa - ẩm thực - kết nối giao thương Lào - Việt Nam 2025",
+        "description": "Ngày hội sẽ được tổ chức tại công viên văn hóa Suối Tiên từ ngày 29/8 đến 2/9/2025, nhân kỷ niệm 80 năm Quốc khánh Việt Nam và 63 năm quan hệ Lào - Việt Nam."
+      },
+      {
+        "title": "Giá cà phê và hồ tiêu ổn định",
+        "description": "Giá cà phê tiếp tục tăng, trong khi giá tiêu trắng của Việt Nam ổn định ở mức cao, đạt 8.950 USD/tấn."
+      },
+      {
+        "title": "Ý nghĩa Cách mạng Tháng Tám và Quốc khánh 2/9",
+        "description": "Báo chí nhấn mạnh ý nghĩa lịch sử của Cách mạng Tháng Tám năm 1945 và vai trò của lực lượng Công an nhân dân trong 80 năm qua."
+      }
+    ]
+  },
+  "groundingChunks": []
+}
