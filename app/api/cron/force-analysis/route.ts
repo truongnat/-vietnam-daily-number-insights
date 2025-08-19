@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { fetchDailyAnalysis } from '@/services/geminiService';
-import { saveTodaysAnalysis, getVietnamDateKey } from '@/utils/server-storage';
+import { saveAnalysisForDate, getVietnamDateKey } from '@/utils/server-storage';
 import { setProcessingStatus } from '@/utils/processing-status';
 import { deleteAnalysisForDate } from '@/utils/server-file-storage';
 
@@ -15,7 +15,7 @@ async function processForceAnalysisInBackground(dateKey: string, currentHour: nu
 
     if (result.analysis && result.analysis.bestNumber && result.analysis.luckyNumbers && result.analysis.luckyNumbers.length > 0) {
       // Save the analysis
-      await saveTodaysAnalysis({
+      await saveAnalysisForDate(dateKey, {
         analysis: result.analysis,
         groundingChunks: result.groundingChunks
       });

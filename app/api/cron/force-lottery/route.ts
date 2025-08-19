@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { fetchCurrentDayLotteryResult } from '@/services/geminiService';
-import { saveTodaysLotteryResult, getVietnamDateKey } from '@/utils/server-storage';
+import { saveLotteryResultForDate, getVietnamDateKey } from '@/utils/server-storage';
 import { setProcessingStatus } from '@/utils/processing-status';
 import { deleteLotteryResultForDate } from '@/utils/server-file-storage';
 
@@ -15,7 +15,7 @@ async function processForceLotteryCheckInBackground(dateKey: string, currentHour
 
     if (result) {
       // Save the lottery result
-      await saveTodaysLotteryResult(result);
+      await saveLotteryResultForDate(dateKey, result);
 
       console.log(`Background processing: FORCE lottery result saved for ${dateKey}:`, result);
       setProcessingStatus(dateKey, 'lottery', 'completed');

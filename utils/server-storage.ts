@@ -9,35 +9,29 @@ import {
 export const getVietnamDateKey = getVietnamDateKeyFile;
 
 /**
- * Saves today's analysis to file system (server-side compatible).
- * @param data The StoredAnalysis object for today.
+ * Saves analysis for a specific date to file system (server-side compatible).
+ * @param dateKey The date key in YYYY-MM-DD format.
+ * @param data The StoredAnalysis object for the date.
  */
-export const saveTodaysAnalysisServer = async (data: Omit<StoredAnalysis, 'lotteryResult'>) => {
+export const saveAnalysisForDate = async (dateKey: string, data: Omit<StoredAnalysis, 'lotteryResult'>) => {
   try {
-    const todayKey = getVietnamDateKey(new Date());
-    await saveAnalysisForDateFile(todayKey, data);
+    await saveAnalysisForDateFile(dateKey, data);
   } catch (error) {
-    console.error("Failed to save analysis to file system:", error);
+    console.error(`Failed to save analysis for ${dateKey} to file system:`, error);
     throw error;
   }
 };
-
-// Export with the expected name for compatibility
-export const saveTodaysAnalysis = saveTodaysAnalysisServer;
 
 /**
- * Saves today's lottery result to file system (server-side compatible).
- * @param result The LotteryResult object for today.
+ * Saves lottery result for a specific date to file system (server-side compatible).
+ * @param dateKey The date key in YYYY-MM-DD format.
+ * @param result The LotteryResult object for the date.
  */
-export const saveTodaysLotteryResultServer = async (result: LotteryResult) => {
+export const saveLotteryResultForDate = async (dateKey: string, result: LotteryResult) => {
   try {
-    const todayKey = getVietnamDateKey(new Date());
-    await saveLotteryResultForDateFile(todayKey, result);
+    await saveLotteryResultForDateFile(dateKey, result);
   } catch (error) {
-    console.error("Failed to save lottery result to file system:", error);
+    console.error(`Failed to save lottery result for ${dateKey} to file system:`, error);
     throw error;
   }
 };
-
-// Export with the expected name for compatibility
-export const saveTodaysLotteryResult = saveTodaysLotteryResultServer;
