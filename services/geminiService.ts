@@ -483,48 +483,19 @@ export const fetchCurrentDayLotteryResult =
       const [day, month, year] = todayString.split('/');
       const apiDateFormat = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
 
-      // First try to fetch from our XSMB API
-      const { fetchXSMBSingleDate, hasValidResults } = await import('@/utils/xsmb-api');
-      
-      try {
-        const xsmbResponse = await fetchXSMBSingleDate(apiDateFormat);
-
-        if (xsmbResponse.ok && xsmbResponse.data && hasValidResults(xsmbResponse.data)) {
-          const xsmbData = xsmbResponse.data;
-
-          // Extract special prize (Đặc biệt) - get last 2 digits
-          const specialPrizeNumbers = xsmbData.prizes['ĐB'];
-          if (!specialPrizeNumbers || specialPrizeNumbers.length === 0) {
-            throw new Error('Special prize not found in XSMB data');
+      // First try to fetch from XSMB API directly (server-side only)
+      if (typeof window === 'undefined') {
+        try {
+          const { fetchLotteryResultForDate } = await import('@/utils/xsmb-server');
+          const result = await fetchLotteryResultForDate(apiDateFormat);
+          
+          if (result) {
+            console.log("Successfully fetched lottery results from XSMB API (direct):", result);
+            return result;
           }
-
-          const specialPrize = specialPrizeNumbers[0].slice(-2); // Get last 2 digits
-
-          // Extract all prizes - get last 2 digits of all numbers
-          const allPrizes: string[] = [];
-          Object.values(xsmbData.prizes).forEach(prizeArray => {
-            if (prizeArray && Array.isArray(prizeArray)) {
-              prizeArray.forEach(number => {
-                if (number && typeof number === 'string') {
-                  allPrizes.push(number.slice(-2)); // Get last 2 digits
-                }
-              });
-            }
-          });
-
-          // Remove duplicates and sort
-          const uniquePrizes = Array.from(new Set(allPrizes)).sort();
-
-          const result: LotteryResult = {
-            specialPrize,
-            allPrizes: uniquePrizes
-          };
-
-          console.log("Successfully fetched lottery results from XSMB API:", result);
-          return result;
+        } catch (xsmbError) {
+          console.warn("Direct XSMB API failed, falling back to Gemini search:", xsmbError);
         }
-      } catch (xsmbError) {
-        console.warn("XSMB API failed, falling back to Gemini search:", xsmbError);
       }
 
       // Fallback to Gemini Google Search if XSMB API fails
