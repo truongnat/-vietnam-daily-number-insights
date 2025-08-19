@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { saveLotteryResultForDate } from '@/utils/server-file-storage';
-import { fetchXSMBSingleDate, hasValidResults } from '@/utils/xsmb-api';
+import { fetchLotteryResultForDate } from '@/utils/xsmb-server';
 import type { LotteryResult } from '@/types';
 
 export async function POST(request: NextRequest) {
@@ -44,59 +44,16 @@ export async function POST(request: NextRequest) {
 
     console.log(`Fetching XSMB lottery results for date: ${dateKey}`);
 
-    // Fetch real lottery results from XSMB API
-    const xsmbResponse = await fetchXSMBSingleDate(dateKey);
+    // Fetch real lottery results using server-side utility
+    const lotteryResult = await fetchLotteryResultForDate(dateKey);
 
-    if (!xsmbResponse.ok || !xsmbResponse.data) {
+    if (!lotteryResult) {
       return NextResponse.json({
         success: false,
         error: `Không thể lấy kết quả xổ số cho ngày ${dateKey}`,
-        details: xsmbResponse.error || 'No data available'
+        details: 'No lottery data available or invalid data'
       }, { status: 404 });
     }
-
-    const xsmbData = xsmbResponse.data;
-
-    // Validate that we have valid results
-    if (!hasValidResults(xsmbData)) {
-      return NextResponse.json({
-        success: false,
-        error: `Kết quả xổ số cho ngày ${dateKey} không hợp lệ hoặc chưa có`,
-        details: 'No valid prize data found'
-      }, { status: 404 });
-    }
-
-    // Extract special prize (Đặc biệt) - get last 2 digits
-    const specialPrizeNumbers = xsmbData.prizes['ĐB'];
-    if (!specialPrizeNumbers || specialPrizeNumbers.length === 0) {
-      return NextResponse.json({
-        success: false,
-        error: `Không tìm thấy giải đặc biệt cho ngày ${dateKey}`,
-        details: 'Special prize not found'
-      }, { status: 404 });
-    }
-
-    const specialPrize = specialPrizeNumbers[0].slice(-2); // Get last 2 digits
-
-    // Extract all prizes - get last 2 digits of all numbers
-    const allPrizes: string[] = [];
-    Object.values(xsmbData.prizes).forEach(prizeArray => {
-      if (prizeArray && Array.isArray(prizeArray)) {
-        prizeArray.forEach(number => {
-          if (number && typeof number === 'string') {
-            allPrizes.push(number.slice(-2)); // Get last 2 digits
-          }
-        });
-      }
-    });
-
-    // Remove duplicates and sort
-    const uniquePrizes = Array.from(new Set(allPrizes)).sort();
-
-    const lotteryResult: LotteryResult = {
-      specialPrize,
-      allPrizes: uniquePrizes
-    };
 
     // Save the lottery result
     await saveLotteryResultForDate(dateKey, lotteryResult);
@@ -108,8 +65,8 @@ export async function POST(request: NextRequest) {
       message: `Đã cập nhật kết quả xổ số cho ngày ${dateKey}`,
       dateKey,
       lotteryResult,
-      source: 'XSMB API',
-      totalNumbers: uniquePrizes.length
+      source: 'XSMB API Direct',
+      totalNumbers: lotteryResult.allPrizes.length
     });
 
   } catch (error) {

@@ -53,3 +53,48 @@ export interface StoredAnalysis {
 export interface HistoricalData {
   [dateKey: string]: StoredAnalysis;
 }
+
+// XSMB API Types
+export interface XSMBPrizes {
+  'ĐB': string[];
+  '1': string[];
+  '2': string[];
+  '3': string[];
+  '4': string[];
+  '5': string[];
+  '6': string[];
+  '7': string[];
+}
+
+export interface XSMBData {
+  date: string;
+  region: string;
+  url?: string;
+  prizes: XSMBPrizes;
+  allNumbers: string[];
+  meta: {
+    title?: string;
+    detectedDate: string;
+    tableSource: string;
+    tbodyRowCount?: number;
+    totalNumbers?: number;
+  };
+}
+
+export interface XSMBResult {
+  date: string;
+  data?: XSMBData;
+  error?: string;
+}
+
+export interface XSMBResponse {
+  ok: boolean;
+  range: boolean;
+  region: string;
+  date?: string;
+  start?: string;
+  end?: string;
+  data?: XSMBData;
+  results?: XSMBResult[];
+  error?: string;
+}
