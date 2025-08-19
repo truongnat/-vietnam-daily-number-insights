@@ -21,7 +21,6 @@ export const ForceRunButton: React.FC<ForceRunButtonProps> = ({ onStatusUpdate }
     setAnalysisStatus({ status: 'running', message: 'Đang xóa dữ liệu cũ và chạy phân tích mới...' });
 
     try {
-      // Use force analysis endpoint which handles deletion automatically
       const response = await fetch('/api/cron/force-analysis', {
         method: 'POST'
       });
@@ -33,7 +32,6 @@ export const ForceRunButton: React.FC<ForceRunButtonProps> = ({ onStatusUpdate }
           message: `Phân tích đã bắt đầu cho ${data.dateKey}. Đang xử lý trong nền...` 
         });
         
-        // Check status after a delay
         setTimeout(async () => {
           try {
             const statusResponse = await fetch('/api/cron/status');
@@ -74,7 +72,6 @@ export const ForceRunButton: React.FC<ForceRunButtonProps> = ({ onStatusUpdate }
     setLotteryStatus({ status: 'running', message: 'Đang xóa kết quả xổ số cũ và kiểm tra mới...' });
 
     try {
-      // Use force lottery endpoint which handles deletion automatically
       const response = await fetch('/api/cron/force-lottery', {
         method: 'POST'
       });
@@ -86,7 +83,6 @@ export const ForceRunButton: React.FC<ForceRunButtonProps> = ({ onStatusUpdate }
           message: `Kiểm tra xổ số đã bắt đầu cho ${data.dateKey}. Đang xử lý trong nền...` 
         });
         
-        // Check status after a delay
         setTimeout(async () => {
           try {
             const statusResponse = await fetch('/api/cron/status');
@@ -126,13 +122,13 @@ export const ForceRunButton: React.FC<ForceRunButtonProps> = ({ onStatusUpdate }
   const getStatusIcon = (status: ProcessStatus) => {
     switch (status.status) {
       case 'running':
-        return <ClockIcon className="w-4 h-4 animate-spin text-blue-400" />;
+        return <ClockIcon className="w-3 h-3 sm:w-4 sm:h-4 animate-spin text-blue-400" />;
       case 'success':
-        return <CheckCircleIcon className="w-4 h-4 text-green-400" />;
+        return <CheckCircleIcon className="w-3 h-3 sm:w-4 sm:h-4 text-green-400" />;
       case 'error':
-        return <ExclamationTriangleIcon className="w-4 h-4 text-red-400" />;
+        return <ExclamationTriangleIcon className="w-3 h-3 sm:w-4 sm:h-4 text-red-400" />;
       default:
-        return <PlayIcon className="w-4 h-4 text-gray-400" />;
+        return <PlayIcon className="w-3 h-3 sm:w-4 sm:h-4 text-gray-400" />;
     }
   };
 
@@ -150,40 +146,40 @@ export const ForceRunButton: React.FC<ForceRunButtonProps> = ({ onStatusUpdate }
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto mb-6">
+    <div className="w-full max-w-5xl mx-auto mb-4 sm:mb-6">
       <div className="bg-gray-800/60 border border-gray-700 rounded-lg overflow-hidden">
         {/* Header */}
         <button
           onClick={() => setIsExpanded(!isExpanded)}
-          className="w-full p-4 flex items-center justify-between hover:bg-gray-700/50 transition-colors duration-200"
+          className="w-full p-3 sm:p-4 flex items-center justify-between hover:bg-gray-700/50 transition-colors duration-200"
         >
-          <div className="flex items-center space-x-3">
-            <PlayIcon className="w-5 h-5 text-blue-400" />
-            <h3 className="text-lg font-semibold text-white">Chạy Thủ Công</h3>
-            <span className="text-sm text-gray-400">
+          <div className="flex items-center space-x-2 sm:space-x-3">
+            <PlayIcon className="w-4 h-4 sm:w-5 sm:h-5 text-blue-400" />
+            <h3 className="text-base sm:text-lg font-semibold text-white">Chạy Thủ Công</h3>
+            <span className="text-xs sm:text-sm text-gray-400 hidden sm:inline">
               (Force Run Processes)
             </span>
           </div>
-          <div className="text-gray-400">
+          <div className="text-gray-400 text-sm sm:text-base">
             {isExpanded ? '▼' : '▶'}
           </div>
         </button>
 
         {/* Expanded Content */}
         {isExpanded && (
-          <div className="p-4 border-t border-gray-700 space-y-4">
-            <p className="text-sm text-gray-400 mb-4">
+          <div className="p-3 sm:p-4 border-t border-gray-700 space-y-3 sm:space-y-4">
+            <p className="text-xs sm:text-sm text-gray-400 mb-3 sm:mb-4">
               Chạy thủ công các tiến trình phân tích và kiểm tra xổ số thay vì chờ cron job tự động.
             </p>
 
             {/* Daily Analysis */}
             <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <h4 className="font-medium text-white">Phân Tích Hàng Ngày</h4>
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4">
+                <h4 className="font-medium text-white text-sm sm:text-base">Phân Tích Hàng Ngày</h4>
                 <button
                   onClick={runDailyAnalysis}
                   disabled={analysisStatus.status === 'running'}
-                  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 disabled:cursor-not-allowed rounded-lg text-white text-sm font-medium transition-colors duration-200 flex items-center space-x-2"
+                  className="px-3 sm:px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 disabled:cursor-not-allowed rounded-lg text-white text-xs sm:text-sm font-medium transition-colors duration-200 flex items-center space-x-2 w-fit"
                 >
                   {getStatusIcon(analysisStatus)}
                   <span>
@@ -192,7 +188,7 @@ export const ForceRunButton: React.FC<ForceRunButtonProps> = ({ onStatusUpdate }
                 </button>
               </div>
               {analysisStatus.message && (
-                <p className={`text-sm ${getStatusColor(analysisStatus)}`}>
+                <p className={`text-xs sm:text-sm ${getStatusColor(analysisStatus)} leading-relaxed`}>
                   {analysisStatus.message}
                 </p>
               )}
@@ -200,12 +196,12 @@ export const ForceRunButton: React.FC<ForceRunButtonProps> = ({ onStatusUpdate }
 
             {/* Lottery Check */}
             <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <h4 className="font-medium text-white">Kiểm Tra Xổ Số</h4>
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4">
+                <h4 className="font-medium text-white text-sm sm:text-base">Kiểm Tra Xổ Số</h4>
                 <button
                   onClick={runLotteryCheck}
                   disabled={lotteryStatus.status === 'running'}
-                  className="px-4 py-2 bg-green-600 hover:bg-green-700 disabled:bg-gray-600 disabled:cursor-not-allowed rounded-lg text-white text-sm font-medium transition-colors duration-200 flex items-center space-x-2"
+                  className="px-3 sm:px-4 py-2 bg-green-600 hover:bg-green-700 disabled:bg-gray-600 disabled:cursor-not-allowed rounded-lg text-white text-xs sm:text-sm font-medium transition-colors duration-200 flex items-center space-x-2 w-fit"
                 >
                   {getStatusIcon(lotteryStatus)}
                   <span>
@@ -214,15 +210,15 @@ export const ForceRunButton: React.FC<ForceRunButtonProps> = ({ onStatusUpdate }
                 </button>
               </div>
               {lotteryStatus.message && (
-                <p className={`text-sm ${getStatusColor(lotteryStatus)}`}>
+                <p className={`text-xs sm:text-sm ${getStatusColor(lotteryStatus)} leading-relaxed`}>
                   {lotteryStatus.message}
                 </p>
               )}
             </div>
 
             {/* Info */}
-            <div className="mt-4 p-3 bg-gray-700/50 rounded-lg">
-              <p className="text-xs text-gray-400">
+            <div className="mt-3 sm:mt-4 p-3 bg-gray-700/50 rounded-lg">
+              <p className="text-xs text-gray-400 leading-relaxed">
                 💡 <strong>Lưu ý:</strong> Các tiến trình sẽ chạy trong nền và có thể mất 1-2 phút để hoàn thành. 
                 Kết quả sẽ được lưu tự động vào database.
               </p>
