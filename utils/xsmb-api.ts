@@ -101,10 +101,30 @@ export const hasValidResults = (data: XSMBData): boolean => {
 };
 
 /**
+ * Get the base URL for API calls
+ */
+const getBaseUrl = (): string => {
+  // For server-side calls, we need to use the full URL
+  if (typeof window === 'undefined') {
+    return process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+  }
+  // For client-side calls, we can use relative URLs
+  return '';
+};
+
+/**
  * Fetch XSMB results for a single date using our proxy API
  */
 export const fetchXSMBSingleDate = async (date: string): Promise<XSMBResponse> => {
-  const response = await fetch(`/api/xsmb?date=${date}`);
+  const baseUrl = getBaseUrl();
+  const url = `${baseUrl}/api/xsmb?date=${date}`;
+  
+  const response = await fetch(url, {
+    headers: {
+      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+      'Accept': 'application/json',
+    },
+  });
   
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`);
@@ -117,7 +137,15 @@ export const fetchXSMBSingleDate = async (date: string): Promise<XSMBResponse> =
  * Fetch XSMB results for a date range using our proxy API
  */
 export const fetchXSMBDateRange = async (startDate: string, endDate: string): Promise<XSMBResponse> => {
-  const response = await fetch(`/api/xsmb?start=${startDate}&end=${endDate}`);
+  const baseUrl = getBaseUrl();
+  const url = `${baseUrl}/api/xsmb?start=${startDate}&end=${endDate}`;
+  
+  const response = await fetch(url, {
+    headers: {
+      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+      'Accept': 'application/json',
+    },
+  });
   
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`);

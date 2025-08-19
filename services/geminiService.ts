@@ -475,37 +475,85 @@ const fetchHistoricalLotteryData = async (): Promise<string> => {
 
 export const fetchCurrentDayLotteryResult =
   async (): Promise<LotteryResult | null> => {
-    const model = "gemini-2.5-flash";
-    const todayString = getVietnamDateStringForPrompt();
-
-    const prompt = `
-    Sử dụng Google Search, tìm kết quả "Xổ số kiến thiết Miền Bắc" (KQXSMB) cho ngày ${todayString}.
-    Nhiệm vụ của bạn là trích xuất hai chữ số cuối của TẤT CẢ các giải. Đặc biệt, tìm hai chữ số cuối của giải Đặc Biệt.
-
-    Nếu bạn tìm thấy kết quả:
-    - Trả về một đối tượng JSON với hai chữ số cuối của giải đặc biệt trong trường "specialPrize" và một mảng chứa hai chữ số cuối của TẤT CẢ các giải (bao gồm cả giải đặc biệt và các giải lô khác) trong trường "allPrizes".
-
-    Nếu bạn KHÔNG thể tìm thấy kết quả cho ngày ${todayString} sau khi đã tìm kiếm kỹ lưỡng:
-    - Trả về một đối tượng JSON với trường "specialPrize" có giá trị là null và "allPrizes" là một mảng rỗng.
-
-    Phản hồi của bạn PHẢI là một chuỗi đối tượng JSON hợp lệ duy nhất. Không thêm bất kỳ văn bản, ghi chú hay markdown nào.
-    Cấu trúc JSON mong muốn khi có kết quả:
-    {
-      "specialPrize": "XX",
-      "allPrizes": ["XX", "XY", "ZA", "BC", "..."]
-    }
-
-    Cấu trúc JSON mong muốn khi KHÔNG có kết quả:
-    {
-      "specialPrize": null,
-      "allPrizes": []
-    }
-  `;
-
     try {
-      console.log(
-        `Fetching current day's lottery results for ${todayString}...`
-      );
+      const todayString = getVietnamDateStringForPrompt();
+      console.log(`Fetching current day's lottery results for ${todayString}...`);
+
+      // Convert DD/MM/YYYY to YYYY-MM-DD format for API
+      const [day, month, year] = todayString.split('/');
+      const apiDateFormat = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+
+      // First try to fetch from our XSMB API
+      const { fetchXSMBSingleDate, hasValidResults } = await import('@/utils/xsmb-api');
+      
+      try {
+        const xsmbResponse = await fetchXSMBSingleDate(apiDateFormat);
+
+        if (xsmbResponse.ok && xsmbResponse.data && hasValidResults(xsmbResponse.data)) {
+          const xsmbData = xsmbResponse.data;
+
+          // Extract special prize (Đặc biệt) - get last 2 digits
+          const specialPrizeNumbers = xsmbData.prizes['ĐB'];
+          if (!specialPrizeNumbers || specialPrizeNumbers.length === 0) {
+            throw new Error('Special prize not found in XSMB data');
+          }
+
+          const specialPrize = specialPrizeNumbers[0].slice(-2); // Get last 2 digits
+
+          // Extract all prizes - get last 2 digits of all numbers
+          const allPrizes: string[] = [];
+          Object.values(xsmbData.prizes).forEach(prizeArray => {
+            if (prizeArray && Array.isArray(prizeArray)) {
+              prizeArray.forEach(number => {
+                if (number && typeof number === 'string') {
+                  allPrizes.push(number.slice(-2)); // Get last 2 digits
+                }
+              });
+            }
+          });
+
+          // Remove duplicates and sort
+          const uniquePrizes = Array.from(new Set(allPrizes)).sort();
+
+          const result: LotteryResult = {
+            specialPrize,
+            allPrizes: uniquePrizes
+          };
+
+          console.log("Successfully fetched lottery results from XSMB API:", result);
+          return result;
+        }
+      } catch (xsmbError) {
+        console.warn("XSMB API failed, falling back to Gemini search:", xsmbError);
+      }
+
+      // Fallback to Gemini Google Search if XSMB API fails
+      const model = "gemini-2.5-flash";
+      const prompt = `
+      Sử dụng Google Search, tìm kết quả "Xổ số kiến thiết Miền Bắc" (KQXSMB) cho ngày ${todayString}.
+      Nhiệm vụ của bạn là trích xuất hai chữ số cuối của TẤT CẢ các giải. Đặc biệt, tìm hai chữ số cuối của giải Đặc Biệt.
+
+      Nếu bạn tìm thấy kết quả:
+      - Trả về một đối tượng JSON với hai chữ số cuối của giải đặc biệt trong trường "specialPrize" và một mảng chứa hai chữ số cuối của TẤT CẢ các giải (bao gồm cả giải đặc biệt và các giải lô khác) trong trường "allPrizes".
+
+      Nếu bạn KHÔNG thể tìm thấy kết quả cho ngày ${todayString} sau khi đã tìm kiếm kỹ lưỡng:
+      - Trả về một đối tượng JSON với trường "specialPrize" có giá trị là null và "allPrizes" là một mảng rỗng.
+
+      Phản hồi của bạn PHẢI là một chuỗi đối tượng JSON hợp lệ duy nhất. Không thêm bất kỳ văn bản, ghi chú hay markdown nào.
+      Cấu trúc JSON mong muốn khi có kết quả:
+      {
+        "specialPrize": "XX",
+        "allPrizes": ["XX", "XY", "ZA", "BC", "..."]
+      }
+
+      Cấu trúc JSON mong muốn khi KHÔNG có kết quả:
+      {
+        "specialPrize": null,
+        "allPrizes": []
+      }
+    `;
+
+      console.log("Falling back to Gemini Google Search...");
       const ai = getGeminiAI();
       const generateContentPromise = ai.models.generateContent({
         model: model,
@@ -541,7 +589,7 @@ export const fetchCurrentDayLotteryResult =
         Array.isArray(result.allPrizes) &&
         result.allPrizes.length > 0
       ) {
-        console.log("Successfully fetched and parsed lottery results.");
+        console.log("Successfully fetched and parsed lottery results from Gemini.");
         return result as LotteryResult;
       } else {
         if (result && result.specialPrize === null) {
