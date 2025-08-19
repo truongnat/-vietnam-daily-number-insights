@@ -14,12 +14,17 @@ export interface XSMBPrizes {
 }
 
 export interface XSMBData {
+  date: string;
+  region: string;
+  url?: string;
   prizes: XSMBPrizes;
   allNumbers: string[];
   meta: {
+    title?: string;
     detectedDate: string;
     tableSource: string;
-    totalNumbers: number;
+    tbodyRowCount?: number;
+    totalNumbers?: number;
   };
 }
 
@@ -49,16 +54,50 @@ export const getDateString = (date: Date): string => {
 };
 
 /**
+ * Convert DD-MM-YYYY to YYYY-MM-DD format
+ */
+export const convertDateFormat = (dateStr: string): string => {
+  if (dateStr.includes('-') && dateStr.length === 10) {
+    const parts = dateStr.split('-');
+    if (parts.length === 3) {
+      // Check if it's DD-MM-YYYY format
+      if (parts[0].length === 2 && parts[1].length === 2 && parts[2].length === 4) {
+        return `${parts[2]}-${parts[1]}-${parts[0]}`; // Convert to YYYY-MM-DD
+      }
+    }
+  }
+  return dateStr; // Return as-is if already in correct format
+};
+
+/**
  * Get Vietnamese date string
  */
 export const getVietnameseDateString = (dateStr: string): string => {
-  const date = new Date(dateStr);
+  // Convert to YYYY-MM-DD format first if needed
+  const normalizedDate = convertDateFormat(dateStr);
+  const date = new Date(normalizedDate);
+  
+  // Check if date is valid
+  if (isNaN(date.getTime())) {
+    return dateStr; // Return original if can't parse
+  }
+  
   return date.toLocaleDateString('vi-VN', {
     weekday: 'long',
     year: 'numeric',
     month: 'long',
     day: 'numeric'
   });
+};
+
+/**
+ * Check if XSMB data has valid results
+ */
+export const hasValidResults = (data: XSMBData): boolean => {
+  if (!data || !data.prizes) return false;
+  
+  // Check if at least one prize category has numbers
+  return Object.values(data.prizes).some(prizes => prizes && prizes.length > 0);
 };
 
 /**
@@ -108,8 +147,16 @@ export const fetchTodayAndYesterdayResults = async (): Promise<{
       throw new Error(data.error || 'Failed to fetch XSMB results');
     }
 
-    const todayResult = data.results.find(r => r.date === todayStr) || null;
-    const yesterdayResult = data.results.find(r => r.date === yesterdayStr) || null;
+    // Find results by matching dates (handle both formats)
+    const todayResult = data.results.find(r => {
+      const normalizedDate = convertDateFormat(r.date);
+      return normalizedDate === todayStr;
+    }) || null;
+    
+    const yesterdayResult = data.results.find(r => {
+      const normalizedDate = convertDateFormat(r.date);
+      return normalizedDate === yesterdayStr;
+    }) || null;
 
     return {
       today: todayResult,
@@ -143,7 +190,8 @@ export const PRIZE_LABELS: Record<keyof XSMBPrizes, string> = {
  */
 export const isToday = (dateStr: string): boolean => {
   const today = getDateString(new Date());
-  return dateStr === today;
+  const normalizedDate = convertDateFormat(dateStr);
+  return normalizedDate === today;
 };
 
 /**
@@ -153,5 +201,6 @@ export const isYesterday = (dateStr: string): boolean => {
   const yesterday = new Date();
   yesterday.setDate(yesterday.getDate() - 1);
   const yesterdayStr = getDateString(yesterday);
-  return dateStr === yesterdayStr;
+  const normalizedDate = convertDateFormat(dateStr);
+  return normalizedDate === yesterdayStr;
 };
