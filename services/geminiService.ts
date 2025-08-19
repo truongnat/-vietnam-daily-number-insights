@@ -405,7 +405,7 @@ const searchMissingLotteryResults = async (missingDates: string[]): Promise<{ [d
  */
 const fetchHistoricalLotteryData = async (): Promise<string> => {
   try {
-    const historicalData: HistoricalData = await getAllHistoricalData();
+    let historicalData: HistoricalData = {}; if (typeof window === 'undefined') { try { const { getAllHistoricalData: getServerData } = await import('@/utils/server-file-storage'); historicalData = await getServerData(); } catch (error) { console.error('Failed to load server-file-storage:', error); historicalData = {}; } } else { historicalData = await getAllHistoricalData(); }
     const entries = Object.entries(historicalData);
 
     // Get the last 14 days of data that have lottery results
@@ -563,3 +563,4 @@ export const fetchCurrentDayLotteryResult =
       throw error;
     }
   };
+
