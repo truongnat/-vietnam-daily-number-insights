@@ -1,4 +1,3 @@
-
 import React from 'react';
 import type { LuckyNumber, BestNumber } from '@/types';
 
@@ -8,7 +7,7 @@ interface LuckyNumberCardProps {
 }
 
 const TypeIcon: React.FC<{ type: string }> = ({ type }) => {
-  const iconProps = { className: "w-6 h-6 text-gray-900" };
+  const iconProps = { className: "w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-gray-900" };
   if (type === 'Số Đề May Mắn Nhất') {
     return <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" {...iconProps}><path fillRule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clipRule="evenodd" /></svg>;
   } else {
@@ -19,22 +18,30 @@ const TypeIcon: React.FC<{ type: string }> = ({ type }) => {
 const BestNumberCard: React.FC<{ bestNumber: BestNumber }> = ({ bestNumber }) => {
   return (
     <div
-      className="w-full p-6 relative bg-gradient-to-br from-yellow-600 to-orange-600 rounded-2xl border border-yellow-400/30 shadow-lg shadow-yellow-500/20 flex flex-col"
+      className="w-full p-4 sm:p-6 lg:p-8 relative bg-gradient-to-br from-yellow-600 to-orange-600 rounded-xl sm:rounded-2xl border border-yellow-400/30 shadow-lg shadow-yellow-500/20 flex flex-col min-h-[280px] sm:min-h-[320px] lg:min-h-[360px]"
       style={{ animation: 'fadeInUp 0.5s both' }}
     >
-      <div className="absolute -top-3 -left-3 w-12 h-12 bg-yellow-400 rounded-full flex items-center justify-center">
+      <div className="absolute -top-2 -left-2 sm:-top-3 sm:-left-3 w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 bg-yellow-400 rounded-full flex items-center justify-center">
         <TypeIcon type={bestNumber.type} />
       </div>
-      <h4 className="text-xl font-bold text-center mt-4 text-white">{bestNumber.type}</h4>
-      <p className="text-sm text-center text-yellow-100 mb-4">Tỷ lệ: {bestNumber.probability}</p>
+      
+      <h4 className="text-lg sm:text-xl lg:text-2xl font-bold text-center mt-6 sm:mt-4 text-white px-2">
+        {bestNumber.type}
+      </h4>
+      <p className="text-xs sm:text-sm text-center text-yellow-100 mb-4">
+        Tỷ lệ: {bestNumber.probability}
+      </p>
 
       <div className="flex-grow flex flex-col items-center justify-center">
-        <div className="text-8xl font-black text-center text-white my-4 tracking-wider" style={{ textShadow: '0 0 15px rgba(255, 255, 255, 0.3)' }}>
+        <div 
+          className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-center text-white my-2 sm:my-4 tracking-wider" 
+          style={{ textShadow: '0 0 15px rgba(255, 255, 255, 0.3)' }}
+        >
           {bestNumber.number}
         </div>
       </div>
 
-      <p className="text-center text-yellow-100 italic text-sm mt-4 pt-4 border-t border-yellow-400/30">
+      <p className="text-center text-yellow-100 italic text-xs sm:text-sm mt-4 pt-4 border-t border-yellow-400/30 px-2 leading-relaxed">
         "{bestNumber.reasoning}"
       </p>
     </div>
@@ -52,22 +59,30 @@ const LuckyNumberSmallCard: React.FC<{ luckyNumber: LuckyNumber, index: number }
 
   return (
     <div
-      className={`w-full p-3 relative bg-gradient-to-br from-gray-900 to-gray-800/70 rounded-xl border ${color.border} shadow-lg ${color.shadow} flex flex-col`}
+      className={`w-full p-3 sm:p-4 lg:p-5 relative bg-gradient-to-br from-gray-900 to-gray-800/70 rounded-lg sm:rounded-xl border ${color.border} shadow-lg ${color.shadow} flex flex-col min-h-[200px] sm:min-h-[220px] lg:min-h-[240px]`}
       style={{ animation: `fadeInUp 0.5s ${(index + 1) * 100}ms both` }}
     >
-      <div className={`absolute -top-2 -left-2 w-8 h-8 ${color.bg} rounded-full flex items-center justify-center`}>
+      <div className={`absolute -top-1.5 -left-1.5 sm:-top-2 sm:-left-2 w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 ${color.bg} rounded-full flex items-center justify-center`}>
         <TypeIcon type={luckyNumber.type} />
       </div>
-      <h5 className="text-sm font-bold text-center mt-3 text-white">{luckyNumber.type}</h5>
-      <p className="text-xs text-center text-gray-400 mb-2">Tỷ lệ: {luckyNumber.probability}</p>
+      
+      <h5 className="text-sm sm:text-base font-bold text-center mt-4 sm:mt-3 text-white px-1">
+        {luckyNumber.type}
+      </h5>
+      <p className="text-xs text-center text-gray-400 mb-2">
+        Tỷ lệ: {luckyNumber.probability}
+      </p>
 
       <div className="flex-grow flex flex-col items-center justify-center">
-        <div className="text-4xl font-black text-center text-white my-2 tracking-wider" style={{ textShadow: '0 0 8px rgba(255, 255, 255, 0.2)' }}>
+        <div 
+          className="text-3xl sm:text-4xl lg:text-5xl font-black text-center text-white my-2 tracking-wider" 
+          style={{ textShadow: '0 0 8px rgba(255, 255, 255, 0.2)' }}
+        >
           {luckyNumber.number}
         </div>
       </div>
 
-      <p className="text-center text-gray-400 italic text-xs mt-2 pt-2 border-t border-gray-700/50">
+      <p className="text-center text-gray-400 italic text-xs mt-2 pt-2 border-t border-gray-700/50 px-1 leading-relaxed">
         "{luckyNumber.reasoning}"
       </p>
     </div>
@@ -76,24 +91,27 @@ const LuckyNumberSmallCard: React.FC<{ luckyNumber: LuckyNumber, index: number }
 
 export const LuckyNumberCard: React.FC<LuckyNumberCardProps> = ({ bestNumber, luckyNumbers }) => {
   return (
-    <div className="w-full max-w-6xl mx-auto mb-12 animate-fade-in">
-      <h3 className="text-xl md:text-2xl font-bold text-center mb-2 text-transparent bg-clip-text bg-gradient-to-r from-teal-300 to-blue-400">
+    <div className="w-full max-w-7xl mx-auto mb-8 sm:mb-12 animate-fade-in px-2 sm:px-4">
+      <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold text-center mb-2 text-transparent bg-clip-text bg-gradient-to-r from-teal-300 to-blue-400">
         Số May Mắn Hôm Nay
       </h3>
-      <p className="text-sm text-center text-gray-400 mb-6">1 số đề may mắn nhất và 1 số lô tiềm năng</p>
+      <p className="text-sm sm:text-base text-center text-gray-400 mb-6 sm:mb-8">
+        1 số đề may mắn nhất và {luckyNumbers.length} số lô tiềm năng
+      </p>
 
-      {/* Số đề may mắn nhất */}
-      <div className="mb-8">
-        <BestNumberCard bestNumber={bestNumber} />
-      </div>
+      {/* Responsive grid layout */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
+        {/* Số đề may mắn nhất - takes full width on mobile, spans 2 columns on large screens */}
+        <div className="lg:col-span-2">
+          <BestNumberCard bestNumber={bestNumber} />
+        </div>
 
-      {/* 1 số lô tiềm năng */}
-      <div className="flex justify-center">
-        {luckyNumbers.map((ln, index) => (
-          <div key={index} className="w-full max-w-md">
-            <LuckyNumberSmallCard luckyNumber={ln} index={index} />
-          </div>
-        ))}
+        {/* Số lô tiềm năng - stacked on mobile, single column on large screens */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4 sm:gap-6">
+          {luckyNumbers.map((ln, index) => (
+            <LuckyNumberSmallCard key={index} luckyNumber={ln} index={index} />
+          ))}
+        </div>
       </div>
     </div>
   );
