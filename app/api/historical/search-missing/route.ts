@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { GoogleGenAI } from "@google/genai";
-import { saveLotteryResultForDate } from '@/utils/appwrite-database';
+import { saveLotteryResultForDate } from '@/utils/storage';
 import type { LotteryResult } from '@/types';
 
 function getGeminiAI() {

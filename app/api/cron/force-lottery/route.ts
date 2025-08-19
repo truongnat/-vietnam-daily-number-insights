@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { fetchCurrentDayLotteryResult } from '@/services/geminiService';
 import { saveTodaysLotteryResult, getVietnamDateKey } from '@/utils/server-storage';
 import { setProcessingStatus } from '@/utils/processing-status';
-import { deleteLotteryResultForDate } from '@/utils/appwrite-database';
+import { deleteLotteryResultForDate } from '@/utils/storage';
 
 // Background processing function for force lottery check
 async function processForceLotteryCheckInBackground(dateKey: string, currentHour: number) {

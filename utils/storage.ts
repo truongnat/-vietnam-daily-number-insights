@@ -240,3 +240,122 @@ export const deleteTodaysData = async () => {
     console.error('Failed to delete today\'s data:', error);
   }
 };
+
+// Additional functions for compatibility with Appwrite database functions
+
+/**
+ * Gets analysis for a specific date
+ */
+export const getAnalysisForDate = async (dateKey: string): Promise<StoredAnalysis | null> => {
+  try {
+    if (isClient) {
+      // Client-side: use localStorage
+      const data = localStorage.getItem(`analysis_${dateKey}`);
+      return data ? JSON.parse(data) : null;
+    } else {
+      // Server-side: use API
+      const response = await fetch(`/api/storage/analysis/${dateKey}`);
+      if (response.ok) {
+        return await response.json();
+      }
+      return null;
+    }
+  } catch (error) {
+    console.error(`Failed to fetch analysis for ${dateKey}:`, error);
+    return null;
+  }
+};
+
+/**
+ * Saves lottery result for a specific date
+ */
+export const saveLotteryResultForDate = async (dateKey: string, result: LotteryResult) => {
+  try {
+    if (isClient) {
+      // Client-side: use localStorage
+      localStorage.setItem(`lottery_${dateKey}`, JSON.stringify(result));
+      const historicalData = await getAllHistoricalData();
+      if (!historicalData[dateKey]) historicalData[dateKey] = {} as StoredAnalysis;
+      historicalData[dateKey].lotteryResult = result;
+      localStorage.setItem('historicalData', JSON.stringify(historicalData));
+    } else {
+      // Server-side: use API
+      const response = await fetch(`/api/storage/lottery/${dateKey}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(result),
+      });
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+    }
+  } catch (error) {
+    console.error(`Failed to save lottery result for ${dateKey}:`, error);
+    throw error;
+  }
+};
+
+/**
+ * Deletes lottery result for a specific date
+ */
+export const deleteLotteryResultForDate = async (dateKey: string) => {
+  try {
+    if (isClient) {
+      // Client-side: use localStorage
+      localStorage.removeItem(`lottery_${dateKey}`);
+      const historicalData = await getAllHistoricalData();
+      if (historicalData[dateKey] && historicalData[dateKey].lotteryResult) {
+        historicalData[dateKey] = {
+          ...historicalData[dateKey],
+          lotteryResult: undefined
+        };
+      }
+      localStorage.setItem('historicalData', JSON.stringify(historicalData));
+    } else {
+      // Server-side: use API
+      const response = await fetch(`/api/storage/lottery/${dateKey}`, {
+        method: 'DELETE',
+      });
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+    }
+  } catch (error) {
+    console.error(`Failed to delete lottery result for ${dateKey}:`, error);
+  }
+};
+
+/**
+ * Deletes analysis for a specific date
+ */
+export const deleteAnalysisForDate = async (dateKey: string) => {
+  try {
+    if (isClient) {
+      // Client-side: use localStorage
+      localStorage.removeItem(`analysis_${dateKey}`);
+      const historicalData = await getAllHistoricalData();
+      if (historicalData[dateKey] && historicalData[dateKey].analysis) {
+        historicalData[dateKey] = {
+          ...historicalData[dateKey],
+          analysis: undefined
+        };
+      }
+      localStorage.setItem('historicalData', JSON.stringify(historicalData));
+    } else {
+      // Server-side: use API
+      const response = await fetch(`/api/storage/analysis/${dateKey}`, {
+        method: 'DELETE',
+      });
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+    }
+  } catch (error) {
+    console.error(`Failed to delete analysis for ${dateKey}:`, error);
+  }
+};
