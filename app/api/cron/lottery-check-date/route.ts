@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { saveLotteryResultForDate } from '@/utils/server-file-storage';
+import { fetchXSMBSingleDate, hasValidResults } from '@/utils/xsmb-api';
+import type { LotteryResult } from '@/types';
 
 export async function POST(request: NextRequest) {
   try {
@@ -26,9 +28,9 @@ export async function POST(request: NextRequest) {
     const vietnamToday = new Date(today.toLocaleString("en-US", {timeZone: "Asia/Ho_Chi_Minh"}));
     const todayString = vietnamToday.toISOString().split('T')[0]; // YYYY-MM-DD format
 
-    // Allow dates up to 7 days in the future for testing purposes
+    // Allow dates up to 1 day in the future for testing purposes
     const maxDate = new Date(vietnamToday);
-    maxDate.setDate(maxDate.getDate() + 7);
+    maxDate.setDate(maxDate.getDate() + 1);
     const maxDateString = maxDate.toISOString().split('T')[0];
 
     console.log(`Date validation: requested=${dateKey}, today=${todayString}, maxAllowed=${maxDateString}`);
@@ -40,23 +42,74 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // For now, we'll simulate fetching lottery results
-    // In a real implementation, you would call an actual lottery API here
-    const mockLotteryResult = {
-      specialPrize: generateMockNumber(),
-      allPrizes: generateMockPrizes(),
-      date: dateKey,
-      source: 'Mock API - Force Check'
+    console.log(`Fetching XSMB lottery results for date: ${dateKey}`);
+
+    // Fetch real lottery results from XSMB API
+    const xsmbResponse = await fetchXSMBSingleDate(dateKey);
+
+    if (!xsmbResponse.ok || !xsmbResponse.data) {
+      return NextResponse.json({
+        success: false,
+        error: `Không thể lấy kết quả xổ số cho ngày ${dateKey}`,
+        details: xsmbResponse.error || 'No data available'
+      }, { status: 404 });
+    }
+
+    const xsmbData = xsmbResponse.data;
+
+    // Validate that we have valid results
+    if (!hasValidResults(xsmbData)) {
+      return NextResponse.json({
+        success: false,
+        error: `Kết quả xổ số cho ngày ${dateKey} không hợp lệ hoặc chưa có`,
+        details: 'No valid prize data found'
+      }, { status: 404 });
+    }
+
+    // Extract special prize (Đặc biệt) - get last 2 digits
+    const specialPrizeNumbers = xsmbData.prizes['ĐB'];
+    if (!specialPrizeNumbers || specialPrizeNumbers.length === 0) {
+      return NextResponse.json({
+        success: false,
+        error: `Không tìm thấy giải đặc biệt cho ngày ${dateKey}`,
+        details: 'Special prize not found'
+      }, { status: 404 });
+    }
+
+    const specialPrize = specialPrizeNumbers[0].slice(-2); // Get last 2 digits
+
+    // Extract all prizes - get last 2 digits of all numbers
+    const allPrizes: string[] = [];
+    Object.values(xsmbData.prizes).forEach(prizeArray => {
+      if (prizeArray && Array.isArray(prizeArray)) {
+        prizeArray.forEach(number => {
+          if (number && typeof number === 'string') {
+            allPrizes.push(number.slice(-2)); // Get last 2 digits
+          }
+        });
+      }
+    });
+
+    // Remove duplicates and sort
+    const uniquePrizes = Array.from(new Set(allPrizes)).sort();
+
+    const lotteryResult: LotteryResult = {
+      specialPrize,
+      allPrizes: uniquePrizes
     };
 
     // Save the lottery result
-    await saveLotteryResultForDate(dateKey, mockLotteryResult);
+    await saveLotteryResultForDate(dateKey, lotteryResult);
+
+    console.log(`Successfully saved lottery result for ${dateKey}:`, lotteryResult);
 
     return NextResponse.json({
       success: true,
       message: `Đã cập nhật kết quả xổ số cho ngày ${dateKey}`,
       dateKey,
-      lotteryResult: mockLotteryResult
+      lotteryResult,
+      source: 'XSMB API',
+      totalNumbers: uniquePrizes.length
     });
 
   } catch (error) {
@@ -70,23 +123,6 @@ export async function POST(request: NextRequest) {
       { status: 500 }
     );
   }
-}
-
-// Helper function to generate mock lottery numbers
-function generateMockNumber(): string {
-  return Math.floor(Math.random() * 100).toString().padStart(2, '0');
-}
-
-// Helper function to generate mock prize list
-function generateMockPrizes(): string[] {
-  const prizes = new Set<string>();
-  
-  // Generate 20 unique 2-digit numbers
-  while (prizes.size < 20) {
-    prizes.add(generateMockNumber());
-  }
-  
-  return Array.from(prizes);
 }
 
 export async function GET() {
