@@ -241,7 +241,7 @@ export const deleteTodaysData = async () => {
   }
 };
 
-// Additional functions for compatibility with Appwrite database functions
+// Additional functions for date-specific operations
 
 /**
  * Gets analysis for a specific date
