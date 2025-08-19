@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { fetchDailyAnalysis } from '@/services/geminiService';
 import { saveTodaysAnalysis, getVietnamDateKey } from '@/utils/server-storage';
 import { setProcessingStatus } from '@/utils/processing-status';
-import { getAnalysisForDate } from '@/utils/storage';
+import { getAnalysisForDate } from '@/utils/server-file-storage';
 
 // Background processing function
 async function processAnalysisInBackground(dateKey: string, currentHour: number) {
@@ -80,5 +80,3 @@ export async function GET() {
     }, { status: 500 });
   }
 }
-
-

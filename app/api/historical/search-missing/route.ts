@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { GoogleGenAI } from "@google/genai";
-import { saveLotteryResultForDate } from '@/utils/storage';
+import { saveLotteryResultForDate } from '@/utils/server-file-storage';
 import type { LotteryResult } from '@/types';
 
 function getGeminiAI() {
@@ -63,7 +63,7 @@ export async function POST() {
           "allPrizes": ["XX", "YY", "ZZ", ...]
         }
         
-        Nếu không tìm thấy, trả về:
+        Nếu không tìm thấy, trả v��:
         {
           "specialPrize": null,
           "allPrizes": []
