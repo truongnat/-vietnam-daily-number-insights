@@ -28,12 +28,14 @@ export default function Page() {
   return (
     <div className="min-h-screen bg-gray-900 text-white flex flex-col font-sans">
       <Header />
-      <main className="flex-grow container mx-auto p-4 md:p-8 flex flex-col items-center">
+      <main className="flex-grow container mx-auto p-2 sm:p-4 md:p-6 lg:p-8 flex flex-col items-center">
         <ViewToggle view={view} setView={setView} />
-        {renderContent()}
+        <div className="w-full">
+          {renderContent()}
+        </div>
         
         {/* XSMB Results Section - Always visible below main content */}
-        <div className="w-full mt-12 pt-8 border-t border-gray-700">
+        <div className="w-full mt-8 sm:mt-12 pt-6 sm:pt-8 border-t border-gray-700">
           <XSMBResults />
         </div>
       </main>

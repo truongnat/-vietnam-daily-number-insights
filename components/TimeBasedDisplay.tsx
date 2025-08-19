@@ -7,8 +7,6 @@ import { LotteryResultDisplay } from '@/components/LotteryResultDisplay';
 import { LoadingSpinner } from '@/components/LoadingSpinner';
 import { ForceRunButton } from '@/components/ForceRunButton';
 
-// Simplified - no need for time slots array anymore
-
 export const TimeBasedDisplay: React.FC = () => {
   const [analysisData, setAnalysisData] = useState<StoredAnalysis | null>(null);
   const [lotteryResult, setLotteryResult] = useState<LotteryResult | null>(null);
@@ -80,28 +78,29 @@ export const TimeBasedDisplay: React.FC = () => {
     };
   }, []);
 
-  // Simplified: just check if we have data
   const hasData = (): boolean => {
     return !!analysisData;
   };
 
   if (isLoading) {
     return (
-      <div className="flex flex-col items-center justify-center py-12">
+      <div className="flex flex-col items-center justify-center py-8 sm:py-12 px-4">
         <LoadingSpinner />
-        <p className="text-gray-400 mt-4">Đang tải dữ liệu theo thời gian thực...</p>
+        <p className="text-gray-400 mt-4 text-sm sm:text-base text-center">
+          Đang tải dữ liệu theo thời gian thực...
+        </p>
       </div>
     );
   }
 
   return (
-    <div className="w-full max-w-6xl space-y-8">
+    <div className="w-full max-w-7xl mx-auto space-y-6 sm:space-y-8 px-2 sm:px-4">
       {/* Current Time Display */}
-      <div className="text-center mb-8">
-        <h2 className="text-2xl font-semibold text-teal-300 mb-2">
+      <div className="text-center mb-6 sm:mb-8">
+        <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold text-teal-300 mb-2">
           Phân Tích Theo Thời Gian Thực
         </h2>
-        <p className="text-gray-400">
+        <p className="text-gray-400 text-sm sm:text-base">
           Thời gian Việt Nam: {currentVietnamTime.toLocaleTimeString('vi-VN', {
             hour: '2-digit',
             minute: '2-digit',
@@ -115,19 +114,19 @@ export const TimeBasedDisplay: React.FC = () => {
 
       {/* Analysis Data - Show if available */}
       {hasData() && (
-        <div className="border border-gray-700 rounded-lg p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-xl font-semibold text-white">
+        <div className="border border-gray-700 rounded-lg p-4 sm:p-6">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4 mb-4 sm:mb-6">
+            <h3 className="text-lg sm:text-xl font-semibold text-white">
               Phân Tích Hàng Ngày (12:00)
             </h3>
-            <div className="px-3 py-1 rounded-full text-sm font-medium bg-green-900/50 text-green-300 border border-green-500/50">
+            <div className="px-3 py-1 rounded-full text-xs sm:text-sm font-medium bg-green-900/50 text-green-300 border border-green-500/50 w-fit">
               Đã hoàn thành
             </div>
           </div>
 
-          <div className="space-y-6">
+          <div className="space-y-4 sm:space-y-6">
             {/* Analysis Summary */}
-            <p className="text-gray-300 text-center">
+            <p className="text-gray-300 text-center text-sm sm:text-base leading-relaxed">
               {analysisData?.analysis?.summary}
             </p>
 
@@ -154,20 +153,18 @@ export const TimeBasedDisplay: React.FC = () => {
 
       {/* No Data Message */}
       {!analysisData && (
-        <div className="text-center py-12">
-          <p className="text-gray-400 text-lg">
+        <div className="text-center py-8 sm:py-12 px-4">
+          <p className="text-gray-400 text-base sm:text-lg mb-2">
             Chưa có dữ liệu phân tích cho hôm nay.
           </p>
-          <p className="text-gray-500 text-sm mt-2">
+          <p className="text-gray-500 text-sm sm:text-base mt-2">
             Dữ liệu sẽ xuất hiện sau khi cron job chạy vào 12:00.
           </p>
-          <p className="text-gray-500 text-sm mt-1">
+          <p className="text-gray-500 text-sm sm:text-base mt-1">
             Hoặc sử dụng nút "Chạy Thủ Công" để tạo ngay.
           </p>
         </div>
       )}
-
-      {/* This section is no longer needed since we show data immediately when available */}
     </div>
   );
 };
