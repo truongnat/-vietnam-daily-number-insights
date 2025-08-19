@@ -1,102 +1,33 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { CalendarIcon, TrophyIcon, ClockIcon } from '@heroicons/react/24/outline';
-
-interface XSMBPrizes {
-  'ĐB': string[];
-  '1': string[];
-  '2': string[];
-  '3': string[];
-  '4': string[];
-  '5': string[];
-  '6': string[];
-  '7': string[];
-}
-
-interface XSMBData {
-  prizes: XSMBPrizes;
-  allNumbers: string[];
-  meta: {
-    detectedDate: string;
-    tableSource: string;
-    totalNumbers: number;
-  };
-}
-
-interface XSMBResult {
-  date: string;
-  data?: XSMBData;
-  error?: string;
-}
-
-interface XSMBResponse {
-  ok: boolean;
-  range: boolean;
-  region: string;
-  date?: string;
-  start?: string;
-  end?: string;
-  data?: XSMBData;
-  results?: XSMBResult[];
-  error?: string;
-}
+import { CalendarIcon, TrophyIcon, ClockIcon, ArrowPathIcon } from '@heroicons/react/24/outline';
+import { 
+  fetchTodayAndYesterdayResults, 
+  getVietnameseDateString, 
+  PRIZE_LABELS,
+  isToday,
+  type XSMBResult,
+  type XSMBPrizes 
+} from '@/utils/xsmb-api';
 
 export const XSMBResults: React.FC = () => {
   const [todayResult, setTodayResult] = useState<XSMBResult | null>(null);
   const [yesterdayResult, setYesterdayResult] = useState<XSMBResult | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
 
-  const getDateString = (date: Date): string => {
-    return date.toISOString().split('T')[0]; // YYYY-MM-DD format
-  };
-
-  const getVietnameseDateString = (dateStr: string): string => {
-    const date = new Date(dateStr);
-    return date.toLocaleDateString('vi-VN', {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
-  };
-
-  const fetchXSMBResults = async () => {
+  const fetchResults = async () => {
     try {
       setIsLoading(true);
       setError(null);
 
-      const today = new Date();
-      const yesterday = new Date(today);
-      yesterday.setDate(yesterday.getDate() - 1);
-
-      const todayStr = getDateString(today);
-      const yesterdayStr = getDateString(yesterday);
-
-      // Fetch results for both days using range API
-      const response = await fetch(
-        `https://v0-next-js-app-for-xoso.vercel.app/api/xoso?start=${yesterdayStr}&end=${todayStr}`
-      );
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const data: XSMBResponse = await response.json();
-
-      if (!data.ok) {
-        throw new Error(data.error || 'Failed to fetch XSMB results');
-      }
-
-      if (data.results) {
-        // Find today's and yesterday's results
-        const todayData = data.results.find(r => r.date === todayStr);
-        const yesterdayData = data.results.find(r => r.date === yesterdayStr);
-
-        setTodayResult(todayData || { date: todayStr, error: 'No data available' });
-        setYesterdayResult(yesterdayData || { date: yesterdayStr, error: 'No data available' });
-      }
+      const { today, yesterday } = await fetchTodayAndYesterdayResults();
+      
+      setTodayResult(today);
+      setYesterdayResult(yesterday);
+      setLastUpdated(new Date());
     } catch (err) {
       console.error('Error fetching XSMB results:', err);
       setError(err instanceof Error ? err.message : 'Unknown error occurred');
@@ -106,27 +37,37 @@ export const XSMBResults: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchXSMBResults();
+    fetchResults();
+    
+    // Auto-refresh every 30 minutes
+    const interval = setInterval(fetchResults, 30 * 60 * 1000);
+    
+    return () => clearInterval(interval);
   }, []);
 
-  const renderPrizeRow = (prizeKey: keyof XSMBPrizes, prizeLabel: string, numbers: string[]) => {
+  const renderPrizeRow = (prizeKey: keyof XSMBPrizes, numbers: string[]) => {
     const isSpecialPrize = prizeKey === 'ĐB';
+    const prizeLabel = PRIZE_LABELS[prizeKey];
     
     return (
-      <div key={prizeKey} className={`flex items-center justify-between py-2 px-3 rounded-lg ${
-        isSpecialPrize ? 'bg-gradient-to-r from-yellow-900/30 to-orange-900/30 border border-yellow-500/30' : 'bg-gray-800/50'
+      <div key={prizeKey} className={`flex items-center justify-between py-3 px-4 rounded-lg transition-all duration-200 ${
+        isSpecialPrize 
+          ? 'bg-gradient-to-r from-yellow-900/40 to-orange-900/40 border border-yellow-500/40 shadow-lg' 
+          : 'bg-gray-800/60 hover:bg-gray-800/80'
       }`}>
-        <div className={`font-semibold ${isSpecialPrize ? 'text-yellow-300' : 'text-gray-300'}`}>
+        <div className={`font-semibold min-w-[80px] ${
+          isSpecialPrize ? 'text-yellow-300' : 'text-gray-300'
+        }`}>
           {prizeLabel}
         </div>
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-2 justify-end">
           {numbers.map((number, index) => (
             <span
               key={index}
-              className={`px-3 py-1 rounded-full text-sm font-mono font-bold ${
+              className={`px-3 py-1.5 rounded-full text-sm font-mono font-bold transition-all duration-200 ${
                 isSpecialPrize 
-                  ? 'bg-yellow-600 text-yellow-100 shadow-lg' 
-                  : 'bg-blue-600 text-blue-100'
+                  ? 'bg-gradient-to-r from-yellow-600 to-orange-600 text-yellow-100 shadow-lg transform hover:scale-105' 
+                  : 'bg-blue-600 text-blue-100 hover:bg-blue-500'
               }`}
             >
               {number}
@@ -137,21 +78,49 @@ export const XSMBResults: React.FC = () => {
     );
   };
 
-  const renderResultCard = (result: XSMBResult, title: string, icon: React.ReactNode) => {
+  const renderResultCard = (result: XSMBResult | null, title: string, icon: React.ReactNode, isCurrentDay: boolean = false) => {
+    if (!result) {
+      return (
+        <div className="bg-gray-800/60 border border-gray-700 rounded-lg p-6">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center space-x-3">
+              {icon}
+              <div>
+                <h3 className="text-xl font-semibold text-white">{title}</h3>
+                <p className="text-gray-400 text-sm">Không có dữ liệu</p>
+              </div>
+            </div>
+          </div>
+          <div className="text-center py-8 text-gray-400">
+            Không thể tải dữ liệu
+          </div>
+        </div>
+      );
+    }
+
     return (
-      <div className="bg-gray-800/60 border border-gray-700 rounded-lg p-6">
+      <div className={`bg-gray-800/60 border rounded-lg p-6 transition-all duration-200 hover:bg-gray-800/80 ${
+        isCurrentDay ? 'border-green-500/50 shadow-lg shadow-green-500/10' : 'border-gray-700'
+      }`}>
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center space-x-3">
             {icon}
             <div>
-              <h3 className="text-xl font-semibold text-white">{title}</h3>
+              <h3 className="text-xl font-semibold text-white flex items-center space-x-2">
+                <span>{title}</span>
+                {isCurrentDay && (
+                  <span className="px-2 py-1 bg-green-600 text-green-100 text-xs rounded-full">
+                    Live
+                  </span>
+                )}
+              </h3>
               <p className="text-gray-400 text-sm">
                 {getVietnameseDateString(result.date)}
               </p>
             </div>
           </div>
           <div className="text-right">
-            <div className="text-sm text-gray-400">XSMB</div>
+            <div className="text-sm text-gray-400 font-semibold">XSMB</div>
             <div className="text-xs text-gray-500">{result.date}</div>
           </div>
         </div>
@@ -159,30 +128,32 @@ export const XSMBResults: React.FC = () => {
         {result.error ? (
           <div className="text-center py-8">
             <div className="text-gray-400 mb-2">
-              <ClockIcon className="w-8 h-8 mx-auto mb-2" />
-              Chưa có kết quả
+              <ClockIcon className="w-8 h-8 mx-auto mb-2 opacity-50" />
+              <p className="font-medium">Chưa có kết quả</p>
             </div>
             <p className="text-sm text-gray-500">{result.error}</p>
+            {isCurrentDay && (
+              <p className="text-xs text-gray-600 mt-2">
+                Kết quả sẽ được cập nhật sau 18:15
+              </p>
+            )}
           </div>
         ) : result.data ? (
-          <div className="space-y-3">
-            {renderPrizeRow('ĐB', 'Đặc biệt', result.data.prizes['ĐB'])}
-            {renderPrizeRow('1', 'Giải nhất', result.data.prizes['1'])}
-            {renderPrizeRow('2', 'Giải nhì', result.data.prizes['2'])}
-            {renderPrizeRow('3', 'Giải ba', result.data.prizes['3'])}
-            {renderPrizeRow('4', 'Giải tư', result.data.prizes['4'])}
-            {renderPrizeRow('5', 'Giải năm', result.data.prizes['5'])}
-            {renderPrizeRow('6', 'Giải sáu', result.data.prizes['6'])}
-            {renderPrizeRow('7', 'Giải bảy', result.data.prizes['7'])}
+          <div className="space-y-2">
+            {Object.entries(result.data.prizes).map(([prizeKey, numbers]) => 
+              renderPrizeRow(prizeKey as keyof XSMBPrizes, numbers)
+            )}
             
-            <div className="mt-4 pt-4 border-t border-gray-700">
-              <div className="text-sm text-gray-400 text-center">
-                Tổng cộng: {result.data.meta.totalNumbers} số
+            <div className="mt-6 pt-4 border-t border-gray-700">
+              <div className="flex items-center justify-between text-sm text-gray-400">
+                <span>Tổng cộng: {result.data.meta.totalNumbers} số</span>
+                <span>Nguồn: xoso.com.vn</span>
               </div>
             </div>
           </div>
         ) : (
           <div className="text-center py-8 text-gray-400">
+            <ClockIcon className="w-8 h-8 mx-auto mb-2 opacity-50" />
             Không có dữ liệu
           </div>
         )}
@@ -195,7 +166,7 @@ export const XSMBResults: React.FC = () => {
       <div className="w-full max-w-6xl mx-auto mb-8">
         <div className="bg-gray-800/60 border border-gray-700 rounded-lg p-8">
           <div className="flex items-center justify-center space-x-3">
-            <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-400"></div>
+            <ArrowPathIcon className="animate-spin h-6 w-6 text-blue-400" />
             <span className="text-gray-400">Đang tải kết quả XSMB...</span>
           </div>
         </div>
@@ -203,22 +174,23 @@ export const XSMBResults: React.FC = () => {
     );
   }
 
-  if (error) {
+  if (error && !todayResult && !yesterdayResult) {
     return (
       <div className="w-full max-w-6xl mx-auto mb-8">
         <div className="bg-red-900/20 border border-red-500/30 rounded-lg p-6">
           <div className="flex items-center space-x-3">
-            <div className="text-red-400">⚠️</div>
-            <div>
+            <div className="text-red-400 text-xl">⚠️</div>
+            <div className="flex-1">
               <h3 className="text-red-300 font-semibold">Lỗi tải dữ liệu XSMB</h3>
               <p className="text-red-400 text-sm mt-1">{error}</p>
-              <button
-                onClick={fetchXSMBResults}
-                className="mt-3 px-4 py-2 bg-red-600 hover:bg-red-700 rounded-lg text-white text-sm font-medium transition-colors duration-200"
-              >
-                Thử lại
-              </button>
             </div>
+            <button
+              onClick={fetchResults}
+              className="px-4 py-2 bg-red-600 hover:bg-red-700 rounded-lg text-white text-sm font-medium transition-colors duration-200 flex items-center space-x-2"
+            >
+              <ArrowPathIcon className="w-4 h-4" />
+              <span>Thử lại</span>
+            </button>
           </div>
         </div>
       </div>
@@ -228,38 +200,63 @@ export const XSMBResults: React.FC = () => {
   return (
     <div className="w-full max-w-6xl mx-auto mb-8">
       <div className="mb-6">
-        <h2 className="text-2xl font-bold text-white mb-2 flex items-center space-x-3">
-          <TrophyIcon className="w-8 h-8 text-yellow-400" />
-          <span>Kết Quả Xổ Số Miền Bắc</span>
-        </h2>
-        <p className="text-gray-400">
-          Kết quả chính thức từ xoso.com.vn
-        </p>
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="text-2xl font-bold text-white mb-2 flex items-center space-x-3">
+              <TrophyIcon className="w-8 h-8 text-yellow-400" />
+              <span>Kết Quả Xổ Số Miền Bắc</span>
+            </h2>
+            <p className="text-gray-400">
+              Kết quả chính thức từ xoso.com.vn
+              {lastUpdated && (
+                <span className="ml-2 text-xs text-gray-500">
+                  • Cập nhật lúc {lastUpdated.toLocaleTimeString('vi-VN')}
+                </span>
+              )}
+            </p>
+          </div>
+          <button
+            onClick={fetchResults}
+            disabled={isLoading}
+            className="px-4 py-2 bg-gray-700 hover:bg-gray-600 disabled:bg-gray-800 disabled:cursor-not-allowed rounded-lg text-gray-300 text-sm font-medium transition-colors duration-200 flex items-center space-x-2"
+          >
+            <ArrowPathIcon className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
+            <span>Làm mới</span>
+          </button>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Today's Results */}
-        {todayResult && renderResultCard(
+        {renderResultCard(
           todayResult,
           "Hôm nay",
-          <CalendarIcon className="w-6 h-6 text-green-400" />
+          <CalendarIcon className="w-6 h-6 text-green-400" />,
+          true
         )}
 
         {/* Yesterday's Results */}
-        {yesterdayResult && renderResultCard(
+        {renderResultCard(
           yesterdayResult,
           "Hôm qua",
-          <ClockIcon className="w-6 h-6 text-blue-400" />
+          <ClockIcon className="w-6 h-6 text-blue-400" />,
+          false
         )}
       </div>
 
-      <div className="mt-4 text-center">
-        <button
-          onClick={fetchXSMBResults}
-          className="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg text-gray-300 text-sm font-medium transition-colors duration-200"
-        >
-          🔄 Làm mới kết quả
-        </button>
+      {error && (todayResult || yesterdayResult) && (
+        <div className="mt-4 p-3 bg-yellow-900/20 border border-yellow-500/30 rounded-lg">
+          <p className="text-yellow-300 text-sm">
+            ⚠️ Có lỗi khi tải một số dữ liệu: {error}
+          </p>
+        </div>
+      )}
+
+      <div className="mt-6 text-center text-xs text-gray-500">
+        <p>
+          Dữ liệu được cập nhật tự động mỗi 30 phút • 
+          Kết quả chính thức từ Công ty Xổ số kiến thiết Việt Nam
+        </p>
       </div>
     </div>
   );
