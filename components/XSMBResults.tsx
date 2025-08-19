@@ -7,6 +7,7 @@ import {
   getVietnameseDateString, 
   PRIZE_LABELS,
   isToday,
+  hasValidResults,
   type XSMBResult,
   type XSMBPrizes 
 } from '@/utils/xsmb-api';
@@ -48,6 +49,11 @@ export const XSMBResults: React.FC = () => {
   const renderPrizeRow = (prizeKey: keyof XSMBPrizes, numbers: string[]) => {
     const isSpecialPrize = prizeKey === 'ĐB';
     const prizeLabel = PRIZE_LABELS[prizeKey];
+    
+    // Don't render if no numbers
+    if (!numbers || numbers.length === 0) {
+      return null;
+    }
     
     return (
       <div key={prizeKey} className={`flex items-center justify-between py-3 px-4 rounded-lg transition-all duration-200 ${
@@ -98,6 +104,8 @@ export const XSMBResults: React.FC = () => {
       );
     }
 
+    const hasResults = result.data && hasValidResults(result.data);
+
     return (
       <div className={`bg-gray-800/60 border rounded-lg p-6 transition-all duration-200 hover:bg-gray-800/80 ${
         isCurrentDay ? 'border-green-500/50 shadow-lg shadow-green-500/10' : 'border-gray-700'
@@ -125,13 +133,15 @@ export const XSMBResults: React.FC = () => {
           </div>
         </div>
 
-        {result.error ? (
+        {result.error || !hasResults ? (
           <div className="text-center py-8">
             <div className="text-gray-400 mb-2">
               <ClockIcon className="w-8 h-8 mx-auto mb-2 opacity-50" />
               <p className="font-medium">Chưa có kết quả</p>
             </div>
-            <p className="text-sm text-gray-500">{result.error}</p>
+            <p className="text-sm text-gray-500">
+              {result.error || 'Kết quả chưa được công bố'}
+            </p>
             {isCurrentDay && (
               <p className="text-xs text-gray-600 mt-2">
                 Kết quả sẽ được cập nhật sau 18:15
@@ -140,15 +150,30 @@ export const XSMBResults: React.FC = () => {
           </div>
         ) : result.data ? (
           <div className="space-y-2">
-            {Object.entries(result.data.prizes).map(([prizeKey, numbers]) => 
-              renderPrizeRow(prizeKey as keyof XSMBPrizes, numbers)
-            )}
+            {/* Render prizes in order, but only if they have numbers */}
+            {(['ĐB', '1', '2', '3', '4', '5', '6', '7'] as (keyof XSMBPrizes)[]).map(prizeKey => 
+              renderPrizeRow(prizeKey, result.data!.prizes[prizeKey])
+            ).filter(Boolean)}
             
             <div className="mt-6 pt-4 border-t border-gray-700">
               <div className="flex items-center justify-between text-sm text-gray-400">
-                <span>Tổng cộng: {result.data.meta.totalNumbers} số</span>
+                <span>
+                  Tổng cộng: {result.data.allNumbers?.length || 0} số
+                </span>
                 <span>Nguồn: xoso.com.vn</span>
               </div>
+              {result.data.url && (
+                <div className="mt-2">
+                  <a 
+                    href={result.data.url} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-xs text-blue-400 hover:text-blue-300 underline"
+                  >
+                    Xem chi tiết trên xoso.com.vn
+                  </a>
+                </div>
+              )}
             </div>
           </div>
         ) : (
