@@ -467,73 +467,65 @@ const fetchHistoricalLotteryData = async (): Promise<string> => {
       );
 
       // Generate list of dates we should have data for
-      const today = new Date();
-      const targetDates: string[] = [];
-      for (let i = 1; i <= 14; i++) {
-        const date = new Date(today);
-        date.setDate(date.getDate() - i);
-        const dateKey = date.toISOString().split("T")[0];
-        targetDates.push(dateKey);
-      }
+      try {
+        // Lấy 14 ngày gần nhất
+        const today = new Date();
+        const targetDates: string[] = [];
+        for (let i = 1; i <= 14; i++) {
+          const date = new Date(today);
+          date.setDate(date.getDate() - i);
+          const dateKey = date.toISOString().split('T')[0];
+          targetDates.push(dateKey);
+        }
 
-      // Find missing dates
-      const existingDates = new Set(entries.map(([dateKey]) => dateKey));
-      const missingDates = targetDates.filter(
-        (date) => !existingDates.has(date)
-      );
+        // Dùng fetchXSMBRangeDirectly để lấy dữ liệu XSMB chuẩn
+        let xsmbResults = [];
+        if (typeof window === 'undefined') {
+          try {
+            const { fetchXSMBRangeDirectly } = await import('@/utils/xsmb-server');
+            const xsmbResponse = await fetchXSMBRangeDirectly(targetDates[targetDates.length - 1], targetDates[0]);
+            if (xsmbResponse && xsmbResponse.data && Array.isArray(xsmbResponse.data)) {
+              xsmbResults = xsmbResponse.data;
+            }
+          } catch (error) {
+            console.error('Failed to fetch XSMB range:', error);
+          }
+        }
 
-      if (missingDates.length > 0) {
-        console.log(
-          `Searching for ${missingDates.length} missing lottery results...`
-        );
-        const foundResults = await searchMissingLotteryResults(missingDates);
-
-        // Add found results to our analysis (but don't save to DB here)
-        Object.entries(foundResults).forEach(([dateKey, lotteryResult]) => {
-          const mockAnalysis: StoredAnalysis = {
+        // Chuyển đổi dữ liệu XSMB sang dạng recentEntries cho AI
+        const recentEntries: [string, StoredAnalysis][] = xsmbResults.map((item: any) => {
+          const dateKey = item.date;
+          const lotteryResult = {
+            specialPrize: item.prizes['ĐB'] ? item.prizes['ĐB'][0].slice(-2) : '',
+            allPrizes: Object.values(item.prizes).flat().map((num: string) => num.slice(-2))
+          };
+          return [dateKey, {
             analysis: {
-              summary: "Dữ liệu được tìm kiếm tự động",
-              bestNumber: {
-                number: "00",
-                type: "",
-                probability: "",
-                reasoning: "",
-              },
+              summary: "Dữ liệu XSMB trực tiếp",
+              bestNumber: { number: "00", type: "", probability: "", reasoning: "" },
               luckyNumbers: [],
               topNumbers: [],
-              events: [],
+              events: []
             },
             groundingChunks: [],
-            lotteryResult,
-          };
-          recentEntries.push([dateKey, mockAnalysis]);
+            lotteryResult
+          }];
         });
 
-        // Re-sort by date
-        recentEntries.sort(([a], [b]) => b.localeCompare(a));
-        recentEntries = recentEntries.slice(0, 14);
+        if (recentEntries.length === 0) {
+          return "Không có kết quả xổ số lịch sử để phân tích.";
+        }
+
+        console.log(`Analyzing ${recentEntries.length} days of lottery data...`);
+
+        // Generate AI-enhanced statistical analysis
+        const aiAnalysis = await generateAIStatisticalAnalysis(recentEntries);
+
+        return aiAnalysis;
+      } catch (error) {
+        console.error('Error fetching historical data:', error);
+        return "Lỗi khi lấy dữ liệu lịch sử.";
       }
-    }
-
-    if (recentEntries.length === 0) {
-      return "Không có kết quả xổ số lịch sử để phân tích.";
-    }
-
-    console.log(`Analyzing ${recentEntries.length} days of lottery data...`);
-
-    // Generate AI-enhanced statistical analysis
-    const aiAnalysis = await generateAIStatisticalAnalysis(recentEntries);
-
-    return aiAnalysis;
-  } catch (error) {
-    console.error("Error fetching historical data:", error);
-    return "Lỗi khi lấy dữ liệu lịch sử.";
-  }
-};
-
-export const fetchCurrentDayLotteryResult =
-  async (): Promise<LotteryResult | null> => {
-    try {
       const todayString = getVietnamDateStringForPrompt();
       console.log(
         `Fetching current day's lottery results for ${todayString}...`
