@@ -1,0 +1,60 @@
+{
+  "analysis": {
+    "summary": "Hôm nay, Việt Nam ghi nhận nhiều sự kiện quan trọng như chuyến thăm cấp nhà nước của Tổng Bí thư Tô Lâm tới Hàn Quốc, lễ kỷ niệm 80 năm thành lập Chính phủ, và các hoạt động diễu binh, diễu hành tại Thủ đô. Các tin tức quốc tế đáng chú ý bao gồm việc Mỹ chỉ định nhóm điều phối cuộc gặp Nga - Ukraine và tình hình cháy rừng tại châu Âu.",
+    "bestNumber": {
+      "number": "80",
+      "type": "Số Đề May Mắn Nhất",
+      "probability": "Cao",
+      "reasoning": "Số 80 nổi bật với tần suất xuất hiện cao trong các tin tức hôm nay, đặc biệt liên quan đến '80 năm thành lập Chính phủ' và 'lễ diễu binh A80' [8, 9, 10]. Đây là một con số mang ý nghĩa lịch sử và quốc gia quan trọng. Dựa trên phân tích thống kê AI, mặc dù không có dữ liệu 14 ngày để xác định chu kỳ rõ ràng, số 80 không nằm trong danh sách các số 'nóng' hay 'lạnh' nhất trong 100 ngày qua [4], cho thấy nó không bị ra quá thường xuyên hay quá ít, tạo cơ hội cho sự xuất hiện trở lại khi có sự kiện nổi bật. Quan trọng hơn, số 80 không trùng với giải đặc biệt ngày hôm qua là 50 [5], đáp ứng yêu cầu tránh số đã ra gần đây."
+    },
+    "luckyNumbers": [
+      {
+        "number": "27",
+        "type": "Số Lô Tiềm Năng",
+        "probability": "Cao",
+        "reasoning": "Số 27 được chọn dựa trên phân tích thống kê AI từ dữ liệu 100 ngày qua, cho thấy đây là một trong những số 'lạnh' (xuất hiện ít nhất) với tần suất 20 lần [4]. Việc số 'lạnh' có xu hướng 'chuyển nóng' là một yếu tố tiềm năng trong xổ số. Đồng thời, số 27 cũng xuất hiện trong tin tức hôm nay (ví dụ: thời gian 13:27) [8], tạo thêm một tín hiệu tích cực. Số này khác biệt với số đề may mắn nhất (80) và không nằm trong các số lô đã về ngày hôm qua (16, 54, 59, 48, 50, 93, 31, 98, 89) [3, 5], tăng khả năng xuất hiện."
+      }
+    ],
+    "topNumbers": [
+      {
+        "number": "08",
+        "count": 6,
+        "reason": "Xuất hiện nhiều trong các mốc thời gian và ngày tháng liên quan đến tin tức (ví dụ: 08/08, 09/08, 10/08, 11/08, 15/08, 20/08)."
+      },
+      {
+        "number": "11",
+        "count": 6,
+        "reason": "Liên quan đến các khung giờ bản tin (11h00, 11h30) và số điện thoại liên hệ trong tin tức."
+      },
+      {
+        "number": "80",
+        "count": 4,
+        "reason": "Nổi bật trong các sự kiện kỷ niệm lớn như '80 năm thành lập Chính phủ' và 'diễu binh A80'."
+      },
+      {
+        "number": "65",
+        "count": 4,
+        "reason": "Liên quan đến số điện thoại liên hệ và số tiền ủng hộ (65 tỷ đồng) trong các sự kiện quan trọng."
+      }
+    ],
+    "events": [
+      {
+        "title": "Tổng Bí thư Tô Lâm thăm cấp nhà nước Đại Hàn dân Quốc",
+        "description": "Chuyến thăm quan trọng nhằm tăng cường mối quan hệ ngoại giao giữa Việt Nam và Hàn Quốc."
+      },
+      {
+        "title": "Lễ kỷ niệm 80 năm thành lập Chính phủ và diễu binh A80",
+        "description": "Các hoạt động kỷ niệm mang ý nghĩa lịch sử sâu sắc, thể hiện sự phát triển và ổn định của đất nước."
+      },
+      {
+        "title": "Mỹ chỉ định nhóm điều phối cuộc gặp Nga - Ukraine",
+        "description": "Thông tin quốc tế đáng chú ý về nỗ lực ngoại giao nhằm giải quyết xung đột."
+      },
+      {
+        "title": "Chương trình ủng hộ nhân dân Cuba đạt mục tiêu 65 tỷ đồng",
+        "description": "Hoạt động nhân đạo ý nghĩa, thể hiện tinh thần đoàn kết quốc tế."
+      }
+    ]
+  },
+  "groundingChunks": []
+}
