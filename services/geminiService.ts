@@ -623,12 +623,12 @@ const fetchHistoricalLotteryData = async (): Promise<string> => {
           result != null &&
           typeof result.specialPrize === "string" &&
           result.specialPrize !== null &&
-          result.specialPrize.length === 2 &&
+          result.specialPrize && (result.specialPrize as string).length === 2 &&
           Array.isArray(result.allPrizes) &&
           result.allPrizes.length > 0
         ) {
           console.log("Successfully fetched and parsed lottery results from Gemini.");
-          return result as unknown as string; // fix type error, should be handled by caller
+          return JSON.stringify(result);
         } else {
           if (result != null && result.specialPrize === null) {
             console.warn(
