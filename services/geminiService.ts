@@ -1,12 +1,21 @@
 import { GoogleGenAI } from "@google/genai";
-import type { AnalysisResult, GroundingChunk, LotteryResult, HistoricalData, StoredAnalysis } from "@/types";
+import type {
+  AnalysisResult,
+  GroundingChunk,
+  LotteryResult,
+  HistoricalData,
+  StoredAnalysis,
+} from "@/types";
 import { getAllHistoricalData } from "@/utils/storage";
 
 function getGeminiAI() {
   if (!process.env.NEXT_PUBLIC_GEMINI_API_KEY) {
     throw new Error("NEXT_PUBLIC_GEMINI_API_KEY environment variable not set");
   }
-  console.log("process.env.NEXT_PUBLIC_GEMINI_API_KEY", process.env.NEXT_PUBLIC_GEMINI_API_KEY);
+  console.log(
+    "process.env.NEXT_PUBLIC_GEMINI_API_KEY",
+    process.env.NEXT_PUBLIC_GEMINI_API_KEY
+  );
   return new GoogleGenAI({ apiKey: process.env.NEXT_PUBLIC_GEMINI_API_KEY });
 }
 
@@ -235,11 +244,17 @@ const generateAIStatisticalAnalysis = async (
     recentEntries.forEach(([dateKey, data]) => {
       if (data.lotteryResult) {
         const { specialPrize, allPrizes } = data.lotteryResult;
-        rawData += `- ${dateKey}: Đặc biệt: ${specialPrize}, Tất cả: [${allPrizes.join(', ')}]\n`;
+        rawData += `- ${dateKey}: Đặc biệt: ${specialPrize}, Tất cả: [${allPrizes.join(
+          ", "
+        )}]\n`;
 
         specialNumbers.push(specialPrize);
         allNumbers.push(...allPrizes);
-        dailyResults.push({ date: dateKey, special: specialPrize, all: allPrizes });
+        dailyResults.push({
+          date: dateKey,
+          special: specialPrize,
+          all: allPrizes,
+        });
       }
     });
 
@@ -284,7 +299,7 @@ const generateAIStatisticalAnalysis = async (
       return generateBasicStatisticalAnalysis(recentEntries);
     }
   } catch (error) {
-    console.error('Error generating AI statistical analysis:', error);
+    console.error("Error generating AI statistical analysis:", error);
     // Fallback to basic analysis
     return generateBasicStatisticalAnalysis(recentEntries);
   }
@@ -304,7 +319,9 @@ const generateBasicStatisticalAnalysis = (
   recentEntries.forEach(([dateKey, data]) => {
     if (data.lotteryResult) {
       const { specialPrize, allPrizes } = data.lotteryResult;
-      historicalSummary += `- ${dateKey}: Đặc biệt: ${specialPrize}, Tất cả: [${allPrizes.join(', ')}]\n`;
+      historicalSummary += `- ${dateKey}: Đặc biệt: ${specialPrize}, Tất cả: [${allPrizes.join(
+        ", "
+      )}]\n`;
 
       specialNumbers.push(specialPrize);
       allNumbers.push(...allPrizes);
@@ -313,12 +330,12 @@ const generateBasicStatisticalAnalysis = (
 
   // Calculate frequency statistics
   const numberFrequency: { [key: string]: number } = {};
-  allNumbers.forEach(num => {
+  allNumbers.forEach((num) => {
     numberFrequency[num] = (numberFrequency[num] || 0) + 1;
   });
 
   const sortedByFrequency = Object.entries(numberFrequency)
-    .sort(([,a], [,b]) => b - a)
+    .sort(([, a], [, b]) => b - a)
     .slice(0, 15);
 
   historicalSummary += `\nThống kê tần suất xuất hiện (top 15):\n`;
@@ -331,13 +348,15 @@ const generateBasicStatisticalAnalysis = (
   const recentNumbers = new Set(allNumbers.slice(-20)); // Last 20 numbers
   const coldNumbers = [];
   for (let i = 0; i <= 99; i++) {
-    const num = i.toString().padStart(2, '0');
+    const num = i.toString().padStart(2, "0");
     if (!recentNumbers.has(num)) {
       coldNumbers.push(num);
     }
   }
 
-  historicalSummary += `\nSố "lạnh" (chưa xuất hiện trong 20 số gần nhất): ${coldNumbers.slice(0, 10).join(', ')}\n`;
+  historicalSummary += `\nSố "lạnh" (chưa xuất hiện trong 20 số gần nhất): ${coldNumbers
+    .slice(0, 10)
+    .join(", ")}\n`;
 
   return historicalSummary;
 };
@@ -345,18 +364,21 @@ const generateBasicStatisticalAnalysis = (
 /**
  * Searches for missing historical lottery results using AI
  */
-const searchMissingLotteryResults = async (missingDates: string[]): Promise<{ [date: string]: LotteryResult }> => {
+const searchMissingLotteryResults = async (
+  missingDates: string[]
+): Promise<{ [date: string]: LotteryResult }> => {
   const results: { [date: string]: LotteryResult } = {};
 
-  for (const dateKey of missingDates.slice(0, 5)) { // Limit to 5 searches to avoid rate limits
+  for (const dateKey of missingDates.slice(0, 5)) {
+    // Limit to 5 searches to avoid rate limits
     try {
-      const vietnamDate = new Date(dateKey + 'T12:00:00+07:00');
-      const dateString = vietnamDate.toLocaleDateString('vi-VN', {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        timeZone: 'Asia/Ho_Chi_Minh'
+      const vietnamDate = new Date(dateKey + "T12:00:00+07:00");
+      const dateString = vietnamDate.toLocaleDateString("vi-VN", {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        timeZone: "Asia/Ho_Chi_Minh",
       });
 
       const prompt = `
@@ -396,14 +418,14 @@ const searchMissingLotteryResults = async (missingDates: string[]): Promise<{ [d
         if (result && result.specialPrize && result.allPrizes.length > 0) {
           results[dateKey] = {
             specialPrize: result.specialPrize,
-            allPrizes: result.allPrizes
+            allPrizes: result.allPrizes,
           };
           console.log(`Found missing lottery result for ${dateKey}`);
         }
       }
 
       // Add delay to avoid rate limiting
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
     } catch (error) {
       console.error(`Error searching lottery result for ${dateKey}:`, error);
     }
@@ -417,7 +439,20 @@ const searchMissingLotteryResults = async (missingDates: string[]): Promise<{ [d
  */
 const fetchHistoricalLotteryData = async (): Promise<string> => {
   try {
-    let historicalData: HistoricalData = {}; if (typeof window === 'undefined') { try { const { getAllHistoricalData: getServerData } = await import('@/utils/server-file-storage'); historicalData = await getServerData(); } catch (error) { console.error('Failed to load server-file-storage:', error); historicalData = {}; } } else { historicalData = await getAllHistoricalData(); }
+    let historicalData: HistoricalData = {};
+    if (typeof window === "undefined") {
+      try {
+        const { getAllHistoricalData: getServerData } = await import(
+          "@/utils/server-file-storage"
+        );
+        historicalData = await getServerData();
+      } catch (error) {
+        console.error("Failed to load server-file-storage:", error);
+        historicalData = {};
+      }
+    } else {
+      historicalData = await getAllHistoricalData();
+    }
     const entries = Object.entries(historicalData);
 
     // Get the last 14 days of data that have lottery results
@@ -427,7 +462,9 @@ const fetchHistoricalLotteryData = async (): Promise<string> => {
 
     // If we don't have enough data, try to search for missing results
     if (recentEntries.length < 10) {
-      console.log(`Only ${recentEntries.length} days of data available, searching for missing results...`);
+      console.log(
+        `Only ${recentEntries.length} days of data available, searching for missing results...`
+      );
 
       // Generate list of dates we should have data for
       const today = new Date();
@@ -435,16 +472,20 @@ const fetchHistoricalLotteryData = async (): Promise<string> => {
       for (let i = 1; i <= 14; i++) {
         const date = new Date(today);
         date.setDate(date.getDate() - i);
-        const dateKey = date.toISOString().split('T')[0];
+        const dateKey = date.toISOString().split("T")[0];
         targetDates.push(dateKey);
       }
 
       // Find missing dates
       const existingDates = new Set(entries.map(([dateKey]) => dateKey));
-      const missingDates = targetDates.filter(date => !existingDates.has(date));
+      const missingDates = targetDates.filter(
+        (date) => !existingDates.has(date)
+      );
 
       if (missingDates.length > 0) {
-        console.log(`Searching for ${missingDates.length} missing lottery results...`);
+        console.log(
+          `Searching for ${missingDates.length} missing lottery results...`
+        );
         const foundResults = await searchMissingLotteryResults(missingDates);
 
         // Add found results to our analysis (but don't save to DB here)
@@ -452,13 +493,18 @@ const fetchHistoricalLotteryData = async (): Promise<string> => {
           const mockAnalysis: StoredAnalysis = {
             analysis: {
               summary: "Dữ liệu được tìm kiếm tự động",
-              bestNumber: { number: "00", type: "", probability: "", reasoning: "" },
+              bestNumber: {
+                number: "00",
+                type: "",
+                probability: "",
+                reasoning: "",
+              },
               luckyNumbers: [],
               topNumbers: [],
-              events: []
+              events: [],
             },
             groundingChunks: [],
-            lotteryResult
+            lotteryResult,
           };
           recentEntries.push([dateKey, mockAnalysis]);
         });
@@ -480,7 +526,7 @@ const fetchHistoricalLotteryData = async (): Promise<string> => {
 
     return aiAnalysis;
   } catch (error) {
-    console.error('Error fetching historical data:', error);
+    console.error("Error fetching historical data:", error);
     return "Lỗi khi lấy dữ liệu lịch sử.";
   }
 };
@@ -489,24 +535,37 @@ export const fetchCurrentDayLotteryResult =
   async (): Promise<LotteryResult | null> => {
     try {
       const todayString = getVietnamDateStringForPrompt();
-      console.log(`Fetching current day's lottery results for ${todayString}...`);
+      console.log(
+        `Fetching current day's lottery results for ${todayString}...`
+      );
 
       // Convert DD/MM/YYYY to YYYY-MM-DD format for API
-      const [day, month, year] = todayString.split('/');
-      const apiDateFormat = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+      const [day, month, year] = todayString.split("/");
+      const apiDateFormat = `${year}-${month.padStart(2, "0")}-${day.padStart(
+        2,
+        "0"
+      )}`;
 
       // First try to fetch from XSMB API directly (server-side only)
-      if (typeof window === 'undefined') {
+      if (typeof window === "undefined") {
         try {
-          const { fetchLotteryResultForDate } = await import('@/utils/xsmb-server');
+          const { fetchLotteryResultForDate } = await import(
+            "@/utils/xsmb-server"
+          );
           const result = await fetchLotteryResultForDate(apiDateFormat);
-          
+
           if (result) {
-            console.log("Successfully fetched lottery results from XSMB API (direct):", result);
+            console.log(
+              "Successfully fetched lottery results from XSMB API (direct):",
+              result
+            );
             return result;
           }
         } catch (xsmbError) {
-          console.warn("Direct XSMB API failed, falling back to Gemini search:", xsmbError);
+          console.warn(
+            "Direct XSMB API failed, falling back to Gemini search:",
+            xsmbError
+          );
         }
       }
 
@@ -572,7 +631,9 @@ export const fetchCurrentDayLotteryResult =
         Array.isArray(result.allPrizes) &&
         result.allPrizes.length > 0
       ) {
-        console.log("Successfully fetched and parsed lottery results from Gemini.");
+        console.log(
+          "Successfully fetched and parsed lottery results from Gemini."
+        );
         return result as LotteryResult;
       } else {
         if (result && result.specialPrize === null) {
@@ -594,4 +655,3 @@ export const fetchCurrentDayLotteryResult =
       throw error;
     }
   };
-
