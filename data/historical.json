@@ -104,5 +104,104 @@
       "source": "Mock API - Force Check"
     }
   },
-  "2025-08-20": {}
+  "2025-08-20": {
+    "analysis": {
+      "summary": "Hôm nay, Việt Nam ghi nhận các sự kiện nổi bật như tình hình dịch bệnh COVID-19 với số ca mắc mới, biến động giá vàng SJC tăng mạnh, tiến độ các dự án hạ tầng quan trọng như đường sắt đô thị, và các hoạt động kỷ niệm, lễ hội lớn được tổ chức trên cả nước.",
+      "bestNumber": {
+        "number": "00",
+        "type": "Số Đề May Mắn Nhất",
+        "probability": "Cao",
+        "reasoning": "Số 00 xuất hiện 2 lần trong các tin tức nổi bật hôm nay, đặc biệt liên quan đến các sự kiện có số liệu thống kê như số ca COVID-19 và số đơn vị máu hiến tặng, cho thấy mức độ nổi bật cao. Trong phân tích thống kê AI từ 14 ngày dữ liệu xổ số (06/08/2025 - 19/08/2025), số 00 chỉ xuất hiện duy nhất 1 lần vào ngày 06/08/2025. Quan trọng hơn, số 00 không phải là hai chữ số cuối của giải đặc biệt ngày hôm qua (19/08/2025 là 50) và cũng không xuất hiện trong các giải lô gần đây, phù hợp với tiêu chí tránh số đã ra thường xuyên. Đây là một số 'lạnh' có tín hiệu mạnh từ tin tức, cho thấy tiềm năng cao để xuất hiện trở lại."
+      },
+      "luckyNumbers": [
+        {
+          "number": "35",
+          "type": "Số Lô Tiềm Năng",
+          "probability": "Cao",
+          "reasoning": "Số 35 xuất hiện trong tin tức về nhiệt độ cao tại Hà Nội. Dựa trên phân tích thống kê AI 14 ngày, số 35 đã xuất hiện 3 lần (vào các ngày 09/08, 11/08, 13/08/2025) nhưng đã vắng mặt trong 6 ngày gần nhất. Điều này cho thấy 35 đang trong xu hướng 'lạnh' sau một chu kỳ xuất hiện, và có tiềm năng 'nóng' trở lại theo quy luật chu kỳ. Tần suất xuất hiện trong tin tức hôm nay cũng củng cố khả năng này."
+        },
+        {
+          "number": "25",
+          "type": "Số Lô Tiềm Năng",
+          "probability": "Cao",
+          "reasoning": "Số 25 nổi bật trong tin tức về số ca mắc COVID-19 mới và thời gian rút ngắn di chuyển của cầu vượt mới, cho thấy sự liên quan đến các sự kiện quan trọng. Trong dữ liệu xổ số 14 ngày qua, số 25 chưa từng xuất hiện, khiến nó trở thành một số 'rất lạnh'. Tuy nhiên, sự xuất hiện mạnh mẽ trong các sự kiện quan trọng hôm nay có thể là tín hiệu cho thấy nó đang có xu hướng 'lạnh' chuyển 'nóng', tăng xác suất xuất hiện trong các giải lô."
+        },
+        {
+          "number": "15",
+          "type": "Số Lô Tiềm Năng",
+          "probability": "Cao",
+          "reasoning": "Số 15 xuất hiện trong tin tức về giá vàng tăng và số đối tượng bị bắt trong vụ buôn lậu ma túy. Trong phân tích thống kê AI 14 ngày, số 15 chỉ xuất hiện 1 lần vào ngày 08/08/2025. Đây là một số 'lạnh' có tín hiệu từ tin tức, cho thấy tiềm năng xuất hiện trong các giải lô. Sự vắng mặt trong phần lớn các ngày gần đây cũng làm tăng khả năng xuất hiện trở lại."
+        }
+      ],
+      "topNumbers": [
+        {
+          "number": "00",
+          "count": 2,
+          "reason": "Xuất hiện trong tin tức về số ca COVID-19 và số đơn vị máu hiến tặng."
+        },
+        {
+          "number": "02",
+          "count": 2,
+          "reason": "Xuất hiện trong tin tức về Quốc khánh 2/9 và số người tử vong trong tai nạn giao thông."
+        },
+        {
+          "number": "50",
+          "count": 2,
+          "reason": "Xuất hiện trong tin tức về số ca COVID-19 và số đơn vị máu hiến tặng."
+        },
+        {
+          "number": "25",
+          "count": 1,
+          "reason": "Nổi bật trong tin tức về số ca mắc COVID-19 mới và thời gian rút ngắn di chuyển của cầu vượt."
+        }
+      ],
+      "events": [
+        {
+          "title": "Tình hình COVID-19 và Hiến máu",
+          "description": "Việt Nam ghi nhận 25 ca mắc COVID-19 mới, tổng số 12.500 ca. Hàng trăm người dân tham gia hiến máu tình nguyện, thu được 500 đơn vị máu."
+        },
+        {
+          "title": "Giá vàng SJC tăng mạnh",
+          "description": "Giá vàng SJC hôm nay tăng mạnh, đạt mức 75 triệu đồng/lượng, tăng 1.5 triệu so với hôm qua."
+        },
+        {
+          "title": "Tiến độ dự án đường sắt đô thị",
+          "description": "Dự án đường sắt đô thị số 3 đạt 80% tiến độ, dự kiến hoàn thành vào năm 2026."
+        },
+        {
+          "title": "Kỷ niệm Cách mạng tháng Tám và Quốc khánh 2/9",
+          "description": "Lễ kỷ niệm 78 năm Cách mạng tháng Tám và Quốc khánh 2/9 được tổ chức trọng thể."
+        },
+        {
+          "title": "Bóng đá U23 Việt Nam vào chung kết",
+          "description": "Đội tuyển bóng đá U23 Việt Nam giành chiến thắng 2-1 trước Thái Lan, tiến vào chung kết."
+        },
+        {
+          "title": "Tai nạn giao thông nghiêm trọng",
+          "description": "Vụ tai nạn giao thông nghiêm trọng trên QL1A, khiến 2 người tử vong và 5 người bị thương."
+        },
+        {
+          "title": "Xuất khẩu nông sản",
+          "description": "Xuất khẩu nông sản đạt 40 tỷ USD trong 7 tháng đầu năm."
+        },
+        {
+          "title": "Chính phủ ban hành Nghị định 10",
+          "description": "Chính phủ ban hành Nghị định 10 về quản lý đất đai."
+        },
+        {
+          "title": "Nhiệt độ Hà Nội",
+          "description": "Nhiệt độ tại Hà Nội hôm nay đạt 35 độ C."
+        },
+        {
+          "title": "Kỷ niệm ngành du lịch",
+          "description": "Kỷ niệm 49 năm thành lập ngành du lịch."
+        },
+        {
+          "title": "Lễ hội hoa đăng",
+          "description": "Lễ hội hoa đăng thu hút 68 nghìn lượt khách."
+        }
+      ]
+    },
+    "groundingChunks": []
+  }
 }
