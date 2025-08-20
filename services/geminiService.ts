@@ -361,78 +361,6 @@ const generateBasicStatisticalAnalysis = (
   return historicalSummary;
 };
 
-/**
- * Searches for missing historical lottery results using AI
- */
-const searchMissingLotteryResults = async (
-  missingDates: string[]
-): Promise<{ [date: string]: LotteryResult }> => {
-  const results: { [date: string]: LotteryResult } = {};
-
-  for (const dateKey of missingDates.slice(0, 5)) {
-    // Limit to 5 searches to avoid rate limits
-    try {
-      const vietnamDate = new Date(dateKey + "T12:00:00+07:00");
-      const dateString = vietnamDate.toLocaleDateString("vi-VN", {
-        weekday: "long",
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-        timeZone: "Asia/Ho_Chi_Minh",
-      });
-
-      const prompt = `
-      Sử dụng Google Search, tìm kết quả "Xổ số kiến thiết Miền Bắc" (KQXSMB) cho ngày ${dateString} (${dateKey}).
-
-      Nhiệm vụ: Trích xuất hai chữ số cuối của TẤT CẢ các giải xổ số.
-
-      Nếu tìm thấy kết quả, trả về JSON với format:
-      {
-        "specialPrize": "XX",
-        "allPrizes": ["XX", "YY", "ZZ", ...]
-      }
-
-      Nếu không tìm thấy, trả về:
-      {
-        "specialPrize": null,
-        "allPrizes": []
-      }
-      `;
-
-      const ai = getGeminiAI();
-      const response = await ai.models.generateContent({
-        model: "gemini-2.5-flash",
-        contents: prompt,
-        config: {
-          tools: [{ googleSearch: {} }],
-          temperature: 0.0,
-        },
-      });
-
-      if (response.text) {
-        const result = parseJsonResponse<{
-          specialPrize: string | null;
-          allPrizes: string[];
-        }>(response.text);
-
-        if (result && result.specialPrize && result.allPrizes.length > 0) {
-          results[dateKey] = {
-            specialPrize: result.specialPrize,
-            allPrizes: result.allPrizes,
-          };
-          console.log(`Found missing lottery result for ${dateKey}`);
-        }
-      }
-
-      // Add delay to avoid rate limiting
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-    } catch (error) {
-      console.error(`Error searching lottery result for ${dateKey}:`, error);
-    }
-  }
-
-  return results;
-};
 
 /**
  * Fetches and analyzes historical lottery data for the past 14 days using AI for enhanced statistical analysis
@@ -442,9 +370,7 @@ const fetchHistoricalLotteryData = async (): Promise<string> => {
     let historicalData: HistoricalData = {};
     if (typeof window === "undefined") {
       try {
-        const { getAllHistoricalData: getServerData } = await import(
-          "@/utils/server-file-storage"
-        );
+        const { getAllHistoricalData: getServerData } = await import("@/utils/server-file-storage");
         historicalData = await getServerData();
       } catch (error) {
         console.error("Failed to load server-file-storage:", error);
@@ -456,17 +382,11 @@ const fetchHistoricalLotteryData = async (): Promise<string> => {
     const entries = Object.entries(historicalData);
 
     // Get the last 14 days of data that have lottery results
-    let recentEntries = entries
-      .filter(([_, data]) => data.lotteryResult)
-      .slice(0, 14);
+    let recentEntries = entries.filter(([_, data]) => data.lotteryResult).slice(0, 14);
 
     // If we don't have enough data, try to search for missing results
     if (recentEntries.length < 10) {
-      console.log(
-        `Only ${recentEntries.length} days of data available, searching for missing results...`
-      );
-
-      // Generate list of dates we should have data for
+      console.log(`Only ${recentEntries.length} days of data available, searching for missing results...`);
       try {
         // Lấy 14 ngày gần nhất
         const today = new Date();
@@ -477,9 +397,8 @@ const fetchHistoricalLotteryData = async (): Promise<string> => {
           const dateKey = date.toISOString().split('T')[0];
           targetDates.push(dateKey);
         }
-
         // Dùng fetchXSMBRangeDirectly để lấy dữ liệu XSMB chuẩn
-      let xsmbResults: any[] = [];
+        let xsmbResults: any[] = [];
         if (typeof window === 'undefined') {
           try {
             const { fetchXSMBRangeDirectly } = await import('@/utils/xsmb-server');
@@ -491,11 +410,9 @@ const fetchHistoricalLotteryData = async (): Promise<string> => {
             console.error('Failed to fetch XSMB range:', error);
           }
         }
-
         // Chuyển đổi dữ liệu XSMB sang dạng recentEntries cho AI
-        const recentEntries: [string, StoredAnalysis][] = xsmbResults.map((item: any) => {
+        const xsmbRecentEntries: [string, StoredAnalysis][] = xsmbResults.map((item: any) => {
           const dateKey = item.date;
-          // Xử lý kiểu unknown khi dùng flat
           const allPrizeNumbers = Object.values(item.prizes).flat().filter((num): num is string => typeof num === 'string').map((num: string) => num.slice(-2));
           const lotteryResult = {
             specialPrize: item.prizes['ĐB'] ? item.prizes['ĐB'][0].slice(-2) : '',
@@ -513,59 +430,47 @@ const fetchHistoricalLotteryData = async (): Promise<string> => {
             lotteryResult
           }];
         });
-
-        if (recentEntries.length === 0) {
+        if (xsmbRecentEntries.length === 0) {
           return "Không có kết quả xổ số lịch sử để phân tích.";
         }
-
-        console.log(`Analyzing ${recentEntries.length} days of lottery data...`);
-
+        console.log(`Analyzing ${xsmbRecentEntries.length} days of lottery data...`);
         // Generate AI-enhanced statistical analysis
-        const aiAnalysis = await generateAIStatisticalAnalysis(recentEntries);
-
+        const aiAnalysis = await generateAIStatisticalAnalysis(xsmbRecentEntries);
         return aiAnalysis ?? "Không có phân tích AI.";
       } catch (error) {
         console.error('Error fetching historical data:', error);
         return "Lỗi khi lấy dữ liệu lịch sử.";
       }
-      const todayString = getVietnamDateStringForPrompt();
-      console.log(
-        `Fetching current day's lottery results for ${todayString}...`
-      );
+    }
 
-      // Convert DD/MM/YYYY to YYYY-MM-DD format for API
-      const [day, month, year] = todayString.split("/");
-      const apiDateFormat = `${year}-${month.padStart(2, "0")}-${day.padStart(
-        2,
-        "0"
-      )}`;
+    // If we have enough recentEntries, generate AI analysis
+    if (recentEntries.length > 0) {
+      const aiAnalysis = await generateAIStatisticalAnalysis(recentEntries);
+      return aiAnalysis ?? "Không có phân tích AI.";
+    }
 
-      // First try to fetch from XSMB API directly (server-side only)
-      if (typeof window === "undefined") {
-        try {
-          const { fetchLotteryResultForDate } = await import(
-            "@/utils/xsmb-server"
-          );
-          const result = await fetchLotteryResultForDate(apiDateFormat);
-
-          if (result) {
-            console.log(
-              "Successfully fetched lottery results from XSMB API (direct):",
-              result
-            );
-            return result;
-          }
-        } catch (xsmbError) {
-          console.warn(
-            "Direct XSMB API failed, falling back to Gemini search:",
-            xsmbError
-          );
+    // If no historical data, try to fetch current day's lottery result
+    const todayString = getVietnamDateStringForPrompt();
+    console.log(`Fetching current day's lottery results for ${todayString}...`);
+    // Convert DD/MM/YYYY to YYYY-MM-DD format for API
+    const [day, month, year] = todayString.split("/");
+    const apiDateFormat = `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
+    // First try to fetch from XSMB API directly (server-side only)
+    if (typeof window === "undefined") {
+      try {
+        const { fetchLotteryResultForDate } = await import("@/utils/xsmb-server");
+        const result = await fetchLotteryResultForDate(apiDateFormat);
+        if (result) {
+          console.log("Successfully fetched lottery results from XSMB API (direct):", result);
+          return JSON.stringify(result);
         }
+      } catch (xsmbError) {
+        console.warn("Direct XSMB API failed, falling back to Gemini search:", xsmbError);
       }
-
-      // Fallback to Gemini Google Search if XSMB API fails
-      const model = "gemini-2.5-flash";
-      const prompt = `
+    }
+    // Fallback to Gemini Google Search if XSMB API fails
+    const model = "gemini-2.5-flash";
+    const prompt = `
       Sử dụng Google Search, tìm kết quả "Xổ số kiến thiết Miền Bắc" (KQXSMB) cho ngày ${todayString}.
       Nhiệm vụ của bạn là trích xuất hai chữ số cuối của TẤT CẢ các giải. Đặc biệt, tìm hai chữ số cuối của giải Đặc Biệt.
 
@@ -588,65 +493,38 @@ const fetchHistoricalLotteryData = async (): Promise<string> => {
         "allPrizes": []
       }
     `;
-
-      console.log("Falling back to Gemini Google Search...");
-      const ai = getGeminiAI();
-      const generateContentPromise = ai.models.generateContent({
-        model: model,
-        contents: prompt,
-        config: {
-          tools: [{ googleSearch: {} }],
-          temperature: 0.0,
-        },
-      });
-
-      const response = (await promiseWithTimeout(
-        generateContentPromise,
-        60000, // 60-second timeout
-        new Error(`Yêu cầu lấy kết quả xổ số đã hết thời gian chờ.`)
-      )) as any;
-
-      if (!response.text) {
-        throw new Error(
-          "Không nhận được phản hồi từ Gemini khi lấy kết quả xổ số."
-        );
-      }
-
-      const result = parseJsonResponse<{
-        specialPrize: string | null;
-        allPrizes: string[];
-      }>(response.text);
-
-      // Stricter validation
-      if (
-        if (
-          result != null &&
-          typeof result.specialPrize === "string" &&
-          result.specialPrize !== null &&
-          result.specialPrize.length === 2 &&
-          Array.isArray(result.allPrizes) &&
-          result.allPrizes.length > 0
-        ) {
-          console.log("Successfully fetched and parsed lottery results from Gemini.");
-          return result as unknown as string; // fix type error, should be handled by caller
-        } else {
-          if (result != null && result.specialPrize === null) {
-            console.warn(
-              `Model indicated that lottery results for ${todayString} are not yet available.`
-            );
-            throw new Error(
-              "Kết quả xổ số hôm nay chưa có hoặc không thể tìm thấy. Vui lòng thử lại sau ít phút."
-            );
-          }
-          console.error(
-            "Failed to parse lottery result from model response",
-            response.text
-          );
-          throw new Error("Mô hình trả về dữ liệu kết quả xổ số không hợp lệ.");
-        }
-      }
-    } catch (error) {
-      console.error("Failed to fetch lottery result:", error);
-      throw error;
+    console.log("Falling back to Gemini Google Search...");
+    const ai = getGeminiAI();
+    const generateContentPromise = ai.models.generateContent({
+      model: model,
+      contents: prompt,
+      config: {
+        tools: [{ googleSearch: {} }],
+        temperature: 0.0,
+      },
+    });
+    const response = (await promiseWithTimeout(
+      generateContentPromise,
+      60000, // 60-second timeout
+      new Error(`Yêu cầu lấy kết quả xổ số đã hết thời gian chờ.`)
+    )) as any;
+    if (!response.text) {
+      throw new Error("Không nhận được phản hồi từ Gemini khi lấy kết quả xổ số.");
     }
-  };
+    const result = parseJsonResponse<{ specialPrize: string | null; allPrizes: string[] }>(response.text);
+    // Strict null checks and validation
+    if (result && typeof result.specialPrize === "string" && result.specialPrize !== null && result.specialPrize.length === 2 && Array.isArray(result.allPrizes) && result.allPrizes.length > 0) {
+      console.log("Successfully fetched and parsed lottery results from Gemini.");
+      return JSON.stringify(result);
+    } else if (result && result.specialPrize === null) {
+      console.warn(`Model indicated that lottery results for ${todayString} are not yet available.`);
+      throw new Error("Kết quả xổ số hôm nay chưa có hoặc không thể tìm thấy. Vui lòng thử lại sau ít phút.");
+    } else {
+      console.error("Failed to parse lottery result from model response", response.text);
+      throw new Error("Mô hình trả về dữ liệu kết quả xổ số không hợp lệ.");
+    }
+  } catch (error) {
+    console.error("Failed to fetch lottery result:", error);
+    throw error;
+  }
+};
