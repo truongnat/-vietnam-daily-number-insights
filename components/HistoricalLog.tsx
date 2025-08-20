@@ -37,7 +37,7 @@ export const HistoricalLog: React.FC = () => {
     }
 
     return (
-        <div className="w-full max-w-4xl animate-fade-in text-center">
+        <div className="w-full animate-fade-in text-center">
             <h2 className="text-2xl font-semibold mb-2 text-teal-300">Nhật Ký Phân Tích</h2>
             <p className="text-gray-400 mb-8">
                 Xem lại kết quả phân tích và độ chính xác của các gợi ý trong quá khứ.
