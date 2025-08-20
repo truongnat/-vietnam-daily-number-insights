@@ -12,6 +12,7 @@ export const TimeBasedDisplay: React.FC = () => {
   const [lotteryResult, setLotteryResult] = useState<LotteryResult | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [currentVietnamTime, setCurrentVietnamTime] = useState<Date>(new Date());
+    const [isSaved, setIsSaved] = useState(false);
 
   const getVietnamTime = () => {
     const now = new Date();
@@ -26,6 +27,12 @@ export const TimeBasedDisplay: React.FC = () => {
   };
 
   const fetchTodaysData = async () => {
+  const handleSaveLocal = () => {
+    if (analysisData) {
+      localStorage.setItem('analysis_' + getDateKey(new Date()), JSON.stringify(analysisData));
+      setIsSaved(true);
+    }
+  };
     try {
       setIsLoading(true);
       const dateKey = getDateKey(new Date());
