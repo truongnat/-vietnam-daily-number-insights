@@ -103,5 +103,65 @@
       "date": "2025-08-19",
       "source": "Mock API - Force Check"
     }
+  },
+  "2025-08-20": {
+    "analysis": {
+      "summary": "Hôm nay, các tin tức nổi bật tại Việt Nam tập trung vào mục tiêu tăng trưởng kinh tế 6.5% trong năm 2025, chuẩn bị cho Hội nghị thượng đỉnh ASEAN lần thứ 47, khánh thành cầu vượt biển mới, biến động giá vàng và dầu, công tác chuẩn bị của đội tuyển bóng đá quốc gia cho World Cup, tình hình sốt xuất huyết và các hoạt động kỷ niệm 80 năm Cách mạng tháng Tám.",
+      "bestNumber": {
+        "number": "47",
+        "type": "Số Đề May Mắn Nhất",
+        "probability": "Cao",
+        "reasoning": "Số 47 nổi bật nhất trong tin tức hôm nay với tần suất xuất hiện 2 lần, liên quan đến sự kiện quan trọng là Hội nghị thượng đỉnh ASEAN lần thứ 47 và 47 lãnh đạo cấp cao dự kiến tham dự. Dựa trên phân tích thống kê AI từ dữ liệu 2 ngày gần nhất (18/08 và 19/08), số 47 không xuất hiện, điều này giúp nó tránh được xu hướng các số đã ra gần đây, đặc biệt là số 77 (giải đặc biệt ngày 19/08). Việc không xuất hiện trong lịch sử gần đây nhưng có tín hiệu mạnh từ tin tức thời sự hiện tại tạo ra một mẫu hình tiềm năng cho sự xuất hiện trở lại. Mức độ quan trọng của sự kiện liên quan (Hội nghị quốc tế cấp cao) cũng làm tăng tính nổi bật của con số này."
+      },
+      "luckyNumbers": [
+        {
+          "number": "31",
+          "type": "Số Lô Tiềm Năng",
+          "probability": "Cao",
+          "reasoning": "Dựa trên phân tích thống kê AI từ dữ liệu 2 ngày gần nhất, số 31 đã xuất hiện 2 lần trong ngày 18/08 nhưng lại không xuất hiện trong ngày 19/08. Điều này cho thấy nó có xu hướng 'nóng' trong một kỳ quay nhưng sau đó lại 'lạnh' đi tạm thời. Xu hướng 'lạnh' chuyển 'nóng' này cùng với việc từng xuất hiện kép trong một ngày là một mẫu hình mạnh mẽ, cho thấy khả năng cao nó sẽ quay trở lại trong kỳ quay hôm nay. Số 31 cũng khác biệt với số đề may mắn nhất (47)."
+        }
+      ],
+      "topNumbers": [
+        {
+          "number": "47",
+          "count": 2,
+          "reason": "Hội nghị thượng đỉnh ASEAN lần thứ 47, 47 lãnh đạo cấp cao."
+        },
+        {
+          "number": "08",
+          "count": 2,
+          "reason": "Giá vàng tăng 0.8 triệu, giá dầu thô tăng 0.8%."
+        },
+        {
+          "number": "12",
+          "count": 2,
+          "reason": "Số ca sốt xuất huyết giảm 12%, 12 tỉnh thành ghi nhận giảm."
+        },
+        {
+          "number": "63",
+          "count": 1,
+          "reason": "Nhiều hoạt động văn hóa nghệ thuật diễn ra tại 63 tỉnh thành."
+        }
+      ],
+      "events": [
+        {
+          "title": "Việt Nam đặt mục tiêu tăng trưởng GDP 6.5%",
+          "description": "Việt Nam đặt mục tiêu tăng trưởng GDP 6.5% trong năm 2025 và thu hút 35 tỷ USD vốn FDI."
+        },
+        {
+          "title": "Hội nghị thượng đỉnh ASEAN lần thứ 47",
+          "description": "Hà Nội đăng cai Hội nghị thượng đỉnh ASEAN lần thứ 47 với sự tham gia của 10 quốc gia thành viên và 47 lãnh đạo cấp cao."
+        },
+        {
+          "title": "Khánh thành cầu vượt biển mới",
+          "description": "Khánh thành cầu vượt biển dài 15 km, tổng vốn đầu tư 3.2 nghìn tỷ đồng, rút ngắn thời gian di chuyển 20 phút."
+        },
+        {
+          "title": "Kỷ niệm 80 năm Cách mạng tháng Tám và Quốc khánh 2/9",
+          "description": "Nhiều hoạt động văn hóa nghệ thuật diễn ra trên 63 tỉnh thành kỷ niệm 80 năm Cách mạng tháng Tám và Quốc khánh 2/9."
+        }
+      ]
+    },
+    "groundingChunks": []
   }
 }
