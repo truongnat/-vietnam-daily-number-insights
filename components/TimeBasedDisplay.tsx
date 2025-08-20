@@ -30,30 +30,40 @@ export const TimeBasedDisplay: React.FC = () => {
     setIsLoading(true);
     const dateKey = getDateKey(new Date());
     try {
-      // 1. Gọi API phân tích (GET)
-      await fetch('/api/cron/daily-analysis');
-
-      // 2. Poll liên tục lấy dữ liệu phân tích
+      // 1. Kiểm tra đã có dữ liệu phân tích chưa
       let analysis = null;
-      const maxAttempts = 15; // ~30s nếu mỗi lần 2s
-      let attempts = 0;
-      while (!analysis && attempts < maxAttempts) {
-        attempts++;
-        try {
-          const analysisResponse = await fetch(`/api/storage/analysis/${dateKey}`);
-          if (analysisResponse.ok) {
-            analysis = await analysisResponse.json();
-            setAnalysisData(analysis);
-            break;
-          }
-        } catch (err) {
-          // ignore
+      try {
+        const analysisResponse = await fetch(`/api/storage/analysis/${dateKey}`);
+        if (analysisResponse.ok) {
+          analysis = await analysisResponse.json();
+          setAnalysisData(analysis);
         }
-        await new Promise(res => setTimeout(res, 2000));
+      } catch (err) {
+        // ignore
       }
 
+      // 2. Nếu chưa có thì mới gọi API phân tích và poll lấy kết quả
       if (!analysis) {
-        console.log('Không lấy được dữ liệu phân tích sau khi chạy!');
+        await fetch('/api/cron/daily-analysis');
+        const maxAttempts = 15; // ~30s nếu mỗi lần 2s
+        let attempts = 0;
+        while (!analysis && attempts < maxAttempts) {
+          attempts++;
+          try {
+            const analysisResponse = await fetch(`/api/storage/analysis/${dateKey}`);
+            if (analysisResponse.ok) {
+              analysis = await analysisResponse.json();
+              setAnalysisData(analysis);
+              break;
+            }
+          } catch (err) {
+            // ignore
+          }
+          await new Promise(res => setTimeout(res, 2000));
+        }
+        if (!analysis) {
+          console.log('Không lấy được dữ liệu phân tích sau khi chạy!');
+        }
       }
 
       // 3. Lấy kết quả xổ số nếu sau 19:00
