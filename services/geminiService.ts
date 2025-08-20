@@ -619,29 +619,27 @@ const fetchHistoricalLotteryData = async (): Promise<string> => {
 
       // Stricter validation
       if (
+        if (!result) {
+          console.error("Failed to parse lottery result from model response", response.text);
+          throw new Error("Mô hình trả về dữ liệu kết quả xổ số không hợp lệ.");
+        }
         if (
-          result != null &&
           typeof result.specialPrize === "string" &&
-          result.specialPrize !== null &&
-          result.specialPrize && (result.specialPrize as string).length === 2 &&
+          (result.specialPrize as string).length === 2 &&
           Array.isArray(result.allPrizes) &&
           result.allPrizes.length > 0
         ) {
           console.log("Successfully fetched and parsed lottery results from Gemini.");
           return JSON.stringify(result);
-        } else {
-          if (result != null && result.specialPrize === null) {
-            console.warn(
-              `Model indicated that lottery results for ${todayString} are not yet available.`
-            );
-            throw new Error(
-              "Kết quả xổ số hôm nay chưa có hoặc không thể tìm thấy. Vui lòng thử lại sau ít phút."
-            );
-          }
-          console.error(
-            "Failed to parse lottery result from model response",
-            response.text
+        } else if (result.specialPrize === null) {
+          console.warn(
+            `Model indicated that lottery results for ${todayString} are not yet available.`
           );
+          throw new Error(
+            "Kết quả xổ số hôm nay chưa có hoặc không thể tìm thấy. Vui lòng thử lại sau ít phút."
+          );
+        } else {
+          console.error("Failed to parse lottery result from model response", response.text);
           throw new Error("Mô hình trả về dữ liệu kết quả xổ số không hợp lệ.");
         }
       }
