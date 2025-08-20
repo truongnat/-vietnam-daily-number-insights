@@ -8,6 +8,18 @@ import { LoadingSpinner } from '@/components/LoadingSpinner';
 // ...existing code...
 
 export const TimeBasedDisplay: React.FC = () => {
+  const handleRefresh = async () => {
+    setIsLoading(true);
+    const dateKey = getDateKey(new Date());
+    try {
+      // Xóa dữ liệu phân tích hiện tại
+      await fetch(`/api/storage/analysis/${dateKey}`, { method: 'DELETE' });
+    } catch (err) {
+      // ignore
+    }
+    // Phân tích lại và cập nhật UI
+    await fetchTodaysData();
+  };
   const [analysisData, setAnalysisData] = useState<StoredAnalysis | null>(null);
   const [lotteryResult, setLotteryResult] = useState<LotteryResult | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -145,6 +157,16 @@ export const TimeBasedDisplay: React.FC = () => {
           </div>
 
           <div className="space-y-4 sm:space-y-6">
+            {/* Button làm mới */}
+            <div className="flex justify-center mb-4">
+              <button
+                className="px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-white font-semibold rounded shadow transition-all duration-200"
+                onClick={handleRefresh}
+                disabled={isLoading}
+              >
+                Làm mới phân tích hôm nay
+              </button>
+            </div>
             {/* Analysis Summary */}
             <p className="text-gray-300 text-center text-sm sm:text-base leading-relaxed">
               {analysisData?.analysis?.summary}
