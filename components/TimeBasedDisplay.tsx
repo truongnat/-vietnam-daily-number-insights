@@ -117,7 +117,7 @@ export const TimeBasedDisplay: React.FC = () => {
         <div className="border border-gray-700 rounded-lg p-4 sm:p-6">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4 mb-4 sm:mb-6">
             <h3 className="text-lg sm:text-xl font-semibold text-white">
-              Phân Tích Hàng Ngày (12:00)
+              Phân Tích Hôm Nay
             </h3>
             <div className="px-3 py-1 rounded-full text-xs sm:text-sm font-medium bg-green-900/50 text-green-300 border border-green-500/50 w-fit">
               Đã hoàn thành
@@ -158,7 +158,7 @@ export const TimeBasedDisplay: React.FC = () => {
             Chưa có dữ liệu phân tích cho hôm nay.
           </p>
           <p className="text-gray-500 text-sm sm:text-base mt-2">
-            Dữ liệu sẽ xuất hiện sau khi cron job chạy vào 12:00.
+            Dữ liệu sẽ được phân tích tự động khi bạn vào màn hình này.
           </p>
           {/* ...existing code... */}
         </div>
