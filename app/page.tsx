@@ -33,10 +33,19 @@ export default function Page() {
         <div className="w-full">
           {renderContent()}
         </div>
-        
         {/* XSMB Results Section - Always visible below main content */}
         <div className="w-full mt-8 sm:mt-12 pt-6 sm:pt-8 border-t border-gray-700">
           <XSMBResults />
+        </div>
+        {/* LocalStorage Export/Import Section - always at the bottom of main */}
+        <div className="w-full mt-8 flex justify-center">
+          {/* Only show on client side */}
+          {typeof window !== 'undefined' && (
+            <div className="max-w-md w-full">
+              {/* Dynamically import to avoid SSR issues */}
+              {React.createElement(require('@/components/LocalStorageExportImport').default)}
+            </div>
+          )}
         </div>
       </main>
       <Footer groundingChunks={[]} />
