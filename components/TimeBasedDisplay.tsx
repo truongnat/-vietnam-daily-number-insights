@@ -31,7 +31,14 @@ export const TimeBasedDisplay: React.FC = () => {
       setIsLoading(true);
       const dateKey = getDateKey(new Date());
 
-      // Fetch analysis data
+      // 1. Gọi API phân tích trước
+      try {
+        await fetch('/api/cron/daily-analysis', { method: 'POST' });
+      } catch (analysisJobError) {
+        console.error('Error running analysis job:', analysisJobError);
+      }
+
+      // 2. Lấy dữ liệu phân tích
       try {
         const analysisResponse = await fetch(`/api/storage/analysis/${dateKey}`);
         if (analysisResponse.ok) {
@@ -44,7 +51,7 @@ export const TimeBasedDisplay: React.FC = () => {
         console.error('Error fetching analysis data:', analysisError);
       }
 
-      // Fetch lottery result if it's after 19:00
+      // 3. Lấy kết quả xổ số nếu sau 19:00
       try {
         const vietnamTime = getVietnamTime();
         if (vietnamTime.getHours() >= 19) {
