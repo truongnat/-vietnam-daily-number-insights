@@ -29,7 +29,7 @@ export const HistoricalLog: React.FC = () => {
 
     if (sortedKeys.length === 0) {
         return (
-            <div className="w-full max-w-4xl text-center mt-16 text-gray-500 bg-gray-800/50 p-8 rounded-lg">
+            <div className="w-full text-center mt-16 text-gray-500 bg-gray-800/50 p-8 rounded-lg">
                 <p className="text-lg">Không có dữ liệu lịch sử nào được tìm thấy.</p>
                 <p className="text-sm mt-2">Dữ liệu phân tích sẽ được lưu lại đây mỗi ngày để bạn có thể xem lại.</p>
             </div>
