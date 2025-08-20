@@ -3,7 +3,7 @@ mode: agent
 ---
 Phân tích kết quả xổ số miền Bắc hàng ngày
 
-1. Tự động phân tích dữ liệu xổ số theo ngày, hiển thị kết quả phân tích, số may mắn, số dự đoán tốt nhất.
+1. Tự động phân tích dữ liệu xổ số theo ngày, hiển thị kết quả phân tích, gợi ý ra 4 số may mắn/dự đoán tốt nhất.
 Tính năng phân tích được thực hiện khi người dùng truy cập, không phụ thuộc vào cronjob.
 Lưu trữ và hiển thị lịch sử phân tích
 
@@ -15,7 +15,8 @@ Kiểm tra kết quả xổ số
 Có thể kiểm tra theo ngày hoặc theo dãy số.
 Dashboard thống kê
 
-4. Hiển thị biểu đồ tần suất xuất hiện các số, số may mắn, số trúng thưởng.
+4. Gợi ý 4 số may mắn/dự đoán tốt nhất mỗi ngày.
+Hiển thị biểu đồ tần suất xuất hiện các số, số may mắn, số trúng thưởng.
 Cung cấp các card thống kê, biểu đồ trực quan.
 Lưu kết quả vào local
 
