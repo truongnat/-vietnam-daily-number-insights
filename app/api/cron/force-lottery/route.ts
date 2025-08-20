@@ -3,7 +3,6 @@ import { fetchCurrentDayLotteryResult } from '@/services/geminiService';
 import { saveLotteryResultForDate, getVietnamDateKey } from '@/utils/server-storage';
 import { setProcessingStatus } from '@/utils/processing-status';
 import { deleteLotteryResultForDate } from '@/utils/server-file-storage';
-import { fetchXSMBSingleDate, hasValidResults } from '@/utils/xsmb-api';
 import type { LotteryResult } from '@/types';
 
 // Background processing function for force lottery check

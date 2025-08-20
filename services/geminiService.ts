@@ -1,3 +1,26 @@
+import { fetchLotteryResultForDate } from '@/utils/xsmb-server';
+
+/**
+ * Fetches the current day's lottery result (ĐB + all prizes) using XSMB API
+ */
+export const fetchCurrentDayLotteryResult = async (): Promise<{ specialPrize: string; allPrizes: string[] } | null> => {
+  const now = new Date();
+  const vietnamTime = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Ho_Chi_Minh' }));
+  const year = vietnamTime.getFullYear();
+  const month = String(vietnamTime.getMonth() + 1).padStart(2, '0');
+  const day = String(vietnamTime.getDate()).padStart(2, '0');
+  const dateKey = `${year}-${month}-${day}`;
+  try {
+    const result = await fetchLotteryResultForDate(dateKey);
+    if (result && result.specialPrize && Array.isArray(result.allPrizes) && result.allPrizes.length > 0) {
+      return result;
+    }
+    return null;
+  } catch (error) {
+    console.error('Error fetching current day lottery result:', error);
+    return null;
+  }
+};
 import { GoogleGenAI } from "@google/genai";
 import type {
   AnalysisResult,
