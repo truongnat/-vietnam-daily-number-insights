@@ -45,12 +45,13 @@ const LocalStorageExportImport: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col gap-2 p-4 border rounded bg-white shadow">
+    <div className="flex flex-col gap-4 p-4 rounded-xl shadow-lg bg-gray-800 border border-gray-700 items-center w-full">
+      <div className="text-lg font-semibold text-white mb-2">Quản lý dữ liệu lịch sử</div>
       <button
-        className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+        className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors duration-150"
         onClick={handleExport}
       >
-        Xuất dữ liệu lịch sử (Export)
+        <span className="inline-block mr-2">📤</span> Xuất dữ liệu lịch sử
       </button>
       <input
         type="file"
@@ -60,11 +61,12 @@ const LocalStorageExportImport: React.FC = () => {
         onChange={handleImport}
       />
       <button
-        className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+        className="w-full px-4 py-2 bg-green-600 text-white rounded-lg font-medium hover:bg-green-700 transition-colors duration-150"
         onClick={() => fileInputRef.current?.click()}
       >
-        Nhập dữ liệu lịch sử (Import)
+        <span className="inline-block mr-2">📥</span> Nhập dữ liệu lịch sử
       </button>
+      <div className="text-xs text-gray-400 mt-2 text-center">Bạn có thể xuất file JSON để sao lưu hoặc nhập lại khi cần khôi phục dữ liệu.</div>
     </div>
   );
 };
