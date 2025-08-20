@@ -150,11 +150,11 @@ export const TimeBasedDisplay: React.FC = () => {
               {analysisData?.analysis?.summary}
             </p>
 
-            {/* Lucky Numbers */}
+            {/* Lucky Numbers: 1 số đề, 3 số lô */}
             {analysisData?.analysis?.bestNumber && analysisData?.analysis?.luckyNumbers && (
               <LuckyNumberCard
                 bestNumber={analysisData.analysis.bestNumber}
-                luckyNumbers={analysisData.analysis.luckyNumbers}
+                luckyNumbers={analysisData.analysis.luckyNumbers.slice(0, 3)}
               />
             )}
 
@@ -163,7 +163,7 @@ export const TimeBasedDisplay: React.FC = () => {
              analysisData?.analysis?.bestNumber && analysisData?.analysis?.luckyNumbers && (
               <LotteryResultDisplay
                 bestNumber={analysisData.analysis.bestNumber}
-                luckyNumbers={analysisData.analysis.luckyNumbers}
+                luckyNumbers={analysisData.analysis.luckyNumbers.slice(0, 3)}
                 lotteryResult={lotteryResult}
               />
             )}
