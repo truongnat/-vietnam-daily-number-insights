@@ -5,7 +5,7 @@ import type { StoredAnalysis, LotteryResult } from '@/types';
 import { LuckyNumberCard } from '@/components/LuckyNumberCard';
 import { LotteryResultDisplay } from '@/components/LotteryResultDisplay';
 import { LoadingSpinner } from '@/components/LoadingSpinner';
-import { ForceRunButton } from '@/components/ForceRunButton';
+// ...existing code...
 
 export const TimeBasedDisplay: React.FC = () => {
   const [analysisData, setAnalysisData] = useState<StoredAnalysis | null>(null);
@@ -110,8 +110,7 @@ export const TimeBasedDisplay: React.FC = () => {
         </p>
       </div>
 
-      {/* Force Run Button */}
-      <ForceRunButton onStatusUpdate={fetchTodaysData} />
+  {/* ...existing code... */}
 
       {/* Analysis Data - Show if available */}
       {hasData() && (
@@ -161,9 +160,7 @@ export const TimeBasedDisplay: React.FC = () => {
           <p className="text-gray-500 text-sm sm:text-base mt-2">
             Dữ liệu sẽ xuất hiện sau khi cron job chạy vào 12:00.
           </p>
-          <p className="text-gray-500 text-sm sm:text-base mt-1">
-            Hoặc sử dụng nút "Chạy Thủ Công" để tạo ngay.
-          </p>
+          {/* ...existing code... */}
         </div>
       )}
     </div>
