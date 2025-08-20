@@ -99,19 +99,19 @@ export const LuckyNumberCard: React.FC<LuckyNumberCardProps> = ({ bestNumber, lu
         1 số đề may mắn nhất và {luckyNumbers.length} số lô tiềm năng
       </p>
 
-      {/* Responsive grid layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
-        {/* Số đề may mắn nhất - takes full width on mobile, spans 2 columns on large screens */}
-        <div className="lg:col-span-2">
+      {/* Responsive grid layout - tối ưu cho mobile */}
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4 lg:gap-8">
+        {/* Số đề may mắn nhất - luôn ở vị trí đầu */}
+        <div className="col-span-1 lg:col-span-1">
           <BestNumberCard bestNumber={bestNumber} />
         </div>
 
-        {/* Số lô tiềm năng - stacked on mobile, single column on large screens */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4 sm:gap-6">
-          {luckyNumbers.map((ln, index) => (
-            <LuckyNumberSmallCard key={index} luckyNumber={ln} index={index} />
-          ))}
-        </div>
+        {/* 3 số lô tiềm năng */}
+        {luckyNumbers.map((ln, index) => (
+          <div className="col-span-1" key={index}>
+            <LuckyNumberSmallCard luckyNumber={ln} index={index} />
+          </div>
+        ))}
       </div>
     </div>
   );
