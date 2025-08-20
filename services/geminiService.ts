@@ -366,161 +366,29 @@ const generateBasicStatisticalAnalysis = (
  */
 const fetchHistoricalLotteryData = async (): Promise<string> => {
   try {
-    let historicalData: HistoricalData = {};
-    if (typeof window === "undefined") {
+    // Always use XSMB API for 14 days historical data (server-side only)
+    if (typeof window === 'undefined') {
+      const today = new Date();
+      const targetDates: string[] = [];
+      for (let i = 1; i <= 14; i++) {
+        const date = new Date(today);
+        date.setDate(date.getDate() - i);
+        const dateKey = date.toISOString().split('T')[0];
+        targetDates.push(dateKey);
+      }
       try {
-        const { getAllHistoricalData: getServerData } = await import("@/utils/server-file-storage");
-        historicalData = await getServerData();
+        const { fetchXSMBRangeDirectly } = await import('@/utils/xsmb-server');
+        const xsmbResponse = await fetchXSMBRangeDirectly(targetDates[targetDates.length - 1], targetDates[0]);
+        // Return raw JSON string for direct use in prompt
+        return JSON.stringify(xsmbResponse);
       } catch (error) {
-        console.error("Failed to load server-file-storage:", error);
-        historicalData = {};
+        console.error('Failed to fetch XSMB range:', error);
+        return "Không có kết quả xổ số lịch sử để phân tích.";
       }
     } else {
-      historicalData = await getAllHistoricalData();
-    }
-    const entries = Object.entries(historicalData);
-
-    // Get the last 14 days of data that have lottery results
-    let recentEntries = entries.filter(([_, data]) => data.lotteryResult).slice(0, 14);
-
-    // If we don't have enough data, try to search for missing results
-    if (recentEntries.length < 10) {
-      console.log(`Only ${recentEntries.length} days of data available, searching for missing results...`);
-      try {
-        // Lấy 14 ngày gần nhất
-        const today = new Date();
-        const targetDates: string[] = [];
-        for (let i = 1; i <= 14; i++) {
-          const date = new Date(today);
-          date.setDate(date.getDate() - i);
-          const dateKey = date.toISOString().split('T')[0];
-          targetDates.push(dateKey);
-        }
-        // Dùng fetchXSMBRangeDirectly để lấy dữ liệu XSMB chuẩn
-        let xsmbResults: any[] = [];
-        if (typeof window === 'undefined') {
-          try {
-            const { fetchXSMBRangeDirectly } = await import('@/utils/xsmb-server');
-            const xsmbResponse = await fetchXSMBRangeDirectly(targetDates[targetDates.length - 1], targetDates[0]);
-            if (xsmbResponse && xsmbResponse.data && Array.isArray(xsmbResponse.data)) {
-              xsmbResults = xsmbResponse.data;
-            }
-          } catch (error) {
-            console.error('Failed to fetch XSMB range:', error);
-          }
-        }
-        // Chuyển đổi dữ liệu XSMB sang dạng recentEntries cho AI
-        const xsmbRecentEntries: [string, StoredAnalysis][] = xsmbResults.map((item: any) => {
-          const dateKey = item.date;
-          const allPrizeNumbers = Object.values(item.prizes).flat().filter((num): num is string => typeof num === 'string').map((num: string) => num.slice(-2));
-          const lotteryResult = {
-            specialPrize: item.prizes['ĐB'] ? item.prizes['ĐB'][0].slice(-2) : '',
-            allPrizes: allPrizeNumbers
-          };
-          return [dateKey, {
-            analysis: {
-              summary: "Dữ liệu XSMB trực tiếp",
-              bestNumber: { number: "00", type: "", probability: "", reasoning: "" },
-              luckyNumbers: [],
-              topNumbers: [],
-              events: []
-            },
-            groundingChunks: [],
-            lotteryResult
-          }];
-        });
-        if (xsmbRecentEntries.length === 0) {
-          return "Không có kết quả xổ số lịch sử để phân tích.";
-        }
-        console.log(`Analyzing ${xsmbRecentEntries.length} days of lottery data...`);
-        // Generate AI-enhanced statistical analysis
-        const aiAnalysis = await generateAIStatisticalAnalysis(xsmbRecentEntries);
-        return aiAnalysis ?? "Không có phân tích AI.";
-      } catch (error) {
-        console.error('Error fetching historical data:', error);
-        return "Lỗi khi lấy dữ liệu lịch sử.";
-      }
-    }
-
-    // If we have enough recentEntries, generate AI analysis
-    if (recentEntries.length > 0) {
-      const aiAnalysis = await generateAIStatisticalAnalysis(recentEntries);
-      return aiAnalysis ?? "Không có phân tích AI.";
-    }
-
-    // If no historical data, try to fetch current day's lottery result
-    const todayString = getVietnamDateStringForPrompt();
-    console.log(`Fetching current day's lottery results for ${todayString}...`);
-    // Convert DD/MM/YYYY to YYYY-MM-DD format for API
-    const [day, month, year] = todayString.split("/");
-    const apiDateFormat = `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
-    // First try to fetch from XSMB API directly (server-side only)
-    if (typeof window === "undefined") {
-      try {
-        const { fetchLotteryResultForDate } = await import("@/utils/xsmb-server");
-        const result = await fetchLotteryResultForDate(apiDateFormat);
-        if (result) {
-          console.log("Successfully fetched lottery results from XSMB API (direct):", result);
-          return JSON.stringify(result);
-        }
-      } catch (xsmbError) {
-        console.warn("Direct XSMB API failed, falling back to Gemini search:", xsmbError);
-      }
-    }
-    // Fallback to Gemini Google Search if XSMB API fails
-    const model = "gemini-2.5-flash";
-    const prompt = `
-      Sử dụng Google Search, tìm kết quả "Xổ số kiến thiết Miền Bắc" (KQXSMB) cho ngày ${todayString}.
-      Nhiệm vụ của bạn là trích xuất hai chữ số cuối của TẤT CẢ các giải. Đặc biệt, tìm hai chữ số cuối của giải Đặc Biệt.
-
-      Nếu bạn tìm thấy kết quả:
-      - Trả về một đối tượng JSON với hai chữ số cuối của giải đặc biệt trong trường "specialPrize" và một mảng chứa hai chữ số cuối của TẤT CẢ các giải (bao gồm cả giải đặc biệt và các giải lô khác) trong trường "allPrizes".
-
-      Nếu bạn KHÔNG thể tìm thấy kết quả cho ngày ${todayString} sau khi đã tìm kiếm kỹ lưỡng:
-      - Trả về một đối tượng JSON với trường "specialPrize" có giá trị là null và "allPrizes" là một mảng rỗng.
-
-      Phản hồi của bạn PHẢI là một chuỗi đối tượng JSON hợp lệ duy nhất. Không thêm bất kỳ văn bản, ghi chú hay markdown nào.
-      Cấu trúc JSON mong muốn khi có kết quả:
-      {
-        "specialPrize": "XX",
-        "allPrizes": ["XX", "XY", "ZA", "BC", "..."]
-      }
-
-      Cấu trúc JSON mong muốn khi KHÔNG có kết quả:
-      {
-        "specialPrize": null,
-        "allPrizes": []
-      }
-    `;
-    console.log("Falling back to Gemini Google Search...");
-    const ai = getGeminiAI();
-    const generateContentPromise = ai.models.generateContent({
-      model: model,
-      contents: prompt,
-      config: {
-        tools: [{ googleSearch: {} }],
-        temperature: 0.0,
-      },
-    });
-    const response = (await promiseWithTimeout(
-      generateContentPromise,
-      60000, // 60-second timeout
-      new Error(`Yêu cầu lấy kết quả xổ số đã hết thời gian chờ.`)
-    )) as any;
-    if (!response.text) {
-      throw new Error("Không nhận được phản hồi từ Gemini khi lấy kết quả xổ số.");
-    }
-    const result = parseJsonResponse<{ specialPrize: string | null; allPrizes: string[] }>(response.text);
-    // Strict null checks and validation
-    if (result && typeof result.specialPrize === "string" && result.specialPrize !== null && result.specialPrize.length === 2 && Array.isArray(result.allPrizes) && result.allPrizes.length > 0) {
-      console.log("Successfully fetched and parsed lottery results from Gemini.");
-      return JSON.stringify(result);
-    } else if (result && result.specialPrize === null) {
-      console.warn(`Model indicated that lottery results for ${todayString} are not yet available.`);
-      throw new Error("Kết quả xổ số hôm nay chưa có hoặc không thể tìm thấy. Vui lòng thử lại sau ít phút.");
-    } else {
-      console.error("Failed to parse lottery result from model response", response.text);
-      throw new Error("Mô hình trả về dữ liệu kết quả xổ số không hợp lệ.");
+      // On client, fallback to local historical data
+      const historicalData = await getAllHistoricalData();
+      return JSON.stringify(historicalData);
     }
   } catch (error) {
     console.error("Failed to fetch lottery result:", error);
