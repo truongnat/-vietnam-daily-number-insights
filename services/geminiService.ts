@@ -2,7 +2,6 @@ import { GoogleGenAI } from "@google/genai";
 import type {
   AnalysisResult,
   GroundingChunk,
-  LotteryResult,
   HistoricalData,
   StoredAnalysis,
 } from "@/types";
