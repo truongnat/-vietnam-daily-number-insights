@@ -27,44 +27,47 @@ export const TimeBasedDisplay: React.FC = () => {
   };
 
   const fetchTodaysData = async () => {
+    setIsLoading(true);
+    const dateKey = getDateKey(new Date());
     try {
-      setIsLoading(true);
-      const dateKey = getDateKey(new Date());
+      // 1. Gọi API phân tích (GET)
+      await fetch('/api/cron/daily-analysis');
 
-      // 1. Gọi API phân tích trước
-      try {
-        await fetch('/api/cron/daily-analysis', { method: 'POST' });
-      } catch (analysisJobError) {
-        console.error('Error running analysis job:', analysisJobError);
+      // 2. Poll liên tục lấy dữ liệu phân tích
+      let analysis = null;
+      const maxAttempts = 15; // ~30s nếu mỗi lần 2s
+      let attempts = 0;
+      while (!analysis && attempts < maxAttempts) {
+        attempts++;
+        try {
+          const analysisResponse = await fetch(`/api/storage/analysis/${dateKey}`);
+          if (analysisResponse.ok) {
+            analysis = await analysisResponse.json();
+            setAnalysisData(analysis);
+            break;
+          }
+        } catch (err) {
+          // ignore
+        }
+        await new Promise(res => setTimeout(res, 2000));
       }
 
-      // 2. Lấy dữ liệu phân tích
-      try {
-        const analysisResponse = await fetch(`/api/storage/analysis/${dateKey}`);
-        if (analysisResponse.ok) {
-          const data = await analysisResponse.json();
-          setAnalysisData(data);
-        } else {
-          console.log('No analysis data available yet');
-        }
-      } catch (analysisError) {
-        console.error('Error fetching analysis data:', analysisError);
+      if (!analysis) {
+        console.log('Không lấy được dữ liệu phân tích sau khi chạy!');
       }
 
       // 3. Lấy kết quả xổ số nếu sau 19:00
-      try {
-        const vietnamTime = getVietnamTime();
-        if (vietnamTime.getHours() >= 19) {
+      const vietnamTime = getVietnamTime();
+      if (vietnamTime.getHours() >= 19) {
+        try {
           const lotteryResponse = await fetch(`/api/storage/lottery/${dateKey}`);
           if (lotteryResponse.ok) {
             const lotteryData = await lotteryResponse.json();
             setLotteryResult(lotteryData);
-          } else {
-            console.log('No lottery data available yet');
           }
+        } catch (lotteryError) {
+          // ignore
         }
-      } catch (lotteryError) {
-        console.error('Error fetching lottery data:', lotteryError);
       }
     } catch (error) {
       console.error('Error in fetchTodaysData:', error);
