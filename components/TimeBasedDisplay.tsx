@@ -27,12 +27,6 @@ export const TimeBasedDisplay: React.FC = () => {
   };
 
   const fetchTodaysData = async () => {
-  const handleSaveLocal = () => {
-    if (analysisData) {
-      localStorage.setItem('analysis_' + getDateKey(new Date()), JSON.stringify(analysisData));
-      setIsSaved(true);
-    }
-  };
     try {
       setIsLoading(true);
       const dateKey = getDateKey(new Date());
