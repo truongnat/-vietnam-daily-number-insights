@@ -73,15 +73,15 @@ export const HistoricalLogItem: React.FC<HistoricalLogItemProps> = ({ dateKey, s
         <div className="bg-gray-800/70 border border-gray-700 rounded-lg text-left overflow-hidden">
             <button
                 onClick={() => setIsExpanded(!isExpanded)}
-                className="w-full p-4 flex justify-between items-center hover:bg-gray-700/50 transition-colors duration-200"
+                className="w-full px-3 py-3 sm:px-4 sm:py-4 flex flex-col sm:flex-row justify-between items-start sm:items-center hover:bg-gray-700/50 transition-colors duration-200 gap-2"
                 aria-expanded={isExpanded}
             >
                 <div className="flex-1 text-left">
-                    <p className="font-semibold text-lg text-white">{formattedDate}</p>
-                    <div className="flex items-center gap-3 mt-1 flex-wrap">
-                        <p className="text-sm text-gray-400">Gợi ý:</p>
+                    <p className="font-semibold text-base sm:text-lg text-white mb-1">{formattedDate}</p>
+                    <div className="flex flex-wrap items-center gap-2 sm:gap-3 mt-1">
+                        <p className="text-xs sm:text-sm text-gray-400">Gợi ý:</p>
                         {analysis?.bestNumber && (
-                            <span className={`text-lg font-bold px-2 py-1 rounded border ${
+                            <span className={`text-base sm:text-lg font-bold px-2 py-1 rounded border ${
                                 lotteryResult
                                     ? lotteryResult.specialPrize === analysis.bestNumber.number
                                         ? 'text-amber-300 border-amber-600 bg-amber-900/30'
@@ -94,7 +94,7 @@ export const HistoricalLogItem: React.FC<HistoricalLogItemProps> = ({ dateKey, s
                             </span>
                         )}
                         {analysis?.luckyNumbers && analysis.luckyNumbers.map(ln => (
-                             <span key={ln.number} className={`text-lg font-bold px-2 py-1 rounded ${
+                             <span key={ln.number} className={`text-base sm:text-lg font-bold px-2 py-1 rounded ${
                                 lotteryResult
                                     ? lotteryResult.specialPrize === ln.number
                                         ? 'text-amber-300 bg-amber-900/30'
@@ -108,7 +108,7 @@ export const HistoricalLogItem: React.FC<HistoricalLogItemProps> = ({ dateKey, s
                         ))}
                     </div>
                 </div>
-                <div className="flex flex-col items-end gap-2">
+                <div className="flex flex-row sm:flex-col items-end gap-2 mt-2 sm:mt-0">
                     {lotteryResult ? (
                          <>
                          {winStats.total > 0 ? (
@@ -127,13 +127,12 @@ export const HistoricalLogItem: React.FC<HistoricalLogItemProps> = ({ dateKey, s
                         />
                     )}
                 </div>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className={`w-5 h-5 text-gray-400 ml-4 transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`}>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className={`w-5 h-5 text-gray-400 ml-2 sm:ml-4 transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`}> 
                   <path fillRule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clipRule="evenodd" />
                 </svg>
-
             </button>
             {isExpanded && analysis && (
-                <div className="p-4 md:p-6 border-t border-gray-700 bg-gray-900/50 animate-fade-in-down">
+                <div className="p-3 sm:p-4 md:p-6 border-t border-gray-700 bg-gray-900/50 animate-fade-in-down">
                     <h4 className="text-lg font-semibold text-teal-300 mb-4">Chi Tiết Phân Tích</h4>
                     <p className="text-sm text-gray-400 italic mb-6">"{analysis.summary}"</p>
 
@@ -161,7 +160,7 @@ export const HistoricalLogItem: React.FC<HistoricalLogItemProps> = ({ dateKey, s
                                 </div>
                             )}
                             {analysis.luckyNumbers && analysis.luckyNumbers.map((ln, index) => (
-                                <div key={index} className="bg-gray-800 p-3 rounded-md border-l-4 border-gray-600">
+                                <div key={index} className="bg-gray-800 p-2 sm:p-3 rounded-md border-l-4 border-gray-600">
                                     <div className="flex items-center justify-between">
                                         <p className="font-bold text-white">{ln.type}: <span className="text-xl">{ln.number}</span></p>
                                         {lotteryResult && (
@@ -186,7 +185,7 @@ export const HistoricalLogItem: React.FC<HistoricalLogItemProps> = ({ dateKey, s
                     {analysis.topNumbers && (
                         <div className="mb-6">
                             <h5 className="font-semibold text-gray-300 mb-3">Các Con Số Nổi Bật Trong Tin Tức:</h5>
-                            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4">
                                 {analysis.topNumbers.map((item, index) => (
                                     <NumberCard
                                         key={index}
