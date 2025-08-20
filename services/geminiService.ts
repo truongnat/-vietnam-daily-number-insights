@@ -85,7 +85,7 @@ export const fetchDailyAnalysis = async (): Promise<{
 
     5.  **Dự đoán Số May Mắn Dựa Trên Xác Suất Nâng cao:** Kết hợp TẤT CẢ các yếu tố trên để đưa ra:
        - 1 SỐ MAY MẮN NHẤT có tỷ lệ cao trúng ĐỀ (giải đặc biệt) - ưu tiên dựa trên: (a) tần suất tin tức, (b) phân tích mẫu hình AI, (c) chu kỳ xuất hiện, (d) tránh số đã ra gần đây
-       - 1 SỐ có tỷ lệ cao trúng LÔ (các giải khác) - dựa trên: (a) phân tích thống kê AI, (b) xu hướng "lạnh" chuyển "nóng", (c) tổ hợp số tiềm năng
+       - 3 SỐ có tỷ lệ cao trúng LÔ (các giải khác) - dựa trên: (a) phân tích thống kê AI, (b) xu hướng "lạnh" chuyển "nóng", (c) tổ hợp số tiềm năng
 
     Phản hồi của bạn PHẢI là một chuỗi đối tượng JSON hợp lệ duy nhất và không có gì khác. Không bao gồm bất kỳ văn bản giới thiệu, cuộc trò chuyện hoặc định dạng markdown nào như \`\`\`json. Đối tượng JSON phải tuân thủ cấu trúc chính xác này:
 
@@ -103,6 +103,18 @@ export const fetchDailyAnalysis = async (): Promise<{
           "type": "Số Lô Tiềm Năng",
           "probability": "Cao",
           "reasoning": "Phân tích xác suất dựa trên: (1) Thống kê AI 14 ngày, (2) Phân tích mẫu hình và chu kỳ, (3) Xu hướng số 'lạnh' chuyển 'nóng', (4) Tần suất trong tin tức, (5) Phân tích tổ hợp số, (6) Mức độ quan trọng của sự kiện liên quan."
+        },
+        {
+          "number": "BB",
+          "type": "Số Lô Tiềm Năng",
+          "probability": "Cao",
+          "reasoning": "Phân tích xác suất như trên, đảm bảo khác AA và số đề."
+        },
+        {
+          "number": "CC",
+          "type": "Số Lô Tiềm Năng",
+          "probability": "Cao",
+          "reasoning": "Phân tích xác suất như trên, đảm bảo khác AA, BB và số đề."
         }
       ],
       "topNumbers": [
@@ -118,7 +130,7 @@ export const fetchDailyAnalysis = async (): Promise<{
 
     **Yêu cầu quan trọng về phân tích xác suất thống kê:**
     - Số đề may mắn nhất TUYỆT ĐỐI KHÔNG được trùng với hai chữ số cuối của giải đặc biệt ngày hôm qua.
-    - 4 số lô phải khác nhau và khác với số đề may mắn nhất.
+    - 3 số lô phải khác nhau và khác với số đề may mắn nhất.
     - SỬ DỤNG PHƯƠNG PHÁP THỐNG KÊ: Cân bằng giữa tần suất xuất hiện trong tin tức hôm nay và xác suất dựa trên dữ liệu lịch sử 7 ngày.
     - TRÁNH CÁC SỐ ĐÃ RA THƯỜNG XUYÊN: Ưu tiên số ít xuất hiện trong lịch sử gần đây nhưng có tín hiệu mạnh từ tin tức.
     - PHÂN TÍCH XU HƯỚNG: Xem xét chu kỳ và pattern từ dữ liệu lịch sử để tăng độ chính xác.
